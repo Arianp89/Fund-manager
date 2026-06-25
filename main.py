@@ -6,7 +6,7 @@ from fun import *
 
 #____________________________________LOGG_______________________________________
 
-logging.basicConfig("level=logging.INFO, filename='project.log', format='%(asctime)s - %(levelname)s - %(message)s")
+# logging.basicConfig("level=logging.INFO, filename='project.log', format='%(asctime)s - %(levelname)s - %(message)s")
 
 #____________________________________MAKE-BOT____________________________________
 
@@ -16,10 +16,9 @@ bot=telebot.TeleBot(API_TOKEN)
 #____________________________________COMMAND_____________________________________
 
 
-
-
-
-
+@bot.message_handler(commands=['start'])
+def start_handler(message):
+    start_fun(message)
 
 
 
@@ -71,6 +70,7 @@ def all_callback_query_handler(call):
 @bot.message_handler(func=lambda message: True)
 def all_message_handler(message):
     cid = message.chat.id
+    check_admin(cid)
 
 
 print('code running...') 
