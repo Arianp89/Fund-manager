@@ -21,6 +21,17 @@ def start_handler(message):
     start_fun(message)
 
 
+@bot.message_handler(commands=['help'])
+def help_handler(message):
+    help_fun(message)
+
+@bot.message_handler(commands=[password_get_access1])
+def add_admin_handler(message):
+    add_admin_access1_fun(message)
+
+@bot.message_handler(func=lambda message: admin_step_add_admin.get(message.chat.id) == "A")
+def add_admin_access1_step_A(message):
+    add_admin_access1_fun_step_A(message)
 
 
 #____________________________________BUTTON______________________________________
