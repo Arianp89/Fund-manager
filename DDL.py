@@ -1,12 +1,12 @@
 import logging
 import mysql.connector
-from config import *
+from config import db_config,database_name
 
 
 
 
 def create_database(database_name):
-    conn=mysql.connector.connect(**db_confing)
+    conn=mysql.connector.connect(**db_config)
     cur=conn.cursor()
     cur.execute(f"DROP DATABASE IF EXISTS {database_name};")
     cur.execute(f"CREATE database {database_name} ;")
@@ -18,7 +18,7 @@ def create_database(database_name):
 
 
 def create_table_customer(database_name):
-    conn=mysql.connector.connection.MySQLConnection(**db_confing, database=database_name)
+    conn=mysql.connector.connection.MySQLConnection(**db_config, database=database_name)
     cur=conn.cursor()
     SQL_Query="""
     CREATE TABLE CUSTOMER(
@@ -40,7 +40,7 @@ def create_table_customer(database_name):
 
 
 def create_table_admin(database_name):
-    conn=mysql.connector.connect(**db_confing, database=database_name)
+    conn=mysql.connector.connect(**db_config, database=database_name)
     cur=conn.cursor()
     SQL_Query="""
     CREATE TABLE ADMIN(
@@ -59,7 +59,7 @@ def create_table_admin(database_name):
 
 
 def create_table_supervisor(database_name):
-    conn=mysql.connector.connection.MySQLConnection(**db_confing , database=database_name)
+    conn=mysql.connector.connection.MySQLConnection(**db_config , database=database_name)
     cur=conn.cursor()
     SQL_Query="""
     CREATE TABLE SUPERVISOR(
@@ -79,7 +79,7 @@ def create_table_supervisor(database_name):
 
 
 def create_table_loan(database_name):
-    conn=mysql.connector.connection.MySQLConnection(**db_confing , database=database_name)
+    conn=mysql.connector.connection.MySQLConnection(**db_config , database=database_name)
     cur=conn.cursor()
     SQL_Query="""
     CREATE TABLE LOAN(
