@@ -92,15 +92,14 @@ def add_admin_access1_fun(message):
 
 def add_admin_access1_fun_step_A(message):
     cid = message.chat.id
-    data = message.text
-    first_name , last_name = data.split()
-    admin_data = get_customer_data_b_fn_ln(first_name , last_name)
+    full_name = message.text
+    admin_data = get_customer_data_b_fn_ln(full_name)
     if not admin_data:
         bot.send_message(cid , 'همچین کاربری وجود ندارد')
         return
     admin_id = int( admin_data['ID'])
     add_customer_bot_id(admin_id , int(cid))
-    add_admin_access1(admin_id , 2)
+    add_admin_access1(admin_id , 1)
 
 def check_is_in_db(chat_id):
     if not get_id_b_admin_bot_id(chat_id):

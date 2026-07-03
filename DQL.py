@@ -3,11 +3,11 @@ from config import db_config,database_name
 
 
 
-def get_customer_data_b_fn_ln(first_name , last_name):
+def get_customer_data_b_fn_ln(full_name):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor(dictionary=True)
-    SQL_Query = "SELECT * FROM CUSTOMER WHERE `FIRST_NAME` = %s and `LAST_NAME` = %s;"
-    cur.execute(SQL_Query , (first_name , last_name))
+    SQL_Query = "SELECT * FROM CUSTOMER WHERE FULL_NAME=%s;"
+    cur.execute(SQL_Query , (full_name))
     data = cur.fetchone()    
     cur.close()
     conn.close()
