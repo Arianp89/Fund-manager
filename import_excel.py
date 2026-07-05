@@ -1,5 +1,11 @@
 from DML import *
-import csv
+
+
+def is_none(arg):
+    if arg == '':
+        return None
+    return int(arg)
+
 class Import_excel:
     number = 0
     family_data = {'family_id':None}
@@ -29,11 +35,11 @@ class Import_excel:
                 elif data_list[0] == 'TRUE':
                     status = 'true'
                     file_data = {'full_name': data_list[-2].replace('\n','') + ' ' + data_list[-1],
-                                'loan_amount': int(data_list[-3]) ,
-                                'loan_number': int(data_list[-4]), 
-                                'capital_increase': int(data_list[-5]) ,
-                                'total_amount': int(data_list[-6]) ,
-                                'total_capital': int(data_list[-7]) ,
+                                'loan_amount': is_none(data_list[-3]) ,
+                                'loan_number': is_none(data_list[-4]), 
+                                'capital_increase': is_none(data_list[-5]) ,
+                                'total_amount': is_none(data_list[-6]) ,
+                                'total_capital': is_none(data_list[-7]) ,
                                 'status':status}
                     
                 
@@ -55,7 +61,7 @@ class Import_excel:
 
 
         elif self.number == 1 or line_number==1:
-
+            print(file_data['total_capital'])
             family_id = add_family()
             head_id = add_customer(family_id ,
                                     full_name ,
