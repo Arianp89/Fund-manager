@@ -35,7 +35,7 @@ def add_admin_handler(message):
 
 @bot.message_handler(func=lambda message: message.text == "گرفتن بکآپ")
 def get_backup_handler(message):
-    pass
+    get_backup_func(message)
 
 @bot.message_handler(func=lambda message: message.text == "دریافت لینک")
 def get_link_handler(message):

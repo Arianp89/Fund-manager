@@ -3,7 +3,9 @@ from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboar
 import telebot 
 import config
 import os
+import shutil
 from DML import *
+from information_database_improved import DatabaseManager
 
 #--------------------------------------------------------------------
 
@@ -141,3 +143,12 @@ def get_link_func(message):
 
 
 
+def get_backup_func(message):
+    cid = message.chat.id
+    manager = DatabaseManager(db_config , database_name)
+    manager.set_language('en')
+    manager.export_to_file()
+    shutil.make_archive('backup' , 'zip' , 'database_data')
+    with open('backup.zip' , 'rb') as f:
+        text = "فایل [(backup)](github.com/arianp89/database-data-mover)"
+        bot.send_document(cid , f ,caption= text, parse_mode='Markdown')

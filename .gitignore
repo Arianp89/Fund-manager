@@ -1,4 +1,6 @@
 venv/
 __pycache__/
+database_data/
 .env
 excel.csv
+backup.zip
