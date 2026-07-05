@@ -17,7 +17,7 @@ def add_customer_bot_id(customer_id , bot_id):
 
 
 
-def add_admin_access1(admin_id , access_level=1):
+def add_admin(admin_id , access_level=1):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
     SQL_Query = "INSERT INTO ADMIN (CUSTOMER_ID,ACCESS_LEVEL) VALUES (%s,%s);"

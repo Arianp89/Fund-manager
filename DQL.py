@@ -7,7 +7,7 @@ def get_customer_data_b_fn_ln(full_name):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor(dictionary=True)
     SQL_Query = "SELECT * FROM CUSTOMER WHERE FULL_NAME=%s;"
-    cur.execute(SQL_Query , (full_name))
+    cur.execute(SQL_Query , (full_name ,))
     data = cur.fetchone()    
     cur.close()
     conn.close()
@@ -54,7 +54,7 @@ def get_id_b_admin_bot_id(admin_bot_id):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor(dictionary=True)
     sql_query = "SELECT ID FROM CUSTOMER WHERE BOT_ID = %s"
-    cur.execute(sql_query, (admin_bot_id ,))
+    cur.execute(sql_query, (admin_bot_id,))
     data = cur.fetchone()
     cur.close()
     conn.close()
@@ -62,3 +62,49 @@ def get_id_b_admin_bot_id(admin_bot_id):
         return False
     return data["ID"]
 
+
+def get_all_customer():
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    sql_query = "SELECT * FROM CUSTOMER;"
+    cur.execute(sql_query)
+    data = cur.fetchall()
+    cur.close()
+    conn.close()
+    return data
+
+
+def get_admin_id_b_access(access_level):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT CUSTOMER_ID FROM ADMIN WHERE ACCESS_LEVEL=%s;"
+    cur.execute(SQL_Query , (access_level ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data["ACCESS_LEVEL"]
+
+
+
+
+def get_family_data(family_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT * FROM FAMILY WHERE ID=%s;"
+    cur.execute(SQL_Query , (family_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    return data
+
+def get_all_family_id():
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT ID FROM FAMILY;"
+    cur.execute(SQL_Query)
+    data = cur.fetchall()    
+    cur.close()
+    conn.close()
+    return [row['ID'] for row in data]

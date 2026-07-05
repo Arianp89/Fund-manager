@@ -29,17 +29,17 @@ def help_handler(message):
 def add_admin_handler(message):
     add_admin_access1_fun(message)
 
-@bot.message_handler(func=lambda message: admin_step_add_admin.get(message.chat.id) == "A")
-def add_admin_access1_step_A(message):
-    add_admin_access1_fun_step_A(message)
-
 
 #____________________________________BUTTON______________________________________
 
 
+@bot.message_handler(func=lambda message: message.text == "گرفتن بکآپ")
+def get_backup_handler(message):
+    pass
 
-
-
+@bot.message_handler(func=lambda message: message.text == "دریافت لینک")
+def get_link_handler(message):
+    get_link_func(message)
 
 
 
@@ -74,6 +74,26 @@ def all_callback_query_handler(call):
     mid = call.message.message_id
     data = call.data
     print(f'call={call.message.from_user.first_name} [{cid}]:{data}')
+
+    if data.startswith("add-access1"):
+        print(data)
+        _,customer_id = data.split("_")
+        customer_id = int(customer_id)
+        add_admin(customer_id)
+        add_customer_bot_id(customer_id , int(cid))
+        print('ok')
+
+
+    elif data.startswith("go"):
+        print(data.split("_"))
+        _,status,page_number=data.split("_")
+        page_number = int(page_number)
+        if status == "back":
+            page_number -=1
+        else:
+            page_number +=1
+        markup = go_ba_ne(get_all_customer() , 'add-access1' , "FULL_NAME" , page_number )
+        bot.edit_message_text('انتخاب کنید' , cid , mid , reply_markup=markup)
 
 
 
