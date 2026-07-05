@@ -12,16 +12,12 @@ class Import_excel:
             for num in range(self.line_number):
                 data = f.readline()
                 data_list = data.split(',')
-                # print(data_list)
 
                 if data_list[0] == 'new_line':
                     file_data = {'full_name':'new_line'}
-                    # print(1)
-
 
                 elif data_list[0] == 'FALSE':
                     status = 'false'
-                    # print(2)
                     file_data = {'full_name': data_list[-2].replace('\n','') + ' ' + data_list[-1],
                             'loan_amount': None ,
                             'loan_number': None , 
@@ -32,7 +28,6 @@ class Import_excel:
                     
                 elif data_list[0] == 'TRUE':
                     status = 'true'
-                    # print(3)
                     file_data = {'full_name': data_list[-2].replace('\n','') + ' ' + data_list[-1],
                                 'loan_amount': int(data_list[-3]) ,
                                 'loan_number': int(data_list[-4]), 
@@ -42,72 +37,74 @@ class Import_excel:
                                 'status':status}
                     
                 
-
                 file_datas.append(file_data)
         return file_datas
         
 
     def add_customer_data(self , file_data  ,line_number):
-        # print(file_data)
-        # print(line_number)
-
-        if file_data['full_name'] == 'new_line':
-            # print(4,file_data['full_name'])
-            self.number += 1
-
-        elif self.number == 1 or line_number==1:
-            # print(5,file_data['full_name'])
-            family_id = add_family()
-            head_id = add_customer(family_id ,
-                                    file_data['full_name'] ,
-                                    file_data['total_capital'] ,
-                                    file_data['status'])
-            family_name = file_data['full_name']
-            add_family_data(family_id , int(head_id) , family_name)
-            self.family_data['family_id'] = family_id 
-            customer_id = head_id
+        family_name = file_data['full_name']
+        full_name = family_name
+        if full_name != 'new_line':
             installment_amount = file_data['loan_amount']
             number_paid_installment = file_data['loan_number']
-            if  installment_amount :
-                loan_amount = 24 * installment_amount
-                number_paid_installment = 24-number_paid_installment
-            else:
-                loan_amount = None
-                number_paid_installment = None
             amount_paid = file_data['total_amount']
             Capital_increase = file_data['capital_increase']
-            if number_paid_installment is None:
-                pass
-            else:
-                loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid)
-                add_installment(loan_id , number_paid_installment , Capital_increase)
-            self.number = 0
-        else:
-            # print(6,file_data['full_name'])
-            family_id = self.family_data['family_id']
-            customer_id = add_customer(family_id , 
-                            file_data['full_name'] , 
-                            file_data['total_capital'] , 
-                            file_data['status'])
-            
-            installment_amount = file_data['loan_amount']
-            number_paid_installment = file_data['loan_number']
+
+        if file_data['full_name'] == 'new_line':
+            self.number += 1
+
+
+        elif self.number == 1 or line_number==1:
+
+            family_id = add_family()
+            head_id = add_customer(family_id ,
+                                    full_name ,
+                                    file_data['total_capital'] ,
+                                    file_data['status'])
+            add_family_data(family_id , int(head_id) , family_name)
+            self.family_data['family_id'] = family_id 
+
+            customer_id = head_id
             if  installment_amount :
                 loan_amount = 24 * installment_amount
                 number_paid_installment = 24 - number_paid_installment
+
             else:
                 loan_amount = None
                 number_paid_installment = None
-            number_paid_installment = file_data['loan_number']
-            amount_paid = file_data['total_amount']
+
+            if number_paid_installment is None:
+                pass
+
+            else:
+                loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid)
+                add_installment(loan_id , number_paid_installment , Capital_increase)
+            
+            self.number = 0
+
+        else:
+            family_id = self.family_data['family_id']
+            customer_id = add_customer(family_id , 
+                            full_name, 
+                            file_data['total_capital'] , 
+                            file_data['status'])
+            
+            
+            if  installment_amount :
+                loan_amount = 24 * installment_amount
+                number_paid_installment = 24 - number_paid_installment
+
+            else:
+                loan_amount = None
+                number_paid_installment = None
+
             Capital_increase = file_data['capital_increase']
-            print('number_paid_installment',number_paid_installment)
+
             if number_paid_installment is None:
                 pass
             else:
                 loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid)
                 add_installment(loan_id , number_paid_installment , Capital_increase)
-            # print('ook')
             
 
 
@@ -118,7 +115,8 @@ class Import_excel:
 
 def main():
     num = 0
-    im = Import_excel(11)
+    line_number = input('enter line_number:')
+    im = Import_excel(int(line_number))
     file_data = im.open_file()
     # print(file_data)
     for file_data in file_data:
