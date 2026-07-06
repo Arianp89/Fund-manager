@@ -1,46 +1,8 @@
 import logging
-from config import db_config,database_name
 import mysql.connector
-from functools import wraps
+from config import db_config,database_name
 
 
-def server_connection(func):
-    @wraps(func)
-    def wrapper(self , cur , *args, **kwargs):
-        with mysql.connector.connect(
-            **self.db_config,
-            database=self.db_name
-        ) as conn :
-            cur = conn.cursor()
-            data = func(self , cur , *args, **kwargs) 
-            return data 
-
-        
-
-def database_connection(func):
-    @wraps(func)
-    def wrapper(self, *args, **kwargs):
-        conn = mysql.connector.connect(
-            **self.db_config,
-            database=self.db_name
-        )
-        cur = conn.cursor()
-
-        try:
-            result = func(self, cur, *args, **kwargs)
-            conn.commit()
-            return result
-
-        except Exception as e:
-            conn.rollback()
-            print(e)
-            raise
-
-        finally:
-            cur.close()
-            conn.close()
-
-    return wrapper
 
 class make_database:
 
@@ -48,17 +10,22 @@ class make_database:
         self.db_config = db_config
         self.db_name = db_name
 
-    @server_connection
-    def create_database(self , cur):
 
+    def create_database(self):
+        conn=mysql.connector.connect(**self.db_config)
+        cur=conn.cursor()
         cur.execute(f"DROP DATABASE IF EXISTS {database_name};")
         cur.execute(f"CREATE database {database_name} ;")
-
+        conn.commit()
+        cur.close()
+        conn.close()
         print(f'database {database_name} created successfully')
 
 
-    @database_connection
-    def create_table_family(self , cur):
+
+    def create_table_family(self):
+        conn=mysql.connector.connection.MySQLConnection(**self.db_config, database=self.db_name)
+        cur=conn.cursor()
         SQL_Query="""
         CREATE TABLE FAMILY(
         `ID`                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -69,7 +36,9 @@ class make_database:
         );
         """
         cur.execute(SQL_Query)
-
+        conn.commit()
+        cur.close()
+        conn.close()
         print(f'table FAMILY created successfully')
 
 
