@@ -1,4 +1,5 @@
-from DML import *
+from database.DML import *
+import os
 
 
 def is_none(arg):
@@ -14,7 +15,7 @@ class Import_excel:
     
     def open_file(self):
         file_datas = list()
-        with open('excel.csv' , 'r' , encoding='utf-8-sig') as f:
+        with open(os.path.join("Data" , 'excel.csv') , 'r' , encoding='utf-8-sig') as f:
             for num in range(self.line_number):
                 data = f.readline()
                 data_list = data.split(',')

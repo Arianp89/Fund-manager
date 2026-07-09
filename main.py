@@ -2,50 +2,28 @@ from config import API_TOKEN
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
 import telebot 
 import logging
-from fun import *
+from handler.fun import *
+from handler.bot_commands import commands
+from handler.admin_button import admin_button
+from handler.command import *
+from handler.call_back import *
+
+
+
+
+
+telebot.apihelper.API_URL = 'http://tapi.bale.ai/bot{0}/{1}' 
+bot=telebot.TeleBot(API_TOKEN)
+
+
+
 
 #____________________________________LOGG_______________________________________
 
 # logging.basicConfig("level=logging.INFO, filename='project.log', format='%(asctime)s - %(levelname)s - %(message)s")
 
-#____________________________________MAKE-BOT____________________________________
-
-telebot.apihelper.API_URL = 'http://tapi.bale.ai/bot{0}/{1}' 
-bot=telebot.TeleBot(API_TOKEN)
-
-#____________________________________COMMAND_____________________________________
-
-
-@bot.message_handler(commands=['start'])
-def start_handler(message):
-    start_fun(message)
-
-
-@bot.message_handler(commands=['help'])
-def help_handler(message):
-    help_fun(message)
-
-@bot.message_handler(commands=[password_get_access1])
-def add_admin_handler(message):
-    add_admin_access1_fun(message)
-
-
-#____________________________________BUTTON______________________________________
-
-
-@bot.message_handler(func=lambda message: message.text == "گرفتن بکآپ")
-def get_backup_handler(message):
-    get_backup_func(message)
-
-@bot.message_handler(func=lambda message: message.text == "دریافت لینک")
-def get_link_handler(message):
-    get_link_func(message)
-
-
-
-
-
 #____________________________________LISENER_____________________________________
+
 
 def listener(messages):
     for m in messages: 
@@ -65,43 +43,58 @@ def listener(messages):
 bot.set_update_listener(listener) 
             
 
+#____________________________________MAKE-BOT____________________________________
+
+
+bot_command = commands(bot)
+admin_buttons = admin_button(bot)
+
+@bot.message_handler(commands=['start'])
+def start_handler(message):
+    bot_command.start(message)
+
+
+@bot.message_handler(commands=['help'])
+def help_handler(message):
+    bot_command.help(message)
+
+@bot.message_handler(commands=[password_get_access1])
+def add_admin_handler(message):
+    bot_command.add_admin_access1(message)
+
+
+#____________________________________BUTTON______________________________________
+
+
+@bot.message_handler(func=lambda message: message.text == "گرفتن بکآپ")
+def get_backup_handler(message):
+    admin_buttons.get_backup(message)
+
+@bot.message_handler(func=lambda message: message.text == "دریافت لینک")
+def get_link_handler(message):
+    admin_buttons.family_link(message , 'make_link')
+
+
 #____________________________CALLS_______________________
 
 @bot.callback_query_handler(func=lambda call: True)
 def all_callback_query_handler(call):
-    call_id = call.id
-    cid = call.message.chat.id
-    mid = call.message.message_id
+    call_hanler = call_back(bot , call)
     data = call.data
-    print(f'call={call.message.from_user.first_name} [{cid}]:{data}')
+    print(f'call={call.message.from_user.first_name} [{call.message.chat.id}]:{data}')
 
     if data.startswith("add-access1"):
-        print(data)
-        _,customer_id = data.split("_")
-        customer_id = int(customer_id)
-        add_admin(customer_id)
-        add_customer_bot_id(customer_id , int(cid))
-        print('ok')
-
+        call_hanler.add_access1(data)
 
     elif data.startswith("go"):
-        print(data.split("_"))
-        _,status,page_number=data.split("_")
-        page_number = int(page_number)
-        if status == "back":
-            page_number -=1
-        else:
-            page_number +=1
-        markup = go_ba_ne(get_all_customer() , 'add-access1' , "FULL_NAME" , page_number )
-        bot.edit_message_text('انتخاب کنید' , cid , mid , reply_markup=markup)
+        call_hanler.go(data)
 
 
 
 #________________________________ALL-MESSAGE__________________________
 @bot.message_handler(func=lambda message: True)
 def all_message_handler(message):
-    cid = message.chat.id
-    check_admin(cid)
+    bot_command.all_message(message)
 
 
 print('code running...') 
