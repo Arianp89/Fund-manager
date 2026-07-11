@@ -84,7 +84,7 @@ def get_admin_id_b_access(access_level):
     conn.close()
     if data is None:
         return False
-    return data["ACCESS_LEVEL"]
+    return data["CUSTOMER_ID"]
 
 
 
@@ -108,3 +108,21 @@ def get_all_family_id():
     cur.close()
     conn.close()
     return [row['ID'] for row in data]
+
+
+
+def check_admin(admin_id):
+    bot_id_list = list()
+    for customer_id in get_admin_list():
+        bot_id = get_customer_bot_id(customer_id)
+        bot_id_list.append(bot_id)
+    if admin_id not in bot_id_list:
+        return "admin"
+    return "customer"
+
+
+
+def check_is_in_db(chat_id):
+    if not get_id_b_admin_bot_id(chat_id):
+        return False
+    return True

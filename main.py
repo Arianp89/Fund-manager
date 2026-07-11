@@ -2,12 +2,7 @@ from config import API_TOKEN
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
 import telebot 
 import logging
-from handler.fun import *
-from handler.bot_commands import commands
-from handler.admin_button import admin_button
-from handler.command import *
-from handler.call_back import *
-
+from handler import bot_commands,admin_button,call_back
 
 
 
@@ -17,6 +12,9 @@ bot=telebot.TeleBot(API_TOKEN)
 
 
 
+password_get_access1 = "Ad1fWQ89Gg"
+bot_command = bot_commands(bot)
+admin_buttons = admin_button(bot)
 
 #____________________________________LOGG_______________________________________
 
@@ -46,8 +44,6 @@ bot.set_update_listener(listener)
 #____________________________________MAKE-BOT____________________________________
 
 
-bot_command = commands(bot)
-admin_buttons = admin_button(bot)
 
 @bot.message_handler(commands=['start'])
 def start_handler(message):
@@ -72,7 +68,7 @@ def get_backup_handler(message):
 
 @bot.message_handler(func=lambda message: message.text == "دریافت لینک")
 def get_link_handler(message):
-    admin_buttons.family_link(message , 'make_link')
+    admin_buttons.make_family_link(message)
 
 
 #____________________________CALLS_______________________
