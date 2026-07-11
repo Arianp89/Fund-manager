@@ -1,5 +1,5 @@
 from services.call_back_ser import *
-from keyboard.markup import go_ba_ne
+from keyboard.markup import customer_markup,go_ba_ne
 
 
 class call_back:
@@ -11,12 +11,13 @@ class call_back:
         self.mid = call.message.message_id
 
     def add_access1(self , data ):
-        _,customer_id = data.split("_")
+        _,admin_id = data.split("_")
         try:
             self.bot.delete_message(self.cid , self.mid)
-            customer_id = int(customer_id)
-            access_1_ser(customer_id , self.cid)
+            admin_id = int(admin_id)
+            access_1_ser(admin_id , self.cid)
             self.bot.answer_callback_query(self.call_id , "شما ادمین شدید.")
+            self.bot.send_message(self.cid , 'این هم از منوی شما' , reply_markup=customer_markup())
             
         except Exception as e:
             self.bot.answer_callback_query(self.call_id , 'دوباره دستور را وارد کنید این پیام منقضی شده است.')

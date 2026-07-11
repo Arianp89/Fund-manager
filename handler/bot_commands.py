@@ -1,6 +1,7 @@
 from keyboard.markup import admin_markup , customer_markup
 from services.command_ser import *
 from handler.command import *
+from services.link import link
 
 
 
@@ -13,14 +14,14 @@ class bot_commands:
 
     def start(self , message):
         cid = message.chat.id
+
         if len(message.text.split()) > 1:
-            family_id = int(message.text.split('_')[-1])
-            status = get_family_link_ser(family_id , cid)
-            if status is None:
-                self.bot.send_message(cid , 'لینک خراب است')
+            links = link(self.bot)
+            link_name = message.text.split('_')[-2]
+            if link_name == "family":
+                links.family_link(message)
                 return
-            self.bot.send_message(cid , 'سلام' , customer_markup())
-            return
+
         status = start_ser(cid)
         if status is None:
             return
@@ -39,11 +40,14 @@ class bot_commands:
 
     def add_admin_access1(self , message):
         cid = message.chat.id
-        data = add_admin_access1_ser()
-        markup = data[0]
-        admin_id = data[1]
+        datas = add_admin_access1_ser(self.bot)
+        try:
+            markup = datas[0]
+            admin_id = datas[1]
+        except Exception as e:
+            markup = datas
         if markup is None:
-            bot.send_message(admin_id , f'کابر @{message.chat.username}\n دسرسی سطح یک')
+            self.bot.send_message(admin_id , f'کابر @{message.chat.username}\n دسرسی سطح یک')
             return
         self.bot.send_message(cid , "لطفا کاربر مورد نظر خود را انتخاب کنید" , reply_markup=markup)
 

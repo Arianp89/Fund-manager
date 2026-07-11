@@ -126,3 +126,19 @@ def check_is_in_db(chat_id):
     if not get_id_b_admin_bot_id(chat_id):
         return False
     return True
+
+
+def get_family_link_status(family_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT USE_LINK FROM FAMILY WHERE ID=%s;"
+    cur.execute(SQL_Query , (family_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    data = data["USE_LINK"]
+    if data == "false":
+        return False
+    return True

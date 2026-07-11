@@ -82,3 +82,15 @@ def add_installment(loan_id , NUMBER_PAID , Capital_increase):
     cur.close()
     conn.close()
     return  cur.lastrowid
+
+
+
+def change_status_use_link_family(family_id , status='true'):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "UPDATE FAMILY SET USE_LINK=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (status , family_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid    
