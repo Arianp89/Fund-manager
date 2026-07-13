@@ -42,8 +42,8 @@ def go_ba_ne(bot , data , call , text , page_number=1 , call_id=None):
     for da in data[(page_number -1)*5:page_number*5]:
         markup.add(InlineKeyboardButton(da[text] ,
                                             callback_data=f'{call}_{da["ID"]}'))
-    markup.add(InlineKeyboardButton("بعد" , callback_data=f'go_next_{page_number}') ,
-               InlineKeyboardButton("قبل" , callback_data=f'go_back_{page_number}'))          
+    markup.add(InlineKeyboardButton("بعد" , callback_data=f'go_next_{page_number}_{call}') ,
+               InlineKeyboardButton("قبل" , callback_data=f'go_back_{page_number}_{call}'))          
             
     if page_number == 0:
         bot.answer_callback_query(call_id , "❌")

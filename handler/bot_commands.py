@@ -17,8 +17,9 @@ class bot_commands:
 
         if len(message.text.split()) > 1:
             links = link(self.bot)
-            link_name = message.text.split('_')[-2]
-            if link_name == "family":
+            link_name = message.text.split()[1]
+            print(1,link_name)
+            if link_name.startswith("family"):
                 links.family_link(message)
                 return
 

@@ -70,20 +70,27 @@ def get_backup_handler(message):
 def get_link_handler(message):
     admin_buttons.make_family_link(message)
 
+@bot.message_handler(func=lambda message: message.text == "اضافه کردن ادمین")
+def add_admin_access2_handler(message):
+    admin_buttons.add_admin_access2(message)
+
 
 #____________________________CALLS_______________________
 
 @bot.callback_query_handler(func=lambda call: True)
 def all_callback_query_handler(call):
-    call_hanler = call_back(bot , call)
+    call_handler = call_back(bot , call)
     data = call.data
     print(f'call={call.message.from_user.first_name} [{call.message.chat.id}]:{data}')
 
     if data.startswith("add-access1"):
-        call_hanler.add_access1(data)
+        call_handler.add_access1(data)
 
     elif data.startswith("go"):
-        call_hanler.go(data)
+        call_handler.go(data)
+
+    elif data.startswith("add-admin"):
+        call_handler.add_admin_access2(data)
 
 
 

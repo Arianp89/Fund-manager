@@ -25,6 +25,8 @@ def get_customer_bot_id(customer_id):
     data = cur.fetchone()    
     cur.close()
     conn.close()
+    if data is None:
+        return False
     return data["BOT_ID"]
 
 def get_admin_list():

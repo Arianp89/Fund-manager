@@ -1,6 +1,7 @@
-from database import get_family_data,add_customer_bot_id,get_all_family_id
+from database import get_family_data,get_all_family_id,get_all_customer,get_admin_list,get_admin_id_b_access,get_customer_bot_id
 from config import bot_id
-
+from database import *
+from keyboard.markup import go_ba_ne
 
 
 
@@ -12,4 +13,11 @@ def make_family_link_ser():
         text_list.append(text)
 
     return text_list
+
+
+def add_admin_ser(bot):
+    if get_admin_id_b_access(2) != False:
+        return False
+    markup = go_ba_ne(bot , get_all_customer() , 'add-admin' , "FULL_NAME")
+    return markup
 

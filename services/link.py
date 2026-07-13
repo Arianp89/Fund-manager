@@ -1,4 +1,3 @@
-from  .command_ser import get_family_link_ser
 from  keyboard.markup import customer_markup
 from database import get_family_data,get_family_link_status,add_customer_bot_id,change_status_use_link_family
 
@@ -7,9 +6,9 @@ class link:
     def __init__(self ,bot):
         self.bot = bot
             
-    def get_family_link_ser(family_id , chat_id):
+    def get_family_link_ser(self , family_id , chat_id):
         family_data = get_family_data(family_id)
-        if family_data is  None:
+        if family_data is None:
             return None
         if not get_family_link_status(family_id):
             return False

@@ -14,6 +14,7 @@ def add_customer_bot_id(customer_id , bot_id):
     conn.commit()
     cur.close()
     conn.close()
+    return  cur.lastrowid
 
 
 

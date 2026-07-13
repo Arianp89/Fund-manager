@@ -34,3 +34,11 @@ class admin_button:
         text_list = make_family_link_ser()
         for text in text_list:
             self.bot.send_message(cid , text)
+
+    def add_admin_access2(self , message):
+        cid = message.chat.id
+        markup = add_admin_ser(self.bot)
+        if not markup:
+            self.bot.send_message(cid , "شما ادمین اضافه کردید")
+            return
+        self.bot.send_message(cid , "کاربر مورد نظر را انتخاب کنید" , reply_markup=markup)
