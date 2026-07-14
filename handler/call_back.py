@@ -26,7 +26,6 @@ class call_back:
 
 
     def go_add_access1_go(self, data):
-        print(data.split("_"))
         _,status,page_number,_=data.split("_")
         page_number = int(page_number)
         if status == "back":
@@ -100,7 +99,6 @@ class call_back:
 
 
     def go(self , data):
-        print(data)
         _,_,_,call_name =data.split("_")
         if call_name == "add-access1":
             self.go_add_access1_go(data)

@@ -4,7 +4,6 @@ from keyboard.call_back_markup import go_ba_ne
 
 
 def start_ser(chat_id):
-    print(check_admin(chat_id))
     if not check_is_in_db(chat_id):
         return None
 
@@ -41,7 +40,5 @@ def add_admin_access1_ser(bot):
     if get_admin_list() != []:
         admin_id = get_admin_id_b_access(1)
         admin_bot_id = get_customer_bot_id(admin_id)
-        print('oooo')
         return [None , admin_bot_id]
-    print('ok')
     return markup

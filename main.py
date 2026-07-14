@@ -15,6 +15,7 @@ bot=telebot.TeleBot(API_TOKEN)
 password_get_access1 = "Ad1fWQ89Gg"
 bot_command = bot_commands(bot)
 admin_buttons = admin_button(bot)
+customer_buttons = admin_button(bot)
 
 #____________________________________LOGG_______________________________________
 
@@ -61,8 +62,6 @@ def add_admin_handler(message):
 
 #____________________________________BUTTON______________________________________
 
-
-
 #____________________________________ADMIN-ACCESS1________________________________
 
 @bot.message_handler(func=lambda message: message.text == "گرفتن بکآپ")
@@ -77,9 +76,22 @@ def get_link_handler(message):
 def add_admin_access2_handler(message):
     admin_buttons.add_admin_access2(message)
 
-@bot.message_handler(func=lambda message:message.text == "تغییر ادمین")
+@bot.message_handler(func=lambda message: message.text == "تغییر ادمین")
 def change_admin_access2(message):
     admin_buttons.change_admin_access2(message)
+
+@bot.message_handler(func=lambda message: message.text == "وارد شدن به پنل ادمین")
+def go_admin_panel_handler(message):
+    admin_buttons.go_to_admin_panel(message)
+
+#_______________________________CUSTOMER_______________________________
+
+
+@bot.message_handler(func=lambda message:message.text == "وارد شدن به پنل کاربر")
+def go_customer_panel_handler(message):
+    customer_buttons.go_to_customer_panel(message)
+
+
 
 #____________________________CALLS_______________________
 

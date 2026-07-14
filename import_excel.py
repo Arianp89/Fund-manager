@@ -62,7 +62,6 @@ class Import_excel:
 
 
         elif self.number == 1 or line_number==1:
-            print(file_data['total_capital'])
             requence=string.ascii_lowercase + string.ascii_uppercase + string.digits
             link_id = str(''.join(random.choices(requence,k=6)))
             family_id = add_family(link_id)
@@ -127,7 +126,6 @@ def main():
     line_number = input('enter line_number:')
     im = Import_excel(int(line_number))
     file_data = im.open_file()
-    # print(file_data)
     for file_data in file_data:
         num += 1
         im.add_customer_data(file_data  , num)

@@ -18,7 +18,6 @@ class bot_commands:
         if len(message.text.split()) > 1:
             links = link(self.bot)
             link_name = message.text.split()[1]
-            print('family_name55455',link_name)
             if link_name.startswith("family"):
                 links.family_link(message)
                 return
@@ -57,7 +56,7 @@ class bot_commands:
         if not check_is_in_db(cid):
             return
         if  check_admin(cid):
-            markup = customer_markup()
+            markup = customer_markup(cid)
         else:
             markup = admin_markup(cid)
         self.bot.send_message(cid , 'دستور یافت نشد' , reply_markup = markup)

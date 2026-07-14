@@ -7,10 +7,7 @@ class link:
         self.bot = bot
             
     def get_family_link_ser(self , link_id , chat_id):
-        print('link_id',link_id)
         family_data = get_family_data(link_id)
-        print('get_family_link_status(link_id)',get_family_link_status(link_id))
-        print('family_data',family_data)
         if family_data is None:
             return False
         if not get_family_link_status(link_id):

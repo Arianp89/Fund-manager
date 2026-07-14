@@ -18,12 +18,10 @@ def change_admin_access2_ser(id):
     customer_id = get_admin_id_b_access(2)
     setting_data = get_setting_data(customer_id)
     admin_id =  get_admin_id(customer_id)
-    print('admin_id',admin_id)
     if not setting_data:
         pass
     else:
         delete_setting(admin_id)
-        print(admin_id)
     delete_admin(admin_id)
     add_admin(id , 2)
     return True

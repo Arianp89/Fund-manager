@@ -29,7 +29,6 @@ def add_admin(admin_id , access_level=1):
     return  cur.lastrowid
 
 def add_customer(family_id , full_name , amount ,is_active='true'):
-    print(full_name)
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
     SQL_Query = "INSERT INTO CUSTOMER (FAMILY_ID,FULL_NAME,TOTAL_CAPITAL,IS_ACTIVE) VALUES (%s,%s,%s,%s);"
