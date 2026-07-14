@@ -63,7 +63,9 @@ class Import_excel:
 
         elif self.number == 1 or line_number==1:
             print(file_data['total_capital'])
-            family_id = add_family()
+            requence=string.ascii_lowercase + string.ascii_uppercase + string.digits
+            link_id = str(''.join(random.choices(requence,k=6)))
+            family_id = add_family(link_id)
             head_id = add_customer(family_id ,
                                     full_name ,
                                     file_data['total_capital'] ,

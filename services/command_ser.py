@@ -1,13 +1,14 @@
 from database import get_family_link_status,change_status_use_link_family,check_admin,check_is_in_db,get_family_data,add_customer_bot_id,get_all_customer,get_admin_list,get_admin_id_b_access,get_customer_bot_id
 from handler.command import *
-from keyboard.markup import go_ba_ne 
+from keyboard.call_back_markup import go_ba_ne 
 
 
 def start_ser(chat_id):
+    print(check_admin(chat_id))
     if not check_is_in_db(chat_id):
         return None
 
-    elif check_admin(chat_id):
+    elif check_admin(chat_id) == "admin":
         return True
     return False
 

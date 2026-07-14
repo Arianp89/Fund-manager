@@ -9,6 +9,7 @@ def customer_markup():
     markup.add("ارسال پیام" , "راهنمای استفاده")
     return markup
 
+
 def admin_markup(chat_id):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     admin_id = get_id_b_admin_bot_id(chat_id)
@@ -25,32 +26,3 @@ def admin_markup(chat_id):
         markup.add("مشاهده لیست اقساط")
     return markup
 
-
-
-
-
-def go_ba_ne(bot , data , call , text , page_number=1 , call_id=None):
-    markup = InlineKeyboardMarkup()
-    data_number = len(data)
-    if data_number == 5:
-        for da in data:
-            markup.add(InlineKeyboardButton(da[text] ,
-                                            callback_data=f'{call}_{da["ID"]}'))
-        return markup
-    
-
-    for da in data[(page_number -1)*5:page_number*5]:
-        markup.add(InlineKeyboardButton(da[text] ,
-                                            callback_data=f'{call}_{da["ID"]}'))
-    markup.add(InlineKeyboardButton("بعد" , callback_data=f'go_next_{page_number}_{call}') ,
-               InlineKeyboardButton("قبل" , callback_data=f'go_back_{page_number}_{call}'))          
-            
-    if page_number == 0:
-        bot.answer_callback_query(call_id , "❌")
-        return False
-
-    elif int(data_number) < int((page_number-1) * 5):
-        bot.answer_callback_query(call_id , 'نمیتوان رفت به صفحه بعد') 
-        return False
-    print(markup)
-    return markup

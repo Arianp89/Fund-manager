@@ -46,7 +46,7 @@ bot.set_update_listener(listener)
 
 
 @bot.message_handler(commands=['start'])
-def start_handler(message):
+def start_handler(message): 
     bot_command.start(message)
 
 
@@ -62,6 +62,9 @@ def add_admin_handler(message):
 #____________________________________BUTTON______________________________________
 
 
+
+#____________________________________ADMIN-ACCESS1________________________________
+
 @bot.message_handler(func=lambda message: message.text == "گرفتن بکآپ")
 def get_backup_handler(message):
     admin_buttons.get_backup(message)
@@ -74,6 +77,9 @@ def get_link_handler(message):
 def add_admin_access2_handler(message):
     admin_buttons.add_admin_access2(message)
 
+@bot.message_handler(func=lambda message:message.text == "تغییر ادمین")
+def change_admin_access2(message):
+    admin_buttons.change_admin_access2(message)
 
 #____________________________CALLS_______________________
 
@@ -86,12 +92,14 @@ def all_callback_query_handler(call):
     if data.startswith("add-access1"):
         call_handler.add_access1(data)
 
-    elif data.startswith("go"):
-        call_handler.go(data)
-
     elif data.startswith("add-admin"):
         call_handler.add_admin_access2(data)
 
+    elif data.startswith("change-admin"):
+        call_handler.change_admin_access2(data)
+
+    elif data.startswith("go"):
+        call_handler.go(data)
 
 
 #________________________________ALL-MESSAGE__________________________
@@ -105,5 +113,5 @@ logging.info('code running...')
 bot.infinity_polling() 
             
 'code write it by:'
-'arian panahi  github id : http://github.com/arianp89'  
+'arian panahi  github adrress : https://github.com/arianp89'  
             

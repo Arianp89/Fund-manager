@@ -40,11 +40,11 @@ def add_customer(family_id , full_name , amount ,is_active='true'):
     return  cur.lastrowid
 
 
-def add_family():
+def add_family(link_id):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "INSERT INTO FAMILY (FAMILY_NAME) VALUES (%s);"
-    cur.execute(SQL_Query , (None ,))
+    SQL_Query = "INSERT INTO FAMILY (LINK_ID) VALUES (%s);"
+    cur.execute(SQL_Query , (link_id ,))
     conn.commit()
     cur.close()
     conn.close()
@@ -86,12 +86,34 @@ def add_installment(loan_id , NUMBER_PAID , Capital_increase):
 
 
 
-def change_status_use_link_family(family_id , status='true'):
+def change_status_use_link_family(link_id , status='true'):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "UPDATE FAMILY SET USE_LINK=%s WHERE ID=%s;"
-    cur.execute(SQL_Query, (status , family_id))
+    SQL_Query = "UPDATE FAMILY SET USE_LINK=%s WHERE LINK_ID=%s;"
+    cur.execute(SQL_Query, (status , link_id))
     conn.commit()
     cur.close()
     conn.close()
-    return  cur.lastrowid    
+    return  cur.lastrowid   
+
+
+def delete_setting(admin_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "DELETE FROM SETTING WHERE ADMIN_ID=%s;"
+    cur.execute(SQL_Query, (admin_id ,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid  
+
+
+def delete_admin(admin_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "DELETE FROM ADMIN WHERE ID=%s;"
+    cur.execute(SQL_Query, (admin_id ,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid  

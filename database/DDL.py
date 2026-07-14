@@ -37,6 +37,7 @@ class make_database:
         `ID`                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
         `FAMILY_NAME`       VARCHAR(20) ,
         `HEAD_ID`           BIGINT ,
+        `LINK_ID`           VARCHAR(10) ,
         `USE_LINK`          VARCHAR(5) ,
         `REGISTER_DATE`     DATETIME DEFAULT CURRENT_TIMESTAMP ,
         `LAST_UPDATE`       DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

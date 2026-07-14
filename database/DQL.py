@@ -48,6 +48,8 @@ def get_admin_access(chat_id):
     data = cur.fetchone()    
     cur.close()
     conn.close()
+    if data is None:
+        return False
     return data["ACCESS_LEVEL"]
 
 
@@ -91,7 +93,18 @@ def get_admin_id_b_access(access_level):
 
 
 
-def get_family_data(family_id):
+def get_family_data(link_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT * FROM FAMILY WHERE LINK_ID=%s;"
+    cur.execute(SQL_Query , (link_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    return data
+
+
+def get_family_data_by_id(family_id):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor(dictionary=True)
     SQL_Query = "SELECT * FROM FAMILY WHERE ID=%s;"
@@ -100,6 +113,7 @@ def get_family_data(family_id):
     cur.close()
     conn.close()
     return data
+
 
 def get_all_family_id():
     conn = mysql.connector.connect(**db_config, database=database_name)
@@ -119,8 +133,8 @@ def check_admin(admin_id):
         bot_id = get_customer_bot_id(customer_id)
         bot_id_list.append(bot_id)
     if admin_id not in bot_id_list:
-        return "admin"
-    return "customer"
+        return "customer"
+    return "admin"
 
 
 
@@ -141,6 +155,38 @@ def get_family_link_status(family_id):
     if data is None:
         return False
     data = data["USE_LINK"]
-    if data == "false":
+    if data == "true":
+        return True
+    return False
+
+
+def get_setting_data(customer_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT ID FROM ADMIN WHERE CUSTOMER_ID=%s;"
+    cur.execute(SQL_Query , (customer_id ,))
+    admin_id = cur.fetchone()
+    if admin_id is None:
         return False
-    return True
+    SQL_Query = "SELECT * FROM SETTING WHERE ADMIN_ID=%s;"
+    cur.execute(SQL_Query , (admin_id["ID"] ,))
+    data = cur.fetchone()
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data
+
+
+
+def get_admin_id(customer_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT ID FROM ADMIN WHERE CUSTOMER_ID=%s;"
+    cur.execute(SQL_Query , (customer_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data["ID"]

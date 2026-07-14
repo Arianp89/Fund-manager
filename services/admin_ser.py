@@ -1,23 +1,21 @@
 from database import get_family_data,get_all_family_id,get_all_customer,get_admin_list,get_admin_id_b_access,get_customer_bot_id
 from config import bot_id
 from database import *
-from keyboard.markup import go_ba_ne
+from keyboard.call_back_markup import go_ba_ne
 
 
 
-def make_family_link_ser():
+def add_family_link_text():
     text_list = list()
     for id in get_all_family_id():
-        text = f'کاربر {get_family_data(id)['FAMILY_NAME']} \n'
-        text += " کلیک کنید ."+ f" [لینک](https://web.bale.ai/chat?uid={bot_id}&start=family_{id}) " + "لطفا روی "
+        family_data = get_family_data_by_id(id)
+        link_id = family_data['LINK_ID']
+        family_name = family_data['FAMILY_NAME']
+        text = f'کاربر {family_name} \n'
+        text += " کلیک کنید ."+ f" [لینک](https://web.bale.ai/chat?uid={bot_id}&start=family_{link_id}) " + "لطفا روی "
         text_list.append(text)
 
     return text_list
 
 
-def add_admin_ser(bot):
-    if get_admin_id_b_access(2) != False:
-        return False
-    markup = go_ba_ne(bot , get_all_customer() , 'add-admin' , "FULL_NAME")
-    return markup
 
