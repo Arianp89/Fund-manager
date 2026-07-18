@@ -1,6 +1,8 @@
 from backup.information_database_improved import DatabaseManager
 from keyboard.keyboard import customer_markup
-from services.admin_ser import check_admin,get_admin_access_by_chat_id,get_admin_access
+from services.admin_ser import check_admin,get_admin_access_by_chat_id,get_admin_access,check_is_in_db
+from .command import customer_step_send_message
+from services.admin_ser import *
 
 
 
@@ -12,24 +14,38 @@ class customer_button:
         self.bot = bot
     
 
-    def answer_customer(self , chat_id , access_level=2):
-        if check_admin(chat_id) == 'customer':
-            self.bot.send_message(chat_id , 'دستور وارد شده اشتباه است' , reply_markup = customer_markup())
+    def answer_customer(self , chat_id):
+        print(check_is_in_db(chat_id))
+        if not check_is_in_db(chat_id):
+            
             return False
-        
-      
-        admin_access = get_admin_access_by_chat_id(chat_id)
-        if admin_access == access_level:
-            return True
-        self.bot.send_message(chat_id , 'دستور وارد شده اشتباه است' , reply_markup = customer_markup())
-        return False
     
 
     def go_to_customer_panel(self , message):  
         cid = message.chat.id
 
         access_level = get_admin_access(cid)
-        if not self.answer_customer(cid , access_level):
-            return
+        if check_admin(cid) == 'customer':
+            self.bot.send_message(cid , 'دستور وارد شده اشتباه است' , reply_markup = customer_markup())
+            return False
+        
+        if access_level is not None:
+            admin_access = get_admin_access_by_chat_id(cid)
+            if admin_access == access_level:
+                return True
+
         
         self.bot.send_message(cid , "شما وارد پنل کاربر شدید" , reply_markup = customer_markup(cid))
+
+
+    def send_message_to_admin(self , message):
+        cid = message.chat.id
+        print(1)
+        if self.answer_customer(cid) == False:
+            return
+        print('ookkk')
+        customer_step_send_message[cid] = "A"
+        self.bot.send_message(cid , "پیام خود را وارد کنید برای خروچ /cancel را بزنید")
+        
+
+        

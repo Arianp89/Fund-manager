@@ -51,12 +51,27 @@ class bot_commands:
             return
         self.bot.send_message(cid , "لطفا کاربر مورد نظر خود را انتخاب کنید" , reply_markup=markup)
 
+
+    def cancel(self , message):
+        cid = message.chat.id
+        if cid in customer_step_send_message:
+            customer_step_send_message.pop(cid)
+
+        if check_admin(cid) == 'admin':
+            markup = admin_markup(cid)
+        else:
+            markup = customer_markup(cid)
+
+        self.bot.send_message(cid , "شما خارج شدید" , reply_markup = markup)
+    
+
     def all_message(self , message):
         cid = message.chat.id
         if not check_is_in_db(cid):
             return
-        if  check_admin(cid):
-            markup = customer_markup(cid)
-        else:
+        
+        if  check_admin(cid) == "admin":
             markup = admin_markup(cid)
+        else:
+            markup = customer_markup(cid)
         self.bot.send_message(cid , 'دستور یافت نشد' , reply_markup = markup)

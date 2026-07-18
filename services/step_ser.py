@@ -1,4 +1,4 @@
-from database import get_all_family_data,get_customer_bot_id
+from database import get_all_family_data,get_customer_bot_id,get_admin_id_b_access
 
 
 def get_all_family_bot_id():
@@ -16,3 +16,13 @@ def get_all_family_bot_id():
             bot_list.append(bot_id)
 
     return bot_list
+
+
+
+
+
+
+def send_message_admin_ser(chat_id):
+    admin_id = get_admin_id_b_access(2)
+    admin_bot_id = get_customer_bot_id(admin_id)
+    return admin_bot_id

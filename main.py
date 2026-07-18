@@ -2,7 +2,8 @@ from config import API_TOKEN
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
 import telebot 
 import logging
-from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,admin_step
+from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,admin_step,customer_button,customer_step
+from handler.command import customer_step_send_message 
 
 
 
@@ -15,8 +16,9 @@ bot=telebot.TeleBot(API_TOKEN)
 password_get_access1 = "Ad1fWQ89Gg"
 bot_command = bot_commands(bot)
 admin_buttons = admin_button(bot)
-customer_buttons = admin_button(bot)
+customer_buttons = customer_button(bot)
 admins_step = admin_step(bot)
+customers_step =customer_step(bot)
 
 #____________________________________LOGG_______________________________________
 
@@ -60,6 +62,10 @@ def help_handler(message):
 def add_admin_handler(message):
     bot_command.add_admin_access1(message)
 
+@bot.message_handler(commands=['cancel'])
+def cancel_handler(message):
+    bot_command.cancel(message)
+
 
 #____________________________________BUTTON______________________________________
 
@@ -91,12 +97,13 @@ def go_admin_panel_handler(message):
 def send_message_to_customer_handler(message):
     admin_buttons.send_message_to_customer(message)
 
+
 @bot.message_handler(func=lambda message: admin_step_send_messsage.get(message.chat.id) == "A")
-def send_message_one_handler(message):
+def send_message_one_handler_A(message):
     admins_step.send_message_one_step_A(message)
 
 @bot.message_handler(func=lambda message: admin_step_send_messsage.get(message.chat.id) == "B")
-def send_message_one_handler(message):
+def send_message_one_handler_B(message):
     admins_step.send_message_one_step_B(message)
 
 
@@ -105,6 +112,15 @@ def send_message_one_handler(message):
 
 #_______________________________CUSTOMER_______________________________
 
+
+@bot.message_handler(func=lambda message: message.text =="ارسال پیام")
+def send_message_to_admin_handler(message):
+    print('ke')
+    customer_buttons.send_message_to_admin(message)
+
+@bot.message_handler(func=lambda message: customer_step_send_message.get(message.chat.id) == "A")
+def send_message_to_admin(message):
+    customers_step.send_message_admin_step_A(message)
 
 @bot.message_handler(func=lambda message:message.text == "وارد شدن به پنل کاربر")
 def go_customer_panel_handler(message):

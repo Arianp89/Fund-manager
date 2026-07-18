@@ -1,5 +1,5 @@
-from .command import send_message_one_data , admin_step_send_messsage
-from services.step_ser import get_all_family_bot_id
+from .command import send_message_one_data , admin_step_send_messsage,customer_step_send_message
+from services.step_ser import get_all_family_bot_id,send_message_admin_ser
 
 class admin_step:
 
@@ -40,3 +40,21 @@ class admin_step:
 
 
 
+class customer_step:
+
+    def __init__(self , bot):
+        self.bot = bot
+
+
+    def send_message_admin_step_A(self , message):
+        cid = message.chat.id
+        text = "پیام کاربر \n"
+        text += message.text
+        admin_bot_id = send_message_admin_ser(cid)
+        try:
+            self.bot.send_message(admin_bot_id , text)
+        except Exception as e:
+            print(e)
+        self.bot.send_message(cid , "پیام با موفقیت ارسال شد")
+        customer_step_send_message.pop(cid)
+        
