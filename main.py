@@ -2,7 +2,7 @@ from config import API_TOKEN
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
 import telebot 
 import logging
-from handler import bot_commands,admin_button,call_back
+from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,admin_step
 
 
 
@@ -16,6 +16,7 @@ password_get_access1 = "Ad1fWQ89Gg"
 bot_command = bot_commands(bot)
 admin_buttons = admin_button(bot)
 customer_buttons = admin_button(bot)
+admins_step = admin_step(bot)
 
 #____________________________________LOGG_______________________________________
 
@@ -84,6 +85,24 @@ def change_admin_access2(message):
 def go_admin_panel_handler(message):
     admin_buttons.go_to_admin_panel(message)
 
+#____________________________________ADMIN-ACCESS1________________________________
+
+@bot.message_handler(func=lambda message: message.text == "ارسال پیام به کاربران")
+def send_message_to_customer_handler(message):
+    admin_buttons.send_message_to_customer(message)
+
+@bot.message_handler(func=lambda message: admin_step_send_messsage.get(message.chat.id) == "A")
+def send_message_one_handler(message):
+    admins_step.send_message_one_step_A(message)
+
+@bot.message_handler(func=lambda message: admin_step_send_messsage.get(message.chat.id) == "B")
+def send_message_one_handler(message):
+    admins_step.send_message_one_step_B(message)
+
+
+
+
+
 #_______________________________CUSTOMER_______________________________
 
 
@@ -109,6 +128,15 @@ def all_callback_query_handler(call):
 
     elif data.startswith("change-admin"):
         call_handler.change_admin_access2(data)
+
+    elif data == "chose_customer_to_send":
+        call_handler.send_massage_custommer_one()
+
+    elif data.startswith("send-message-one"):
+        call_handler.send_message_one(data)
+
+    elif data.startswith("send-message-all-customer"):
+        call_handler.send_message_all_customer()
 
     elif data.startswith("go"):
         call_handler.go(data)

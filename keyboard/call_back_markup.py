@@ -1,5 +1,5 @@
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
-from database import get_all_customer,get_admin_id_b_access
+from database import get_all_customer,get_admin_id_b_access,get_all_family_data
 
 def go_ba_ne(bot , data , call , text , page_number=1 , call_id=None):
     markup = InlineKeyboardMarkup()
@@ -58,4 +58,25 @@ def add_admin_markup(bot):
     if get_admin_id_b_access(2) != False:
         return False
     markup = go_ba_ne(bot , get_all_customer() , 'add-admin' , "FULL_NAME")
+    return markup
+
+
+def send_message_customer_markup():
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("به یک نفر" , callback_data = 'chose_customer_to_send'))
+    markup.add(InlineKeyboardButton("همه" , callback_data = 'send-message-all-customer'))
+    return markup
+
+
+def chose_customer_to_send_message_markup(bot):
+    markup = go_ba_ne(bot , get_all_family_data() , 'send-message-one' , "FAMILY_NAME")
+    if not markup:
+        return False
+    return markup
+
+
+def chose_customer_to_send_message_markup_go(bot , page_number , call_id):
+    markup = go_ba_ne(bot , get_all_family_data() , 'send-message-one' , "FAMILY_NAME" , page_number , call_id)
+    if not markup:
+        return False
     return markup

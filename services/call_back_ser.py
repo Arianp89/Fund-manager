@@ -25,3 +25,11 @@ def change_admin_access2_ser(id):
     delete_admin(admin_id)
     add_admin(id , 2)
     return True
+
+def send_message_one_ser(family_id):
+    family_data = get_family_data_by_id(family_id)
+    head_id = family_data["HEAD_ID"]
+    customer_bot_id = get_customer_bot_id(head_id)
+    if not customer_bot_id:
+        return None
+    return customer_bot_id

@@ -8,6 +8,7 @@ class link:
             
     def get_family_link_ser(self , link_id , chat_id):
         family_data = get_family_data(link_id)
+        print(family_data)
         if family_data is None:
             return False
         if not get_family_link_status(link_id):
@@ -31,5 +32,5 @@ class link:
             self.bot.send_message(cid , 'لینک خراب است')
             return
         elif status:
-            self.bot.send_message(cid , 'سلام' , customer_markup())
+            self.bot.send_message(cid , 'سلام' , customer_markup(cid))
         return

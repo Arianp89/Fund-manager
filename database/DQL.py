@@ -153,7 +153,7 @@ def get_family_link_status(family_id):
     cur.close()
     conn.close()
     if data is None:
-        return False
+        return True
     data = data["USE_LINK"]
     if data == "true":
         return True
@@ -196,3 +196,16 @@ def get_admin_access_by_chat_id(chat_id):
     admin_id = get_id_b_admin_bot_id(chat_id)
     admin_access = get_admin_access(admin_id)
     return admin_access
+
+
+def get_all_family_data():
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT * FROM FAMILY;"
+    cur.execute(SQL_Query)
+    data = cur.fetchall()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data
