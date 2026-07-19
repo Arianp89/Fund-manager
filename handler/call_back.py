@@ -1,7 +1,7 @@
 from services.call_back_ser import access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
 from keyboard.keyboard import admin_markup
 from keyboard.call_back_markup import chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
-from .command import send_message_one_data,admin_step_send_messsage
+from .command import send_message_one_data,admin_step_send_messsage,customer_step_send_message,customer_data_send_message
 
 class call_back:
 
@@ -131,6 +131,34 @@ class call_back:
         self.bot.edit_message_text("پیام خود را وارد کنید" , self.cid , self.mid)
 
 
+    def see_message(self , data):
+        _ , customer_id = data.split("_")
+
+        try:
+            self.bot.delete_message(self.cid , self.mid)
+        except Exception as e:
+            self.bot.send_message(self.cid , "پیام منقضی شده")
+            return
+        self.bot.send_message(customer_id , "پیام شما مشاهده شد")
+        self.bot.send_message(self.cid , "پیام مشاهده شدن ارسال شد")
+
+
+    def not_answer(self):
+
+        try:
+            self.bot.delete_message(self.cid , self.mid)
+        except Exception as e:
+            print(e)
+            self.bot.answer_callback_query(self.call_id ,"این پیام منقضی شده")
+
+
+    def answer_message(self , data):
+        _ , customer_id = data.split("_")
+        customer_step_send_message[self.cid] = "B"
+        customer_data_send_message[self.cid] = customer_id
+        self.bot.edit_message_text("پیام خود را وارد کنید" , self.cid ,self.mid)
+        
+    
 
     def go(self , data):
         _,_,_,call_name =data.split("_")

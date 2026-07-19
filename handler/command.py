@@ -6,5 +6,6 @@ command = {"start" : "شروع" ,
 
 
 customer_step_send_message = dict()
+customer_data_send_message = dict()
 admin_step_send_messsage = dict()
 send_message_one_data = dict()

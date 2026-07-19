@@ -119,8 +119,12 @@ def send_message_to_admin_handler(message):
     customer_buttons.send_message_to_admin(message)
 
 @bot.message_handler(func=lambda message: customer_step_send_message.get(message.chat.id) == "A")
-def send_message_to_admin(message):
+def send_message_to_admin_handler_A(message):
     customers_step.send_message_admin_step_A(message)
+
+@bot.message_handler(func=lambda message: customer_step_send_message.get(message.chat.id) == "B")
+def send_message_to_admin_handler_B(message):
+    customers_step.send_message_admin_step_B(message)
 
 @bot.message_handler(func=lambda message:message.text == "وارد شدن به پنل کاربر")
 def go_customer_panel_handler(message):
@@ -153,6 +157,15 @@ def all_callback_query_handler(call):
 
     elif data.startswith("send-message-all-customer"):
         call_handler.send_message_all_customer()
+
+    elif data.startswith("see-message"):
+        call_handler.see_message(data)
+        
+    elif data == "not-answer":
+        call_handler.not_answer()
+
+    elif data.startswith("answer-message"):
+        call_handler.answer_message(data)
 
     elif data.startswith("go"):
         call_handler.go(data)

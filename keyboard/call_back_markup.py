@@ -80,3 +80,11 @@ def chose_customer_to_send_message_markup_go(bot , page_number , call_id):
     if not markup:
         return False
     return markup
+
+
+def send_message_admin_markup(customer_id):
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("خوانده شده" , callback_data = f'see-message_{customer_id}') ,
+               InlineKeyboardButton("نادیده گرفتن" , callback_data=f'not-answer'))
+    markup.add(InlineKeyboardButton("پاسخ دادن" , callback_data = f'answer-message_{customer_id}'))
+    return markup
