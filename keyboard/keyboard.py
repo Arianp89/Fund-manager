@@ -6,7 +6,7 @@ from database import *
 
 def customer_markup(chat_id):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add("پرداخت قسط" , "مشاهده اطلاعات وام")
+    markup.add("پرداخت قسط" , "مشاهده اطلاعات ماه")
     markup.add("پروفایل")
     markup.add("ارسال پیام" , "راهنمای استفاده")
     if check_admin(chat_id) == 'admin':

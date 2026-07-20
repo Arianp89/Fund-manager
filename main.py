@@ -113,9 +113,13 @@ def send_message_one_handler_B(message):
 #_______________________________CUSTOMER_______________________________
 
 
+@bot.message_handler(func=lambda message: message.text == "پروفایل")
+def profile_handler(message):
+    customer_buttons.profile(message)
+
+
 @bot.message_handler(func=lambda message: message.text =="ارسال پیام")
 def send_message_to_admin_handler(message):
-    print('ke')
     customer_buttons.send_message_to_admin(message)
 
 @bot.message_handler(func=lambda message: customer_step_send_message.get(message.chat.id) == "A")
@@ -166,6 +170,12 @@ def all_callback_query_handler(call):
 
     elif data.startswith("answer-message"):
         call_handler.answer_message(data)
+
+    elif data.startswith("see-data"):
+        call_handler.see_data(data)
+    
+    elif data.startswith("see-family-data"):
+        call_handler.see_family_data(data)
 
     elif data.startswith("go"):
         call_handler.go(data)

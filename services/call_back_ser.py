@@ -33,3 +33,31 @@ def send_message_one_ser(family_id):
     if not customer_bot_id:
         return None
     return customer_bot_id
+
+def get_see_data_text(customer_id):
+    print(customer_id)
+    print(get_loan_data_by_customer_id(customer_id))
+    customer_data = get_customer_data_by_id(customer_id)
+    loan_data = get_loan_data_by_customer_id(customer_id)
+    if customer_data["IS_ACTIVE"] == "false":
+        is_active = "غیر فعال"
+    else:
+        is_active = "فعال"
+
+    if not loan_data:
+        text = f"""کد:{customer_data["ID"]}
+نام:{customer_data["FULL_NAME"]}
+سرمایه کل:{customer_data["TOTAL_CAPITAL"]}
+وضعیت اکانت:{is_active}
+مبلغ وام:تعلق نگرفته
+تعداد قسط های باقیمانده:تعلق نگرفته"""
+        return text
+    
+
+    text = f"""کد:{customer_data["ID"]}
+نام:{customer_data["FULL_NAME"]}
+سرمایه کل:{customer_data["TOTAL_CAPITAL"]}
+وضعیت اکانت:{is_active}
+مبلغ وام:{loan_data["LOAN_AMOUNT"]}
+تعداد قسط های باقیمانده:{loan_data["NUMBER_REMAINING_INSTALLMENTS"]}"""
+    return text

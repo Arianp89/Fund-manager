@@ -209,3 +209,58 @@ def get_all_family_data():
     if data is None:
         return False
     return data
+
+
+def get_family_data_by_head_id(head_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT * FROM FAMILY WHERE HEAD_ID=%s;"
+    cur.execute(SQL_Query , (head_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data
+
+
+def get_all_family_data_by_id(family_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT * FROM CUSTOMER WHERE FAMILY_ID=%s;"
+    cur.execute(SQL_Query , (family_id ,))
+    data = cur.fetchall()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data
+
+
+
+
+def get_customer_data_by_id(customer_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT * FROM CUSTOMER WHERE ID=%s;"
+    cur.execute(SQL_Query , (customer_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data
+
+def get_loan_data_by_customer_id(customer_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT * FROM LOAN WHERE CUSTOMER_ID = %s ORDER BY id DESC LIMIT 1"
+    cur.execute(SQL_Query , (customer_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data
+
+

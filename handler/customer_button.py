@@ -1,8 +1,10 @@
 from backup.information_database_improved import DatabaseManager
 from keyboard.keyboard import customer_markup
+from keyboard.call_back_markup import profile_markup
 from services.admin_ser import check_admin,get_admin_access_by_chat_id,get_admin_access,check_is_in_db
 from .command import customer_step_send_message
 from services.admin_ser import *
+from services.customer_ser import *
 
 
 
@@ -17,8 +19,8 @@ class customer_button:
     def answer_customer(self , chat_id):
         print(check_is_in_db(chat_id))
         if not check_is_in_db(chat_id):
-            
             return False
+        return True
     
 
     def go_to_customer_panel(self , message):  
@@ -40,12 +42,20 @@ class customer_button:
 
     def send_message_to_admin(self , message):
         cid = message.chat.id
-        print(1)
         if self.answer_customer(cid) == False:
             return
-        print('ookkk')
         customer_step_send_message[cid] = "A"
         self.bot.send_message(cid , "پیام خود را وارد کنید برای خروچ /cancel را بزنید")
+
+    def profile(self , message):
+        cid = message.chat.id
+        if not self.answer_customer(cid):
+            return
+        
+        text = get_profile_text(cid)
+        markup = profile_markup(cid)
+        self.bot.send_message(cid , text , reply_markup = markup)
+
         
 
         

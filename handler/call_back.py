@@ -1,6 +1,6 @@
-from services.call_back_ser import access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
+from services.call_back_ser import get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
 from keyboard.keyboard import admin_markup
-from keyboard.call_back_markup import chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
+from keyboard.call_back_markup import see_family_data_markup_go,see_family_markup,chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
 from .command import send_message_one_data,admin_step_send_messsage,customer_step_send_message,customer_data_send_message
 
 class call_back:
@@ -157,6 +157,31 @@ class call_back:
         customer_step_send_message[self.cid] = "B"
         customer_data_send_message[self.cid] = customer_id
         self.bot.edit_message_text("پیام خود را وارد کنید" , self.cid ,self.mid)
+
+
+    def see_data(self , data):
+        _ , customer_id = data.split("_")
+        text = get_see_data_text(customer_id)
+        self.bot.edit_message_text(text , self.cid , self.mid)
+
+    def see_family_data(self , data):
+        _ , family_id = data.split("_")
+        text = "لیست اعضای خانواده"
+        markup = see_family_markup(self.bot , family_id)
+        self.bot.edit_message_text(text , self.cid , self.mid , reply_markup = markup)
+
+
+    def see_family_data_go(self , data):
+        _,status,page_number,_=data.split("_")
+        page_number = int(page_number)
+        if status == "back":
+            page_number -=1
+        else:
+            page_number +=1
+        markup = see_family_data_markup_go(self.bot , page_number , self.call_id)
+        if not markup:
+            return 
+        self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
         
     
 
@@ -173,6 +198,9 @@ class call_back:
 
         elif call_name == "send-message-one":
             self.chose_customer_to_send_message_go(data)
+        
+        elif call_name == "see-family-data":
+            self.see_family_data_go(data)
 
 
         
