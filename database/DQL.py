@@ -264,3 +264,41 @@ def get_loan_data_by_customer_id(customer_id):
     return data
 
 
+def get_payment_data_by_customer_id(customer_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT * FROM PAYMENT WHERE CUSTOMER_ID = %s ORDER BY id DESC LIMIT 1"
+    cur.execute(SQL_Query , (customer_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data
+
+
+def get_loan_id_by_customer_id(customer_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT ID FROM LOAN WHERE CUSTOMER_ID = %s ORDER BY id DESC LIMIT 1"
+    cur.execute(SQL_Query , (customer_id ,))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data["ID"]
+
+
+
+def get_all_installment_data_by_loan_id(loan_id , status="true"):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT * FROM INSTALLMENT WHERE LOAN_ID = %s and STATUS = %s"
+    cur.execute(SQL_Query , (loan_id , status))
+    data = cur.fetchall()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data

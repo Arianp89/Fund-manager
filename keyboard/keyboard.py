@@ -1,12 +1,11 @@
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
-# from database import get_id_b_admin_bot_id,get_admin_access,get_admin_id_b_access
-from database import *
+from database import get_id_b_admin_bot_id,get_admin_access,get_admin_id_b_access,check_admin
 
 
 
 def customer_markup(chat_id):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add("پرداخت قسط" , "مشاهده اطلاعات ماه")
+    markup.add("پرداخت قسط" )
     markup.add("پروفایل")
     markup.add("ارسال پیام" , "راهنمای استفاده")
     if check_admin(chat_id) == 'admin':
@@ -25,7 +24,7 @@ def admin_markup(chat_id):
         else:
             markup.add("تغییر ادمین" , "دریافت لینک")
     elif admin_access == 2:
-        markup.add("مشاهده کاربران" , "مشاهده لیست اقساط")
+        markup.add("مشاهده کاربران" ,  "مشاهده لیست اقساط")
         markup.add("ارسال پیام به کاربران")
 
     markup.add("وارد شدن به پنل کاربر")

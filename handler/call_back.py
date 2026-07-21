@@ -39,14 +39,14 @@ class call_back:
 
 
     def add_admin_access2(self , data):
-        _ , customer_id = data.split("_")
+        _ , family_id = data.split("_")
         try:
             self.bot.delete_message(self.cid , self.mid)
-            data = add_admin_access2_call(customer_id)
+            data = add_admin_access2_call(family_id)
             status = data[0]
             if status:
                 chat_id = data[1]
-                self.bot.send_message(chat_id , 'شما ادمین شدید دکمه جا به جایی رو بزنید' , reply_markup=admin_markup())
+                self.bot.send_message(chat_id , 'شما ادمین شدید' , reply_markup=admin_markup(self.cid))
             else:
                 self.bot.answer_callback_query(self.call_id , 'ربات را استارت نزده')
             self.bot.send_message(self.cid , 'با موفقیت اضافه شد' , reply_markup = admin_markup(self.cid))
@@ -69,10 +69,10 @@ class call_back:
 
 
     def change_admin_access2(self , data):
-        _ , customer_id = data.split("_")
+        _ , family_id = data.split("_")
         try:
             self.bot.delete_message(self.cid , self.mid)
-            change_admin_access2_ser(customer_id)
+            change_admin_access2_ser(family_id)
         except Exception as e:
             print(e)
             self.bot.send_message(self.cid , 'دوباره تلاش کنید')

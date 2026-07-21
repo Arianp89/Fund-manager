@@ -7,14 +7,17 @@ def access_1_ser(customer_id , chat_id):
 
 
 
-def add_admin_access2_call(customer_id ):
+def add_admin_access2_call(family_id ):
+    customer_id = get_family_data_by_id(family_id)["HEAD_ID"]
     add_admin(customer_id , 2)
     bot_id = get_customer_bot_id(customer_id)
     if bot_id is None:
         return [False]
     return [True , bot_id]
 
-def change_admin_access2_ser(id):
+def change_admin_access2_ser(family_id):
+    new_admin_id = get_family_data_by_id(family_id)["HEAD_ID"]
+    print(new_admin_id)
     customer_id = get_admin_id_b_access(2)
     setting_data = get_setting_data(customer_id)
     admin_id =  get_admin_id(customer_id)
@@ -23,7 +26,7 @@ def change_admin_access2_ser(id):
     else:
         delete_setting(admin_id)
     delete_admin(admin_id)
-    add_admin(id , 2)
+    add_admin(new_admin_id , 2)
     return True
 
 def send_message_one_ser(family_id):
@@ -39,25 +42,26 @@ def get_see_data_text(customer_id):
     print(get_loan_data_by_customer_id(customer_id))
     customer_data = get_customer_data_by_id(customer_id)
     loan_data = get_loan_data_by_customer_id(customer_id)
+
+
     if customer_data["IS_ACTIVE"] == "false":
         is_active = "غیر فعال"
+        text = f"کد:{customer_data["ID"]} \n نام:{customer_data["FULL_NAME"]} وضعیت اکانت:{is_active}"
+        
     else:
+        if not loan_data:
+            loan_number = "تعلق نگرفته"
+            number_installmet_pay = "تعلق نگرفته"
+
+        else:
+            loan_number = loan_data["LOAN_AMOUNT"]
+            number_installmet_pay = loan_data["NUMBER_REMAINING_INSTALLMENTS"]
+
         is_active = "فعال"
-
-    if not loan_data:
         text = f"""کد:{customer_data["ID"]}
-نام:{customer_data["FULL_NAME"]}
-سرمایه کل:{customer_data["TOTAL_CAPITAL"]}
+نام:{customer_data["FULL_NAME"]} سرمایه کل:{customer_data["TOTAL_CAPITAL"]}
 وضعیت اکانت:{is_active}
-مبلغ وام:تعلق نگرفته
-تعداد قسط های باقیمانده:تعلق نگرفته"""
-        return text
-    
-
-    text = f"""کد:{customer_data["ID"]}
-نام:{customer_data["FULL_NAME"]}
-سرمایه کل:{customer_data["TOTAL_CAPITAL"]}
-وضعیت اکانت:{is_active}
-مبلغ وام:{loan_data["LOAN_AMOUNT"]}
-تعداد قسط های باقیمانده:{loan_data["NUMBER_REMAINING_INSTALLMENTS"]}"""
+مبلغ وام:{loan_number}
+تعداد قسط های باقیمانده:{number_installmet_pay}"""
+        
     return text

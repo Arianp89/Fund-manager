@@ -55,7 +55,3 @@ class customer_button:
         text = get_profile_text(cid)
         markup = profile_markup(cid)
         self.bot.send_message(cid , text , reply_markup = markup)
-
-        
-
-        
