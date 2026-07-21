@@ -143,7 +143,7 @@ class make_database:
         `ID`                    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
         `LOAN_ID`               BIGINT UNSIGNED NOT NULL ,
         `INSTALLMENT_NUMBER`    INT ,
-        `CAPITAL_INCREASE`      BIGINT ,
+        `DEPOSIT AMOUNT`        BIGINT ,
         `STATUS`                VARCHAR(5) ,
         `REGISTER_DATE`         DATETIME DEFAULT CURRENT_TIMESTAMP ,
         `LAST_UPDATE`           DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
@@ -154,9 +154,33 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table customer created successfully')
+        print(f'table INSTALLMENT created successfully')
 
 
+
+    def create_table_payment(self):
+        conn=mysql.connector.connection.MySQLConnection(**self.db_config, database=self.db_name)
+        cur=conn.cursor()
+        SQL_Query="""CREATE TABLE PAYMENT (
+        `ID`                      BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        `LOAN_ID`                 BIGINT UNSIGNED NOT NULL,              -- اتصال به وام
+        `INSTALLMENT_ID`          BIGINT UNSIGNED NULL,           -- اتصال به قسط (اختیاری، اگر پرداخت مستقیماً برای یک قسط باشد)
+        `CUSTOMER_ID`             BIGINT UNSIGNED NOT NULL,         -- اتصال به مشتری (برای کوئری‌های سریع‌تر)
+        `AMOUNT_PAID`             BIGINT NOT NULL,                   -- مبلغ پرداخت شده
+        `CAPITAL_INCREASE`         BIGINT UNSIGNED NOT NULL ,        -- مبلغ افزایش سرمایه
+        `PAYMENT_DATE`            DATETIME DEFAULT CURRENT_TIMESTAMP, -- زمان انجام پرداخت
+        `LAST_UPDATE`             DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        CONSTRAINT FK_PAYMENT_LOAN FOREIGN KEY (LOAN_ID) REFERENCES LOAN(ID) ON DELETE CASCADE,
+        CONSTRAINT FK_PAYMENT_INSTALLMENT FOREIGN KEY (INSTALLMENT_ID) REFERENCES INSTALLMENT(ID) ON DELETE SET NULL,
+        CONSTRAINT FK_PAYMENT_CUSTOMER FOREIGN KEY (CUSTOMER_ID) REFERENCES CUSTOMER(ID) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+"""
+        cur.execute(SQL_Query)
+        conn.commit()
+        cur.close()
+        conn.close()
+        print(f'table customer created payment')
 
 
 
