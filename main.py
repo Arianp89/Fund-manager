@@ -88,7 +88,7 @@ def change_admin_access2(message):
 
 @bot.message_handler(func=lambda message: message.text == "وارد شدن به پنل ادمین")
 def go_admin_panel_handler(message):
-    admin_buttons.go_to_admin_panel(message)
+    admin_buttons.go_admin_panel(message)
 
 #____________________________________ADMIN-ACCESS2________________________________
 
@@ -157,7 +157,7 @@ def all_callback_query_handler(call):
         call_handler.change_admin_access2(data)
 
     elif data == "chose_customer_to_send":
-        call_handler.send_massage_custommer_one()
+        call_handler.send_massage_customer_one()
 
     elif data.startswith("send-message-one"):
         call_handler.send_message_one(data)
@@ -175,13 +175,13 @@ def all_callback_query_handler(call):
         call_handler.answer_message(data)
 
     elif data.startswith("see-data"):
-        call_handler.see_data(data)
+        call_handler.get_customer_data(data)
     
     elif data.startswith("see-family-data"):
         call_handler.see_family_data(data)
 
     elif data.startswith("admin-see-family-list"):
-        call_handler.admin_get_family_list()
+        call_handler.get_family_list()
 
     elif data.startswith("get-family-member-list"):
         call_handler.see_family_data(data)

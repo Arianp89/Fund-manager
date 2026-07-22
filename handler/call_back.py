@@ -26,7 +26,7 @@ class call_back:
             print(e)
 
 
-    def go_add_access1_go(self, data):
+    def add_access1_go(self, data):
         _,status,page_number,_=data.split("_")
         page_number = int(page_number)
         if status == "back":
@@ -105,7 +105,7 @@ class call_back:
 
 
 
-    def send_massage_custommer_one(self):
+    def send_massage_customer_one(self):
         markup = chose_customer_to_send_message_markup(self.bot)
         self.bot.edit_message_text(chat_id = self.cid , text = "انتخاب کنید" , message_id = self.mid , reply_markup = markup)
 
@@ -141,7 +141,6 @@ class call_back:
 
 
     def not_answer(self):
-
         try:
             self.bot.delete_message(self.cid , self.mid)
         except Exception as e:
@@ -156,19 +155,19 @@ class call_back:
         self.bot.edit_message_text("پیام خود را وارد کنید" , self.cid ,self.mid)
 
 
-    def see_data(self , data):
+    def get_customer_data(self , data):
         _ , customer_id = data.split("_")
         text = get_see_data_text(customer_id)
         self.bot.edit_message_text(text , self.cid , self.mid)
 
-    def see_family_data(self , data):
+    def get_family_member(self , data):
         _ , family_id = data.split("_")
         text = "لیست اعضای خانواده"
         markup = see_family_markup(self.bot , family_id)
         self.bot.edit_message_text(text , self.cid , self.mid , reply_markup = markup)
 
 
-    def see_family_data_go(self , data):
+    def get_family_member_go(self , data):
         _,status,page_number,_=data.split("_")
         page_number = int(page_number)
         if status == "back":
@@ -181,7 +180,7 @@ class call_back:
         self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
 
 
-    def admin_get_family_list(self):
+    def get_family_list(self):
         text = "لیست خانواده ها"
         markup = get_family_markup(self.bot)
         self.bot.edit_message_text(chat_id = self.cid , message_id = self.mid , text = text , reply_markup = markup)
@@ -203,7 +202,7 @@ class call_back:
     def go(self , data):
         _,_,_,call_name =data.split("_")
         if call_name == "add-access1":
-            self.go_add_access1_go(data)
+            self.add_access1_go(data)
         
         elif call_name == "add-admin":
             self.add_admin_access2_go(data)
@@ -215,7 +214,7 @@ class call_back:
             self.chose_customer_to_send_message_go(data)
         
         elif call_name == "see-family-data":
-            self.see_family_data_go(data)
+            self.get_family_member_go(data)
         
         elif call_name == "admin-see-family-data":
             self.get_family_list_go(data)

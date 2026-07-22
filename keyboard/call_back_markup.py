@@ -55,14 +55,14 @@ def change_admin_access2_markup_go(bot , page_number , call_id):
     return markup
 
 
-def add_admin_markup(bot):
+def add_admin_access2_markup(bot):
     if get_admin_id_b_access(2) != False:
         return False
     markup = go_ba_ne(bot , get_all_family_data() , 'add-admin' , "FAMILY_NAME")
     return markup
 
 
-def send_message_customer_markup():
+def send_message_to_customer_markup():
     markup = InlineKeyboardMarkup()
     markup.add(InlineKeyboardButton("به یک نفر" , callback_data = 'chose_customer_to_send'))
     markup.add(InlineKeyboardButton("همه" , callback_data = 'send-message-all-customer'))

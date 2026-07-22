@@ -39,7 +39,6 @@ def send_message_one_ser(family_id):
     return customer_bot_id
 
 def get_see_data_text(customer_id):
-    print(customer_id)
     print(get_loan_data_by_customer_id(customer_id))
     customer_data = get_customer_data_by_id(customer_id)
     loan_data = get_loan_data_by_customer_id(customer_id)
