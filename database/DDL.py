@@ -143,7 +143,8 @@ class make_database:
         `ID`                    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
         `LOAN_ID`               BIGINT UNSIGNED NOT NULL ,
         `INSTALLMENT_NUMBER`    INT ,
-        `DEPOSIT AMOUNT`        BIGINT ,
+        `DEPOSIT_AMOUNT`        BIGINT ,
+        `CAPITAL_INCREASE`      BIGINT UNSIGNED NOT NULL ,        -- مبلغ افزایش سرمایه
         `STATUS`                VARCHAR(5) ,
         `REGISTER_DATE`         DATETIME DEFAULT CURRENT_TIMESTAMP ,
         `LAST_UPDATE`           DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
@@ -167,7 +168,6 @@ class make_database:
         `INSTALLMENT_ID`          BIGINT UNSIGNED NULL,           -- اتصال به قسط (اختیاری، اگر پرداخت مستقیماً برای یک قسط باشد)
         `CUSTOMER_ID`             BIGINT UNSIGNED NOT NULL,         -- اتصال به مشتری (برای کوئری‌های سریع‌تر)
         `AMOUNT_PAID`             BIGINT NOT NULL,                   -- مبلغ پرداخت شده
-        `CAPITAL_INCREASE`         BIGINT UNSIGNED NOT NULL ,        -- مبلغ افزایش سرمایه
         `PAYMENT_DATE`            DATETIME DEFAULT CURRENT_TIMESTAMP, -- زمان انجام پرداخت
         `LAST_UPDATE`             DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         CONSTRAINT FK_PAYMENT_LOAN FOREIGN KEY (LOAN_ID) REFERENCES LOAN(ID) ON DELETE CASCADE,
@@ -193,4 +193,5 @@ if __name__ == '__main__':
     db.create_table_setting()
     db.create_table_loan()
     db.create_table_installment()
+    db.create_table_payment()
     print('end creat database')

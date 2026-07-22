@@ -116,3 +116,20 @@ def see_family_data_markup_go(bot , family_id , page_number , call_id):
     if not markup:
         return False
     return markup
+
+def get_family_markup(bot):
+    markup  = go_ba_ne(bot , get_all_family_data() , 'get-family-member-list' ,"FAMILY_NAME")
+    if not markup:
+        return False
+    return markup
+
+def get_family_list_markup_go(bot , page_number , call_id):
+    markup  = go_ba_ne(bot , get_all_family_data() , 'admin-see-family-data' ,"FAMILY_NAME" , page_number , call_id)
+    if not markup:
+        return False
+    return markup
+
+def admin_see_family_list():
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("مشاهده لیست خانواده" , callback_data = "admin-see-family-list"))
+    return markup

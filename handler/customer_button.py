@@ -17,26 +17,25 @@ class customer_button:
     
 
     def answer_customer(self , chat_id):
-        print(check_is_in_db(chat_id))
         if not check_is_in_db(chat_id):
             return False
         return True
     
 
-    def go_to_customer_panel(self , message):  
+    def go_customer_panel(self , message):  
         cid = message.chat.id
+        if not self.answer_customer(cid):
+            return
 
         access_level = get_admin_access(cid)
         if check_admin(cid) == 'customer':
-            self.bot.send_message(cid , 'دستور وارد شده اشتباه است' , reply_markup = customer_markup())
+            self.bot.send_message(cid , 'دستور وارد شده اشتباه است' , reply_markup = customer_markup(cid))
             return False
         
         if access_level is not None:
             admin_access = get_admin_access_by_chat_id(cid)
             if admin_access == access_level:
                 return True
-
-        
         self.bot.send_message(cid , "شما وارد پنل کاربر شدید" , reply_markup = customer_markup(cid))
 
 
@@ -44,8 +43,10 @@ class customer_button:
         cid = message.chat.id
         if self.answer_customer(cid) == False:
             return
+        
         customer_step_send_message[cid] = "A"
         self.bot.send_message(cid , "پیام خود را وارد کنید برای خروچ /cancel را بزنید")
+
 
     def profile(self , message):
         cid = message.chat.id

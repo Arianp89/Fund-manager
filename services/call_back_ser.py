@@ -1,7 +1,8 @@
 from database import *
 
 
-def access_1_ser(customer_id , chat_id):
+def access_1_ser(family_id , chat_id):
+    customer_id = get_family_data_by_id(family_id)["HEAD_ID"]
     add_admin(customer_id)
     add_customer_bot_id(customer_id , int(chat_id))
 
@@ -65,3 +66,9 @@ def get_see_data_text(customer_id):
 تعداد قسط های باقیمانده:{number_installmet_pay}"""
         
     return text
+
+
+def see_family_data_admin_text(family_id):
+    family_data = get_family_data_by_id(family_id)["HEAD_ID"]
+    head_id = family_data["HEAD_ID"]
+    pay_time = get_payment_data_by_customer_id(head_id)

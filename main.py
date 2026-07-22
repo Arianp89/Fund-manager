@@ -92,6 +92,10 @@ def go_admin_panel_handler(message):
 
 #____________________________________ADMIN-ACCESS2________________________________
 
+@bot.message_handler(func=lambda message: message.text == "مشاهده کاربران")
+def see_customer_handler(message):
+    admin_buttons.see_customer(message)
+
 @bot.message_handler(func=lambda message: message.text == "ارسال پیام به کاربران")
 def send_message_to_customer_handler(message):
     admin_buttons.send_message_to_customer(message)
@@ -131,7 +135,7 @@ def send_message_to_admin_handler_B(message):
 
 @bot.message_handler(func=lambda message:message.text == "وارد شدن به پنل کاربر")
 def go_customer_panel_handler(message):
-    customer_buttons.go_to_customer_panel(message)
+    customer_buttons.go_customer_panel(message)
 
 
 
@@ -144,7 +148,7 @@ def all_callback_query_handler(call):
     print(f'call={call.message.from_user.first_name} [{call.message.chat.id}]:{data}')
 
     if data.startswith("add-access1"):
-        call_handler.add_access1(data)
+        call_handler.add_admin_access1(data)
 
     elif data.startswith("add-admin"):
         call_handler.add_admin_access2(data)
@@ -174,6 +178,12 @@ def all_callback_query_handler(call):
         call_handler.see_data(data)
     
     elif data.startswith("see-family-data"):
+        call_handler.see_family_data(data)
+
+    elif data.startswith("admin-see-family-list"):
+        call_handler.admin_get_family_list()
+
+    elif data.startswith("get-family-member-list"):
         call_handler.see_family_data(data)
 
     elif data.startswith("go"):

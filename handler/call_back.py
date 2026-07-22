@@ -1,22 +1,23 @@
 from services.call_back_ser import get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
 from keyboard.keyboard import admin_markup
-from keyboard.call_back_markup import see_family_data_markup_go,see_family_markup,chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
+from keyboard.call_back_markup import get_family_markup,get_family_list_markup_go,see_family_data_markup_go,see_family_markup,chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
 from .command import send_message_one_data,admin_step_send_messsage,customer_step_send_message,customer_data_send_message
 
 class call_back:
-
     def __init__(self , bot , call):
         self.bot = bot
         self.call_id = call.id
         self.cid = call.message.chat.id
         self.mid = call.message.message_id
 
-    def add_access1(self , data ):
-        _,admin_id = data.split("_")
+
+    def add_admin_access1(self , data ):
+        _,family_id = data.split("_")
         try:
             self.bot.delete_message(self.cid , self.mid)
-            admin_id = int(admin_id)
-            access_1_ser(admin_id , self.cid)
+            
+            family_id = int(family_id)
+            access_1_ser(family_id , self.cid)
             self.bot.answer_callback_query(self.call_id , "شما ادمین شدید.")
             self.bot.send_message(self.cid , 'این هم از منوی شما' , reply_markup=admin_markup(self.cid))
             
@@ -67,7 +68,6 @@ class call_back:
         self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
 
 
-
     def change_admin_access2(self , data):
         _ , family_id = data.split("_")
         try:
@@ -77,8 +77,6 @@ class call_back:
             print(e)
             self.bot.send_message(self.cid , 'دوباره تلاش کنید')
         self.bot.send_message(self.cid , 'ادمین با موفقیت تغییر کرد')
-
-
 
 
     def change_admin_access2_go(self , data):
@@ -105,14 +103,12 @@ class call_back:
         send_message_one_data[self.cid] = customer_bot_id
         self.bot.edit_message_text("پیام خود را وارد کنید" , self.cid , self.mid )
 
-    
 
 
     def send_massage_custommer_one(self):
-
         markup = chose_customer_to_send_message_markup(self.bot)
-
         self.bot.edit_message_text(chat_id = self.cid , text = "انتخاب کنید" , message_id = self.mid , reply_markup = markup)
+
 
     def chose_customer_to_send_message_go(self , data):
         _,status,page_number,_=data.split("_")
@@ -125,6 +121,7 @@ class call_back:
         if not markup:
             return 
         self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
+
 
     def send_message_all_customer(self):
         admin_step_send_messsage[self.cid] = "B"
@@ -182,8 +179,26 @@ class call_back:
         if not markup:
             return 
         self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
-        
+
+
+    def admin_get_family_list(self):
+        text = "لیست خانواده ها"
+        markup = get_family_markup(self.bot)
+        self.bot.edit_message_text(chat_id = self.cid , message_id = self.mid , text = text , reply_markup = markup)
     
+    
+    def get_family_list_go(self , data):
+        _,status,page_number,_=data.split("_")
+        page_number = int(page_number)
+        if status == "back":
+            page_number -=1
+        else:
+            page_number +=1
+        markup = get_family_list_markup_go(self.bot , page_number , self.call_id)
+        if not markup:
+            return 
+        self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
+
 
     def go(self , data):
         _,_,_,call_name =data.split("_")
@@ -201,6 +216,6 @@ class call_back:
         
         elif call_name == "see-family-data":
             self.see_family_data_go(data)
-
-
         
+        elif call_name == "admin-see-family-data":
+            self.get_family_list_go(data)

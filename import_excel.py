@@ -87,6 +87,7 @@ class Import_excel:
             else:
                 loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid)
                 add_installment(loan_id , number_paid_installment , Capital_increase)
+                
             
             self.number = 0
 

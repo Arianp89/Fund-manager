@@ -1,7 +1,7 @@
 from backup import DatabaseManager
 from config import db_config,database_name
 from keyboard.keyboard import customer_markup,admin_markup
-from keyboard.call_back_markup import add_admin_markup,change_admin_access2_markup,send_message_customer_markup
+from keyboard.call_back_markup import admin_see_family_list,add_admin_markup,change_admin_access2_markup,send_message_customer_markup,get_family_markup
 import shutil
 import os
 from services.admin_ser import *
@@ -112,6 +112,14 @@ class admin_button:
         markup = send_message_customer_markup()
         self.bot.send_message(cid , "یکی از گزینه های زیر را انتخاب کنید" , reply_markup = markup)
 
+    def see_customer(self , message):
+        cid = message.chat.id
+        if not self.answer_customer(cid):
+            return
+        
+        text = admin_see_customer_text()
+        markup = admin_see_family_list()
+        self.bot.send_message(cid , text , reply_markup = markup)
 
     
 
