@@ -251,10 +251,10 @@ def get_customer_data_by_id(customer_id):
         return False
     return data
 
-def get_loan_data_by_customer_id(customer_id):
+def get_loan_data_by_customer_id(customer_id ):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor(dictionary=True)
-    SQL_Query =  "SELECT * FROM LOAN WHERE CUSTOMER_ID = %s ORDER BY id DESC LIMIT 1"
+    SQL_Query =  "SELECT * FROM LOAN WHERE CUSTOMER_ID = %s  ORDER BY id DESC LIMIT 1"
     cur.execute(SQL_Query , (customer_id ,))
     data = cur.fetchone()    
     cur.close()
@@ -297,6 +297,18 @@ def get_all_installment_data_by_loan_id(loan_id , status="true"):
     SQL_Query =  "SELECT * FROM INSTALLMENT WHERE LOAN_ID = %s and STATUS = %s"
     cur.execute(SQL_Query , (loan_id , status))
     data = cur.fetchall()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data
+
+def get_loan_data_by_id(loan_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT * FROM LOAN WHERE ID =%s"
+    cur.execute(SQL_Query , (loan_id ,))
+    data = cur.fetchone()    
     cur.close()
     conn.close()
     if data is None:

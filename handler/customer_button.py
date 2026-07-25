@@ -1,6 +1,6 @@
 from backup.information_database_improved import DatabaseManager
 from keyboard.keyboard import customer_markup
-from keyboard.call_back_markup import profile_markup
+from keyboard.call_back_markup import profile_markup,pay_installment_markup
 from services.admin_ser import check_admin,get_admin_access_by_chat_id,get_admin_access,check_is_in_db
 from .command import customer_step_send_message
 from services.admin_ser import *
@@ -56,3 +56,16 @@ class customer_button:
         text = get_profile_text(cid)
         markup = profile_markup(cid)
         self.bot.send_message(cid , text , reply_markup = markup)
+
+    def pay_installment(self , message):
+        cid = message.chat.id
+        if not self.answer_customer(cid):
+            return
+        
+        text = pay_installment_ser(cid)
+        print(text)
+        if not text[0]:
+            self.bot.send_message(cid , text[1])
+            return
+        markup = pay_installment_markup(message)
+        self.bot.send_message(cid , text[1] , reply_markup = markup)

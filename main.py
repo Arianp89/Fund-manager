@@ -92,6 +92,11 @@ def go_admin_panel_handler(message):
 
 #____________________________________ADMIN-ACCESS2________________________________
 
+@bot.message_handler(func=lambda message: message.text == "پرداخت قسط")
+def pay_installment_handler(message):
+    customer_buttons.pay_installment(message)
+
+
 @bot.message_handler(func=lambda message: message.text == "مشاهده کاربران")
 def see_customer_handler(message):
     admin_buttons.see_customer(message)

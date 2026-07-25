@@ -133,3 +133,9 @@ def admin_see_family_list():
     markup = InlineKeyboardMarkup()
     markup.add(InlineKeyboardButton("مشاهده لیست خانواده" , callback_data = "admin-see-family-list"))
     return markup
+
+
+def pay_installment_markup(head_id):
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("افزایش سرمایه" , callback_data=f"amount_{head_id}"))
+    return markup
