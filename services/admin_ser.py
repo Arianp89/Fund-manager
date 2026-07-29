@@ -2,6 +2,7 @@ from database import get_family_data,get_all_family_id,get_all_customer,get_admi
 from config import bot_id
 from database import *
 from keyboard.call_back_markup import go_ba_ne
+import datetime
 
 
 
@@ -41,6 +42,29 @@ def admin_see_customer_text():
 """
     return text
         
+def see_loan_list_text():
+    total_loan = 0
+    total_installment_not_pay = 0
+    total_installment_pay = 0
+    for loan_data in get_all_loan_data():
+        if loan_data["NUMBER_REMAINING_INSTALLMENTS"] > 0:
+            total_loan += 1
+            loan_id = loan_data["ID"]
+            now = datetime.datetime.now().strftime("%Y/%m")
+            for installment_data in get_all_installment_data_by_id(loan_id):
+                print(2)
+                if installment_data["REGISTER_DATE"].strftime("%Y/%m") == now:
+                    print(1)
+                    print(installment_data["STATUS"])
+                    if installment_data["STATUS"] == 'true':
+                        total_installment_pay += 1
+                    else:
+                        total_installment_not_pay += 1
 
+    text = f"""تعداد وام ها:{total_loan}
+تعداد اقساط پرداخت شده:{total_installment_pay}
+تعداد اقساط پرداخت نشده:{total_installment_not_pay}
+"""
+    return text
 
 

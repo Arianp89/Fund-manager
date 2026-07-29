@@ -153,3 +153,8 @@ def message_link_family_markup(customer_id , link_id):
     markup.add(InlineKeyboardButton("تایید" , callback_data=f"family-link-msg_true_{link_id}_{customer_id}") ,
                InlineKeyboardButton("لغو" , callback_data=f"family-link-msg_false_{link_id}_{customer_id}"))
     return markup
+
+def see_loan_list_markup():
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("ارسال پیام برای پرداخت" , callback_data='send-message-to-pay'))
+    return markup

@@ -314,3 +314,24 @@ def get_loan_data_by_id(loan_id):
     if data is None:
         return False
     return data
+
+
+def get_all_loan_data():
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT * FROM LOAN;"
+    cur.execute(SQL_Query)
+    data = cur.fetchall()    
+    cur.close()
+    conn.close()
+    return data
+
+def get_all_installment_data_by_id(loan_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT * FROM INSTALLMENT WHERE LOAN_ID =%s;"
+    cur.execute(SQL_Query , (loan_id ,))
+    data = cur.fetchall()    
+    cur.close()
+    conn.close()
+    return data

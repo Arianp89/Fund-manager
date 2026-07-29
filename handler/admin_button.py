@@ -1,7 +1,7 @@
 from backup import DatabaseManager
 from config import db_config,database_name
 from keyboard.keyboard import customer_markup,admin_markup
-from keyboard.call_back_markup import admin_see_family_list,add_admin_access2_markup,change_admin_access2_markup,send_message_to_customer_markup,get_family_markup
+from keyboard.call_back_markup import see_loan_list_markup,admin_see_family_list,add_admin_access2_markup,change_admin_access2_markup,send_message_to_customer_markup,get_family_markup
 import shutil
 import os
 from services.admin_ser import *
@@ -110,6 +110,11 @@ class admin_button:
         markup = admin_see_family_list()
         self.bot.send_message(cid , text , reply_markup = markup)
 
-    
-
-
+    def see_loan_list(self , message):
+        cid = message.chat.id
+        if not self.answer_customer(cid):
+            return
+        
+        text = see_loan_list_text()
+        markup = see_loan_list_markup()
+        self.bot.send_message(cid , text , reply_markup = markup)

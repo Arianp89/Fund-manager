@@ -93,4 +93,15 @@ def family_link_msg_true_ser(link_id , customer_bot_id):
             add_customer_bot_id(family_data["HEAD_ID"] , customer_bot_id)
             change_status_use_link_family(link_id)
             
-
+def get_customer_bot_id_and_message():
+    data = dict()
+    for loan_data in get_all_loan_data():
+        loan_id = loan_data["ID"]
+        for installment in get_all_installment_data_by_id(loan_id):
+            if installment["STATUS"] == 'false':
+                customer_bot_id = get_customer_bot_id(loan_data["CUSTOMER_ID"])
+                if loan_data["CUSTOMER_ID"]  in data:
+                    data[str(customer_bot_id)] += loan_data["INSTALLMENT_AMOUNT"]
+                else:
+                    data[str(customer_bot_id)] = loan_data["INSTALLMENT_AMOUNT"]
+    return data

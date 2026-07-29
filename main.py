@@ -98,6 +98,9 @@ def pay_installment_handler(message):
 def pay_installment_step_A_handler(message):
     customers_step.pay_installment_A(message)
 
+@bot.message_handler(func=lambda message: message.text == "مشاهده لیست اقساط")
+def see_loan_list_handler(message):
+    admin_buttons.see_loan_list(message)
 
 @bot.message_handler(func=lambda message: message.text == "مشاهده کاربران")
 def see_customer_handler(message):
@@ -198,6 +201,9 @@ def all_callback_query_handler(call):
 
     elif data.startswith("family-link-msg"):
         call_handler.family_link_msg(data)
+
+    elif data == 'send-message-to-pay':
+        call_handler.send_message_to_pay()
 
     elif data.startswith("go"):
         call_handler.go(data)
