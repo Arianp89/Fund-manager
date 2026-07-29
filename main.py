@@ -1,15 +1,14 @@
 from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,admin_step,customer_button,customer_step
-from handler.command import customer_step_send_message 
-from config import API_TOKEN 
-import telebot 
+from handler.command import customer_step_send_message,pay_installment_step
+from config import API_TOKEN
+import telebot
 import logging
 
 
 
 
-telebot.apihelper.API_URL = 'http://tapi.bale.ai/bot{0}/{1}' 
+telebot.apihelper.API_URL = 'http://tapi.bale.ai/bot{0}/{1}'
 bot=telebot.TeleBot(API_TOKEN)
-
 
 
 password_get_access1 = "Ad1fWQ89Gg"
@@ -27,29 +26,28 @@ customers_step =customer_step(bot)
 
 
 def listener(messages):
-    for m in messages: 
-        # print(m) 
-        if m.content_type == "text": 
-            print(f"{m.chat.first_name} [{str(m.chat.id)}]: {m.text}") 
-            logging.info(f"{m.chat.first_name} [{str(m.chat.id)}]: {m.text}") 
-        elif m.content_type == "photo": 
-            print(f"{m.chat.first_name} [{str(m.chat.id)}]: New photo recieved") 
-            logging.info(f"{m.chat.first_name} [{str(m.chat.id)}]: New photo recieved") 
-        elif m.content_type == "document": 
-            print(f"{m.chat.first_name} [{str(m.chat.id)}]: New document recieved") 
-            logging.info(f"{m.chat.first_name} [{str(m.chat.id)}]: New document recieved") 
+    for m in messages:
+        # print(m)
+        if m.content_type == "text":
+            print(f"{m.chat.first_name} [{str(m.chat.id)}]: {m.text}")
+            logging.info(f"{m.chat.first_name} [{str(m.chat.id)}]: {m.text}")
+        elif m.content_type == "photo":
+            print(f"{m.chat.first_name} [{str(m.chat.id)}]: New photo recieved")
+            logging.info(f"{m.chat.first_name} [{str(m.chat.id)}]: New photo recieved")
+        elif m.content_type == "document":
+            print(f"{m.chat.first_name} [{str(m.chat.id)}]: New document recieved")
+            logging.info(f"{m.chat.first_name} [{str(m.chat.id)}]: New document recieved")
         elif m.content_type == "voice":
-            print(f"{m.chat.first_name} [{str(m.chat.id)}]: New voice recieved") 
-            logging.info(f"{m.chat.first_name} [{str(m.chat.id)}]: New voice recieved") 
-bot.set_update_listener(listener) 
+            print(f"{m.chat.first_name} [{str(m.chat.id)}]: New voice recieved")
+            logging.info(f"{m.chat.first_name} [{str(m.chat.id)}]: New voice recieved")
+bot.set_update_listener(listener)
             
 
 #____________________________________MAKE-BOT____________________________________
 
 
-
 @bot.message_handler(commands=['start'])
-def start_handler(message): 
+def start_handler(message):
     bot_command.start(message)
 
 
@@ -95,6 +93,10 @@ def go_admin_panel_handler(message):
 @bot.message_handler(func=lambda message: message.text == "پرداخت قسط")
 def pay_installment_handler(message):
     customer_buttons.pay_installment(message)
+
+@bot.message_handler(func=lambda message: pay_installment_step.get(message.chat.id) == "A" , content_types=["photo"])
+def pay_installment_step_A_handler(message):
+    customers_step.pay_installment_A(message)
 
 
 @bot.message_handler(func=lambda message: message.text == "مشاهده کاربران")
@@ -183,13 +185,19 @@ def all_callback_query_handler(call):
         call_handler.get_customer_data(data)
     
     elif data.startswith("see-family-data"):
-        call_handler.see_family_data(data)
+        call_handler.get_family_member(data)
 
     elif data.startswith("admin-see-family-list"):
         call_handler.get_family_list()
 
     elif data.startswith("get-family-member-list"):
-        call_handler.see_family_data(data)
+        call_handler.get_family_member(data)
+
+    elif data.startswith("pay-installment"):
+        call_handler.pay_installment(data)
+
+    elif data.startswith("family-link-msg"):
+        call_handler.family_link_msg(data)
 
     elif data.startswith("go"):
         call_handler.go(data)
@@ -201,10 +209,10 @@ def all_message_handler(message):
     bot_command.all_message(message)
 
 
-print('code running...') 
-logging.info('code running...') 
-bot.infinity_polling() 
+print('code running...')
+logging.info('code running...')
+bot.infinity_polling()
             
 'code write it by:'
-'arian panahi  github adrress : https://github.com/arianp89'  
+'arian panahi  github adrress : https://github.com/arianp89'
             

@@ -1,6 +1,6 @@
 from .command import send_message_one_data , admin_step_send_messsage,customer_step_send_message,customer_data_send_message
-from services.step_ser import get_all_family_bot_id,send_message_admin_ser
-from keyboard.call_back_markup import send_message_admin_markup
+from services.step_ser import pay_installment_A_text_and_admin_id,get_all_family_bot_id,send_message_admin_ser
+from keyboard.call_back_markup import send_message_admin_markup,check_pay_admin_markup
 
 class admin_step:
 
@@ -77,4 +77,14 @@ class customer_step:
         self.bot.send_message(cid , "پیام با موفقیت ارسال شد")
         customer_data_send_message.pop(cid)
         customer_step_send_message.pop(cid)
+
+    def pay_installment_A(self , message):
+        cid = message.chat.id
+        photo_id = message.photo[-1].file_id
+        text = pay_installment_A_text_and_admin_id(cid)
+        markup = check_pay_admin_markup(cid)
+        admin_id  = text[1]
+        text = text[0]
+        self.bot.send_photo(admin_id , photo_id , text , reply_markup=markup)
+        self.bot.send_message(cid , "پیام برای ادمین ارسال شد")
         

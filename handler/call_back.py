@@ -1,4 +1,4 @@
-from services.call_back_ser import get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
+from services.call_back_ser import family_link_msg_true_ser,pay_installment_true_ser,get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
 from keyboard.keyboard import admin_markup
 from keyboard.call_back_markup import get_family_markup,get_family_list_markup_go,see_family_data_markup_go,see_family_markup,chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
 from .command import send_message_one_data,admin_step_send_messsage,customer_step_send_message,customer_data_send_message
@@ -198,6 +198,37 @@ class call_back:
             return 
         self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
 
+
+    def pay_installment(self , data):
+        _ , status , customer_bot_id = data.split("_")
+        print(customer_bot_id)
+        print(status)
+        if status == 'true':
+            try:
+                self.bot.delete_message(self.cid , self.mid)
+                self.bot.answer_callback_query(self.call_id ,  "تایید شد")
+                pay_installment_true_ser(customer_bot_id)
+                self.bot.send_message(customer_bot_id , "تایید شد")
+            except Exception as e:
+                print(e)
+                self.bot.send_message(self.cid , "این پیام منغضی شده")
+
+        else:
+            try:
+                self.bot.delete_message(self.cid , self.mid)
+                self.bot.answer_callback_query(self.call_id , "لغو شد")
+                self.bot.send_message(customer_bot_id , "فیش شما توست ادمین لغو شد برای دانستن اطلاهات بیشتر با ادمین در تماس باشید")
+            except Exception as e:
+                print(e)
+                self.bot.send_message(self.cid , "این پیام منغضی شده")
+
+
+    def family_link_msg(self , data):
+        _ , status , link_id , customer_bot_id = data.split("_")
+        if status == "true":
+            family_link_msg_true_ser(link_id , customer_bot_id)
+
+    
 
     def go(self , data):
         _,_,_,call_name =data.split("_")

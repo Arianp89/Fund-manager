@@ -67,6 +67,18 @@ class bot_commands:
 
     def all_message(self , message):
         cid = message.chat.id
+        text = message.text
+        try:
+            link_name = text.split("start=")[-1].split(")")[0]
+            print("o;",link_name)
+            links = link(self.bot)
+            if link_name.startswith("family"):
+                print("pspodjfh")
+                links.message_link_family(message , link_name.split("_")[1])
+                return
+        except:
+            pass
+
         if not check_is_in_db(cid):
             return
         

@@ -1,5 +1,6 @@
 from  keyboard.keyboard import customer_markup
-from database import get_family_data,get_family_link_status,add_customer_bot_id,change_status_use_link_family
+from keyboard.call_back_markup import message_link_family_markup
+from database import get_customer_bot_id,get_admin_id_b_access,get_family_data,get_family_link_status,add_customer_bot_id,change_status_use_link_family
 
 class link:
 
@@ -34,3 +35,28 @@ class link:
         elif status:
             self.bot.send_message(cid , 'سلام' , customer_markup(cid))
         return
+    
+
+    def message_link_family_ser(self , link_id):
+        family_data = get_family_data(link_id)
+        print(family_data)
+        if not family_data:
+            return False
+        elif family_data["USE_LINK"] is not None or family_data["USE_LINK"] == "true":
+            return False
+        return family_data
+
+
+
+    def message_link_family(self , message , link_id):
+        cid = message.chat.id
+        status = self.message_link_family_ser(link_id)
+        if not status:
+            print("1")
+            return
+        else:
+             admin_id = get_admin_id_b_access(2)
+             admin_bot_id = get_customer_bot_id(admin_id)
+             text = "ok"
+             markup = message_link_family_markup(cid , link_id)
+             self.bot.send_message(admin_bot_id , text , reply_markup = markup)

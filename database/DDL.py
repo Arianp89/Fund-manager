@@ -20,6 +20,7 @@ class make_database:
     def create_database(self):
         conn=mysql.connector.connect(**self.db_config)
         cur=conn.cursor()
+        # noinspection SqlResolve
         cur.execute(f"DROP DATABASE IF EXISTS {database_name};")
         cur.execute(f"CREATE database {database_name} ;")
         conn.commit()
@@ -42,7 +43,7 @@ class make_database:
         `REGISTER_DATE`     DATETIME DEFAULT CURRENT_TIMESTAMP ,
         `LAST_UPDATE`       DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
-        """
+"""
         cur.execute(SQL_Query)
         conn.commit()
         cur.close()

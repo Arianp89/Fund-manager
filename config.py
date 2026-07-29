@@ -6,4 +6,4 @@ database_name = os.environ.get('db_name')
 
 API_TOKEN = os.environ.get('tel_token') 
 
-bot_id = os.environ.get("bot_cid")
+bot_id = os.environ.get("bot_id")

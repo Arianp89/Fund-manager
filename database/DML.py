@@ -1,7 +1,4 @@
 import mysql.connector
-import logging
-import string
-import random
 from config import db_config,database_name
 
 
@@ -116,3 +113,32 @@ def delete_admin(admin_id):
     cur.close()
     conn.close()
     return  cur.lastrowid  
+
+
+def change_loan_number(loan_id , new_number = -1):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT NUMBER_REMAINING_INSTALLMENTS FROM LOAN WHERE ID=%s;"
+    cur.execute(SQL_Query , (loan_id ,))
+    number = cur.fetchone()   
+    if number is None:
+        return False
+    number = number["NUMBER_REMAINING_INSTALLMENTS"]
+    SQL_Query = "UPDATE LOAN SET NUMBER_REMAINING_INSTALLMENTS=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (number+new_number , loan_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid  
+
+
+def add_pay(loan_id ,head_id ,amount_paid):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "INSERT INTO PAYMENT (LOAN_ID  , CUSTOMER_ID , AMOUNT_PAID) VALUES (%s,%s,%s);"
+    cur.execute(SQL_Query , (loan_id  , head_id , amount_paid))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid 
+

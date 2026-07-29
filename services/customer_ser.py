@@ -1,5 +1,6 @@
 from database import *
 import datetime
+from handler.command import pay_installment_step , pay_installment_data 
 
 
 
@@ -39,12 +40,14 @@ def pay_installment_ser(chat_id):
                         loan_data.append(installment_data)
 
         print(loan_data)
+        pay_installment_step[chat_id] = "A"
+        pay_installment_data[chat_id] = loan_data
         for loan_data in loan_data:
             loan_id = loan_data["LOAN_ID"]
             installment_amount = get_loan_data_by_id(loan_id)["INSTALLMENT_AMOUNT"]
             total += installment_amount
-            cart_number = 0
-            name_cart = "ali"
+        cart_number = 0
+        name_cart = "ali"
         text = f"""شما باید مبلغ:{total} 
         را به شماره {cart_number}            {name_cart}"""
         return [True , text]
@@ -75,6 +78,8 @@ def pay_installment_ser(chat_id):
                         loan_data.append(installment_data)
 
         print(loan_data)
+        pay_installment_step[chat_id] = "A"
+        pay_installment_data[chat_id] = loan_data
         for loan_data in loan_data:
             loan_id = loan_data["LOAN_ID"]
             installment_amount = get_loan_data_by_id(loan_id)["INSTALLMENT_AMOUNT"]
@@ -84,7 +89,3 @@ def pay_installment_ser(chat_id):
         text = f"""شما باید مبلغ:{total} 
         را به شماره {cart_number}            {name_cart}"""
         return [True , text]
-
-
-
-        

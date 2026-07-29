@@ -1,5 +1,5 @@
 from database import *
-
+from handler.command import pay_installment_data
 
 def access_1_ser(family_id , chat_id):
     customer_id = get_family_data_by_id(family_id)["HEAD_ID"]
@@ -71,3 +71,24 @@ def see_family_data_admin_text(family_id):
     family_data = get_family_data_by_id(family_id)["HEAD_ID"]
     head_id = family_data["HEAD_ID"]
     pay_time = get_payment_data_by_customer_id(head_id)
+
+
+def pay_installment_true_ser(chat_id):
+    chat_id = int(chat_id)
+    head_id = get_id_b_admin_bot_id(chat_id)
+    print(pay_installment_data)
+    loans_data = pay_installment_data[chat_id]
+    for loan_data in loans_data:
+        loan_id = loan_data["LOAN_ID"]
+        change_loan_number(loan_id)
+        add_pay(loan_id , head_id , 5)
+
+
+def family_link_msg_true_ser(link_id , customer_bot_id):
+    for family_data in get_all_family_data():
+        family_link_id = family_data["LINK_ID"]
+        if family_link_id == link_id:
+            add_customer_bot_id(family_data["HEAD_ID"] , customer_bot_id)
+            change_status_use_link_family(link_id)
+            
+

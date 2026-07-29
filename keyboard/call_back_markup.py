@@ -139,3 +139,17 @@ def pay_installment_markup(head_id):
     markup = InlineKeyboardMarkup()
     markup.add(InlineKeyboardButton("افزایش سرمایه" , callback_data=f"amount_{head_id}"))
     return markup
+
+
+def check_pay_admin_markup(chat_id):
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("تایید" , callback_data=f"pay-installment_true_{chat_id}") ,
+               InlineKeyboardButton("لغو" , callback_data=f"pay-installment_false_{chat_id}"))
+    return markup
+
+
+def message_link_family_markup(customer_id , link_id):
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("تایید" , callback_data=f"family-link-msg_true_{link_id}_{customer_id}") ,
+               InlineKeyboardButton("لغو" , callback_data=f"family-link-msg_false_{link_id}_{customer_id}"))
+    return markup
