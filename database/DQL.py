@@ -153,11 +153,11 @@ def get_family_link_status(family_id):
     cur.close()
     conn.close()
     if data is None:
-        return True
+        return False
     data = data["USE_LINK"]
     if data == "true":
-        return True
-    return False
+        return False
+    return True
 
 
 def get_setting_data(customer_id):

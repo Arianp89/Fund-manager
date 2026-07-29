@@ -12,13 +12,12 @@ class link:
         print(family_data)
         if family_data is None:
             return False
-        if not get_family_link_status(link_id):
-            return True
+        if not get_family_link_status(family_data["ID"]):
+            return False
         head_id = family_data['HEAD_ID']
         add_customer_bot_id(head_id , chat_id)
         change_status_use_link_family(link_id)
-        if get_family_link_status(link_id):
-            return False
+        return True
     
 
     def family_link(self , message):
@@ -34,7 +33,6 @@ class link:
             return
         elif status:
             self.bot.send_message(cid , 'سلام' , customer_markup(cid))
-        return
     
 
     def message_link_family_ser(self , link_id):

@@ -15,7 +15,6 @@ class call_back:
         _,family_id = data.split("_")
         try:
             self.bot.delete_message(self.cid , self.mid)
-            
             family_id = int(family_id)
             access_1_ser(family_id , self.cid)
             self.bot.answer_callback_query(self.call_id , "شما ادمین شدید.")

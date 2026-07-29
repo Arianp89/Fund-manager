@@ -3,6 +3,8 @@ from handler.command import pay_installment_data
 
 def access_1_ser(family_id , chat_id):
     customer_id = get_family_data_by_id(family_id)["HEAD_ID"]
+    link_id = get_family_data_by_id(family_id)["LINK_ID"]
+    change_status_use_link_family(link_id)
     add_admin(customer_id)
     add_customer_bot_id(customer_id , int(chat_id))
 
