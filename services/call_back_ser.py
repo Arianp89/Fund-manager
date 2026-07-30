@@ -48,7 +48,7 @@ def get_see_data_text(customer_id):
 
     if customer_data["IS_ACTIVE"] == "false":
         is_active = "غیر فعال"
-        text = f"کد:{customer_data["ID"]} \n نام:{customer_data["FULL_NAME"]} وضعیت اکانت:{is_active}"
+        text = f"کد:{customer_data["ID"]} \n کد خانواده:{customer_data["FAMILY_ID"]} \n نام:{customer_data["FULL_NAME"]} وضعیت اکانت:{is_active}"
         
     else:
         if not loan_data:
@@ -61,6 +61,7 @@ def get_see_data_text(customer_id):
 
         is_active = "فعال"
         text = f"""کد:{customer_data["ID"]}
+کد خانواده:{customer_data["FAMILY_ID"]}
 نام:{customer_data["FULL_NAME"]} سرمایه کل:{customer_data["TOTAL_CAPITAL"]}
 وضعیت اکانت:{is_active}
 مبلغ وام:{loan_number}

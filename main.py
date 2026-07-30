@@ -1,9 +1,10 @@
 from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,admin_step,customer_button,customer_step
 from handler.command import customer_step_send_message,pay_installment_step
 from config import API_TOKEN
+from handler.threads import get_ziro
 import telebot
 import logging
-
+import threading
 
 
 
@@ -204,9 +205,15 @@ def all_callback_query_handler(call):
 
     elif data == 'send-message-to-pay':
         call_handler.send_message_to_pay()
+        
+    elif data == "see-customer-list":
+        call_handler.see_customer_list()
 
     elif data.startswith("go"):
         call_handler.go(data)
+
+    elif data.startswith("back"):
+        call_handler.back(data)
 
 
 #________________________________ALL-MESSAGE__________________________
@@ -214,11 +221,15 @@ def all_callback_query_handler(call):
 def all_message_handler(message):
     bot_command.all_message(message)
 
+#________________________________threading_______________________________
+
+t1 = threading.Thread(target=get_ziro, args=())
+t1.start()
+
 
 print('code running...')
 logging.info('code running...')
 bot.infinity_polling()
             
 'code write it by:'
-'arian panahi  github adrress : https://github.com/arianp89'
-            
+'arian panahi  github adrress : https://github.com/arianp89'       

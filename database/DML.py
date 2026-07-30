@@ -36,11 +36,11 @@ def add_customer(family_id , full_name , amount ,is_active='true'):
     return  cur.lastrowid
 
 
-def add_family(link_id):
+def add_family(link_id , use_link='false'):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "INSERT INTO FAMILY (LINK_ID) VALUES (%s);"
-    cur.execute(SQL_Query , (link_id ,))
+    SQL_Query = "INSERT INTO FAMILY (LINK_ID , USE_LINK) VALUES (%s,%s);"
+    cur.execute(SQL_Query , (link_id , use_link))
     conn.commit()
     cur.close()
     conn.close()

@@ -15,6 +15,7 @@ def get_all_family_bot_id():
         if bot_id is not None:
             bot_list.append(bot_id)
 
+    print(bot_list)
     return bot_list
 
 

@@ -28,14 +28,13 @@ class admin_step:
         cid = message.chat.id
         text = "پیام ادمین \n"
         text += message.text
-        for head_id in get_all_family_bot_id():
-            print(head_id)
+        for customer_bot_id in get_all_family_bot_id():
+            print(customer_bot_id)
             try:
-                self.bot.send_message(head_id , text)
+                self.bot.send_message(customer_bot_id , text)
             except:
-                self.bot.send_message(cid , f"ارسال نشد:{head_id}")
-            admin_step_send_messsage.pop(cid)
-            return
+                self.bot.send_message(cid , f"ارسال نشد برای:[کاربر](https://web.bale.ai/chat?uid={customer_bot_id})")
+        admin_step_send_messsage.pop(cid)
         self.bot.send_message(cid , "با موفقیت ارسال شد")
 
 

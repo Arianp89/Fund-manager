@@ -1,7 +1,7 @@
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
 from database import get_all_family_data_by_id,get_all_customer,get_admin_id_b_access,get_all_family_data,get_family_data_by_head_id,get_id_b_admin_bot_id
 import time
-from handler.command import customer_permissions
+from handler.command import customer_permissions,see_data_step
 def go_ba_ne(bot , data , call , text , page_number=1 , call_id=None):
     markup = InlineKeyboardMarkup()
     data_number = len(data)
@@ -131,7 +131,7 @@ def get_family_list_markup_go(bot , page_number , call_id):
 
 def admin_see_family_list():
     markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton("مشاهده لیست خانواده" , callback_data = "admin-see-family-list"))
+    markup.add(InlineKeyboardButton("مشاهده اعضا" , callback_data = "see-customer-list"))
     return markup
 
 
@@ -158,3 +158,34 @@ def see_loan_list_markup():
     markup = InlineKeyboardMarkup()
     markup.add(InlineKeyboardButton("ارسال پیام برای پرداخت" , callback_data='send-message-to-pay'))
     return markup
+
+def see_customer_list_markup(bot):
+    markup  = go_ba_ne(bot , get_all_customer() , 'see-data' ,"FULL_NAME")
+    if not markup:
+        return False
+    return markup
+
+def see_customer_list_markup_go(bot , page_number , call_id):
+    markup  = go_ba_ne(bot , get_all_customer() , 'see-data' ,"FULL_NAME" , page_number , call_id)
+    if not markup:
+        return False
+    return markup
+
+def back_markup(mark , markup=None):
+    if markup is None:
+        markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("بازگشت به قبل" , callback_data=f'back.{mark}'))
+    return markup
+    
+
+def get_customer_data_back(chat_id):
+    try:
+        data = see_data_step[chat_id]
+        if data == "see-customer-list":
+            markup = back_markup("see-customer-list")
+            return markup
+        elif data.startswith("see-family-data"):
+            markup = back_markup(data)
+            return markup
+    except:
+        return None
