@@ -123,6 +123,7 @@ class make_database:
         `INSTALLMENT_AMOUNT`                BIGINT NOT NULL,
         `NUMBER_REMAINING_INSTALLMENTS`     INT NOT NULL, 
         `AMOUNT_PAID`                       BIGINT UNSIGNED ,
+        `STATUS`                            varchar(5) ,
         `REGISTER_DATE`                     DATETIME DEFAULT CURRENT_TIMESTAMP ,
         `LAST_UPDATE`                       DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
         FOREIGN KEY (CUSTOMER_ID)           REFERENCES CUSTOMER(ID)
