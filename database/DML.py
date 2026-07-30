@@ -59,22 +59,22 @@ def add_family_data(family_id , head_id , family_name):
     return  cur.lastrowid            
 
 
-def add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid):
+def add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid , status):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "INSERT INTO LOAN (CUSTOMER_ID,LOAN_AMOUNT,INSTALLMENT_AMOUNT,NUMBER_REMAINING_INSTALLMENTS,AMOUNT_PAID) VALUES (%s,%s,%s,%s,%s);"
-    cur.execute(SQL_Query , (customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid))
+    SQL_Query = "INSERT INTO LOAN (CUSTOMER_ID,LOAN_AMOUNT,INSTALLMENT_AMOUNT,NUMBER_REMAINING_INSTALLMENTS,AMOUNT_PAID,STATUS) VALUES (%s,%s,%s,%s,%s,%s);"
+    cur.execute(SQL_Query , (customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid , status))
     conn.commit()
     cur.close()
     conn.close()
     return  cur.lastrowid 
 
 
-def add_installment(loan_id , NUMBER_PAID , Capital_increase):
+def add_installment(loan_id , NUMBER_PAID , status="false"):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "INSERT INTO INSTALLMENT (LOAN_ID,INSTALLMENT_NUMBER,CAPITAL_INCREASE) VALUES (%s,%s,%s);"
-    cur.execute(SQL_Query , (loan_id , NUMBER_PAID , Capital_increase))
+    SQL_Query = "INSERT INTO INSTALLMENT (LOAN_ID,INSTALLMENT_NUMBER , STATUS) VALUES (%s,%s,%s);"
+    cur.execute(SQL_Query , (loan_id , NUMBER_PAID , status ))
     conn.commit()
     cur.close()
     conn.close()

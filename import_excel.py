@@ -87,8 +87,12 @@ class Import_excel:
                 pass
 
             else:
-                loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid)
-                add_installment(loan_id , number_paid_installment , Capital_increase)
+                if number_paid_installment > 0:
+                    status = 'false'
+                else:
+                    status = "true"
+                loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid , status)
+                add_installment(loan_id , number_paid_installment )
                 
             
             self.number = 0
@@ -114,8 +118,12 @@ class Import_excel:
             if number_paid_installment is None:
                 pass
             else:
-                loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid)
-                add_installment(loan_id , number_paid_installment , Capital_increase)
+                if number_paid_installment > 0:
+                    status = 'false'
+                else:
+                    status = "true"
+                loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid , status)
+                add_installment(loan_id , number_paid_installment)
             
 
 
