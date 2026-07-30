@@ -47,14 +47,12 @@ def see_loan_list_text():
     total_installment_not_pay = 0
     total_installment_pay = 0
     for loan_data in get_all_loan_data():
-        if loan_data["NUMBER_REMAINING_INSTALLMENTS"] > 0:
+        if loan_data["STATUS"] == "false":
             total_loan += 1
             loan_id = loan_data["ID"]
             now = datetime.datetime.now().strftime("%Y/%m")
             for installment_data in get_all_installment_data_by_id(loan_id):
-                print(2)
                 if installment_data["REGISTER_DATE"].strftime("%Y/%m") == now:
-                    print(1)
                     print(installment_data["STATUS"])
                     if installment_data["STATUS"] == 'true':
                         total_installment_pay += 1

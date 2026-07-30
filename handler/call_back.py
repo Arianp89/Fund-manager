@@ -158,7 +158,6 @@ class call_back:
     def get_customer_data(self , data):
         _ , customer_id = data.split("_")
         text = get_see_data_text(customer_id)
-
         markup = get_customer_data_back(self.cid)
         self.bot.edit_message_text(text , self.cid , self.mid , reply_markup = markup)
 
@@ -234,7 +233,11 @@ class call_back:
     def send_message_to_pay(self):
         for customer_bot_id , text in get_customer_bot_id_and_message().items():
             text = f"شمل باید مبلغ {text} را واریز کنید لطفا انجام دهید"
-            self.bot.send_message(customer_bot_id , text)
+            try:
+                self.bot.send_message(customer_bot_id , text)
+            except Exception as e:
+                print(e)
+                self.bot.send_message(self.cid , f"برای کاربر با کد {customer_bot_id} ارسال نشد")
         self.bot.edit_message_text("با موفقیت انجام شد" , self.cid , self.mid)
 
 

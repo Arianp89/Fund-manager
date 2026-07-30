@@ -54,17 +54,20 @@ def get_see_data_text(customer_id):
         if not loan_data:
             loan_number = "تعلق نگرفته"
             number_installmet_pay = "تعلق نگرفته"
+            installment_number = "تعلق نگرفته"
 
         else:
             loan_number = loan_data["LOAN_AMOUNT"]
             number_installmet_pay = loan_data["NUMBER_REMAINING_INSTALLMENTS"]
+            installment_number = loan_data["INSTALLMENT_AMOUNT"]
 
         is_active = "فعال"
         text = f"""کد:{customer_data["ID"]}
 کد خانواده:{customer_data["FAMILY_ID"]}
-نام:{customer_data["FULL_NAME"]} سرمایه کل:{customer_data["TOTAL_CAPITAL"]}
-وضعیت اکانت:{is_active}
+نام:{customer_data["FULL_NAME"]} وضعیت اکانت:{is_active}
+سرمایه کل:{customer_data["TOTAL_CAPITAL"]}
 مبلغ وام:{loan_number}
+مبلغ قسط:{installment_number}
 تعداد قسط های باقیمانده:{number_installmet_pay}"""
         
     return text
@@ -100,9 +103,19 @@ def get_customer_bot_id_and_message():
         loan_id = loan_data["ID"]
         for installment in get_all_installment_data_by_id(loan_id):
             if installment["STATUS"] == 'false':
-                customer_bot_id = get_customer_bot_id(loan_data["CUSTOMER_ID"])
-                if loan_data["CUSTOMER_ID"]  in data:
+                family_id = get_customer_data_by_id(loan_data["CUSTOMER_ID"])["FAMILY_ID"]
+                head_id = get_family_data_by_id(family_id)["HEAD_ID"]
+                customer_bot_id = get_customer_bot_id(head_id)
+                if customer_bot_id is None:
+                    customer_bot_id = loan_data["CUSTOMER_ID"]
+                    print(3)
+                print(customer_bot_id,"customer_bot_id")
+                if str(customer_bot_id)  in data:
+                    print(1)
                     data[str(customer_bot_id)] += loan_data["INSTALLMENT_AMOUNT"]
                 else:
                     data[str(customer_bot_id)] = loan_data["INSTALLMENT_AMOUNT"]
+                    print(2)
+                print(data)
+    print(data)
     return data

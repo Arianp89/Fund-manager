@@ -6,6 +6,29 @@ import telebot
 import logging
 import threading
 
+import functools
+import logging
+
+# تنظیمات لاگ (می‌توانید در فایل اصلی پروژه تنظیم کنید)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+def debug_info(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        # قبل از اجرا: لاگ کردن ورودی‌ها
+        logger.info(f"Calling: {func.__name__} | Args: {args} | Kwargs: {kwargs}")
+        try:
+            result = func(*args, **kwargs)
+            # بعد از اجرا: لاگ کردن خروجی
+            logger.info(f"{func.__name__} returned: {result}")
+            return result
+        except Exception as e:
+            # در صورت بروز خطا: لاگ کردن خطا
+            logger.error(f"Exception in {func.__name__}: {str(e)}")
+            print(e)
+            raise e # خطا را مجدداً بالا می‌برد تا برنامه متوقف نشود یا توسط سایر خطاگیرها دیده شود
+    return wrapper
 
 
 telebot.apihelper.API_URL = 'http://tapi.bale.ai/bot{0}/{1}'
@@ -232,4 +255,4 @@ logging.info('code running...')
 bot.infinity_polling()
             
 'code write it by:'
-'arian panahi  github adrress : https://github.com/arianp89'       
+'arian panahi  github adrress : https://github.com/arianp89'

@@ -37,10 +37,10 @@ class link:
 
     def message_link_family_ser(self , link_id):
         family_data = get_family_data(link_id)
-        print(family_data)
+        print("family_data",family_data)
         if not family_data:
             return False
-        elif family_data["USE_LINK"] is not None or family_data["USE_LINK"] == "true":
+        elif family_data["USE_LINK"] == "true":
             return False
         return family_data
 
@@ -48,7 +48,9 @@ class link:
 
     def message_link_family(self , message , link_id):
         cid = message.chat.id
+        print(link_id)
         status = self.message_link_family_ser(link_id)
+        print("status" , status)
         if not status:
             print("1")
             return
