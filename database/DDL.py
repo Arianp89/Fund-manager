@@ -38,7 +38,7 @@ class make_database:
         `ID`                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
         `FAMILY_NAME`       VARCHAR(20) ,
         `HEAD_ID`           BIGINT ,
-        `LINK_ID`           VARCHAR(10) ,
+        `LINK_ID`           VARCHAR(10) NOT NULL,
         `USE_LINK`          VARCHAR(5) ,
         `REGISTER_DATE`     DATETIME DEFAULT CURRENT_TIMESTAMP ,
         `LAST_UPDATE`       DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -119,10 +119,10 @@ class make_database:
         CREATE TABLE LOAN(
         `ID`                                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
         `CUSTOMER_ID`                       BIGINT UNSIGNED NOT NULL ,
-        `LOAN_AMOUNT`                       BIGINT ,
-        `INSTALLMENT_AMOUNT`                BIGINT ,
-        `NUMBER_REMAINING_INSTALLMENTS`     INT , 
-        `AMOUNT_PAID`                       BIGINT ,
+        `LOAN_AMOUNT`                       BIGINT NOT NULL ,
+        `INSTALLMENT_AMOUNT`                BIGINT NOT NULL,
+        `NUMBER_REMAINING_INSTALLMENTS`     INT NOT NULL, 
+        `AMOUNT_PAID`                       BIGINT UNSIGNED ,
         `REGISTER_DATE`                     DATETIME DEFAULT CURRENT_TIMESTAMP ,
         `LAST_UPDATE`                       DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
         FOREIGN KEY (CUSTOMER_ID)           REFERENCES CUSTOMER(ID)
@@ -143,9 +143,7 @@ class make_database:
         CREATE TABLE INSTALLMENT(
         `ID`                    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
         `LOAN_ID`               BIGINT UNSIGNED NOT NULL ,
-        `INSTALLMENT_NUMBER`    INT ,
-        `DEPOSIT_AMOUNT`        BIGINT ,
-        `CAPITAL_INCREASE`      BIGINT UNSIGNED NOT NULL ,        -- مبلغ افزایش سرمایه
+        `INSTALLMENT_NUMBER`    INT NOT NULL ,
         `STATUS`                VARCHAR(5) ,
         `REGISTER_DATE`         DATETIME DEFAULT CURRENT_TIMESTAMP ,
         `LAST_UPDATE`           DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
@@ -168,6 +166,7 @@ class make_database:
         `LOAN_ID`                 BIGINT UNSIGNED NOT NULL,              -- اتصال به وام
         `INSTALLMENT_ID`          BIGINT UNSIGNED NULL,           -- اتصال به قسط (اختیاری، اگر پرداخت مستقیماً برای یک قسط باشد)
         `CUSTOMER_ID`             BIGINT UNSIGNED NOT NULL,         -- اتصال به مشتری (برای کوئری‌های سریع‌تر)
+        `CAPITAL_INCREASE`      BIGINT UNSIGNED NOT NULL ,        -- مبلغ افزایش سرمایه
         `AMOUNT_PAID`             BIGINT NOT NULL,                   -- مبلغ پرداخت شده
         `PAYMENT_DATE`            DATETIME DEFAULT CURRENT_TIMESTAMP, -- زمان انجام پرداخت
         `LAST_UPDATE`             DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
