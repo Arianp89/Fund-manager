@@ -25,7 +25,7 @@ def admin_markup(chat_id):
             markup.add("تغییر ادمین" , "دریافت لینک")
     elif admin_access == 2:
         markup.add("مشاهده کاربران" ,  "مشاهده لیست اقساط")
-        markup.add("ارسال پیام به کاربران")
+        markup.add("ارسال پیام به کاربران" , "اضافه کردن کاربر")
 
     markup.add("وارد شدن به پنل کاربر")
     return markup

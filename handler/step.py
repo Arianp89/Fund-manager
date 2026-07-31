@@ -1,7 +1,7 @@
-from .command import send_message_one_data , admin_step_send_messsage,customer_step_send_message,customer_data_send_message
-from services.step_ser import pay_installment_A_text_and_admin_id,get_all_family_bot_id,send_message_admin_ser
+from .command import add_new_customer_step,add_new_customer_data,send_message_one_data , admin_step_send_messsage,customer_step_send_message,customer_data_send_message
+from services.step_ser import add_new_customer_step_B_ser,pay_installment_A_text_and_admin_id,get_all_family_bot_id,send_message_admin_ser
 from keyboard.call_back_markup import send_message_admin_markup,check_pay_admin_markup
-
+from config import bot_id
 class admin_step:
 
     def __init__(self , bot):
@@ -37,6 +37,31 @@ class admin_step:
         admin_step_send_messsage.pop(cid)
         self.bot.send_message(cid , "با موفقیت ارسال شد")
 
+    def add_new_customer_step_A(self , message):
+        cid = message.chat.id
+        customer_name = message.text
+        add_new_customer_data[cid] = {"name":customer_name , "amount":None}
+        add_new_customer_step[cid] = "B"
+        text = "مبلغ سرمایه را به عدد وارد کنید:"
+        self.bot.send_message(cid , text)
+
+    def add_new_customer_step_B(self , message):
+        cid = message.chat.id
+        customer_amount = message.text
+        try:
+            customer_amount = int(customer_amount)
+            add_new_customer_data[cid]["amount"] = customer_amount
+
+        except:
+            self.bot.send_message(cid , "لطفا سرمایه را به عدد وارد کنید")
+            return
+        
+        link_id = add_new_customer_step_B_ser(cid)
+        text = "لطفا برای وارد شدن به اکانت خود روی" +f" [لینک](https://web.bale.ai/chat?uid={bot_id}&start=family_{link_id})" + "کلیک کنید"
+        self.bot.send_message(cid , text)
+        self.bot.send_message(cid , "لطفا لینک بالا را برای کاربر ارسال کنید")
+        add_new_customer_data.pop(cid) 
+        add_new_customer_step.pop(cid)
 
 
 

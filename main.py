@@ -1,4 +1,4 @@
-from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,admin_step,customer_button,customer_step
+from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,add_new_customer_step,admin_step,customer_button,customer_step
 from handler.command import customer_step_send_message,pay_installment_step
 from config import API_TOKEN
 from handler.threads import get_ziro
@@ -9,23 +9,20 @@ import threading
 import functools
 import logging
 
-# تنظیمات لاگ (می‌توانید در فایل اصلی پروژه تنظیم کنید)
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
 def debug_info(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         # قبل از اجرا: لاگ کردن ورودی‌ها
-        logger.info(f"Calling: {func.__name__} | Args: {args} | Kwargs: {kwargs}")
+        logging.info(f"Calling: {func.__name__} | Args: {args} | Kwargs: {kwargs}")
         try:
             result = func(*args, **kwargs)
             # بعد از اجرا: لاگ کردن خروجی
-            logger.info(f"{func.__name__} returned: {result}")
+            logging.info(f"{func.__name__} returned: {result}")
             return result
         except Exception as e:
             # در صورت بروز خطا: لاگ کردن خطا
-            logger.error(f"Exception in {func.__name__}: {str(e)}")
+            logging.error(f"Exception in {func.__name__}: {str(e)}")
             print(e)
             raise e # خطا را مجدداً بالا می‌برد تا برنامه متوقف نشود یا توسط سایر خطاگیرها دیده شود
     return wrapper
@@ -144,8 +141,17 @@ def send_message_one_handler_B(message):
     admins_step.send_message_one_step_B(message)
 
 
+@bot.message_handler(func=lambda message: message.text == "اضافه کردن کاربر")
+def add_new_customer_handler(message):
+    admin_buttons.add_new_customer(message)
 
+@bot.message_handler(func=lambda message: add_new_customer_step.get(message.chat.id) == "A")
+def add_new_customer_step_A_handler(message):
+    admins_step.add_new_customer_step_A(message)
 
+@bot.message_handler(func=lambda message: add_new_customer_step.get(message.chat.id) == "B")
+def add_new_customer_step_B_handler(message):
+    admins_step.add_new_customer_step_B(message)
 
 #_______________________________CUSTOMER_______________________________
 
