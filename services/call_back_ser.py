@@ -1,5 +1,5 @@
 from database import *
-from handler.command import pay_installment_data
+from handler.command import pay_installment_data,block_customer_command
 
 def access_1_ser(family_id , chat_id):
     customer_id = get_family_data_by_id(family_id)["HEAD_ID"]
@@ -134,11 +134,26 @@ def block_acount_true_ser(customer_id):
         print(total)
 
     if total > 0:
+        status = "1"
         admin_text = f"شما باید مبلغ {total} را پرداخت کنید به کاربر مورد نظر پرداخت کنید"
         customer_text = f"ادمین درحال بستن اکانت {customer_name} است و باید مبلغ {total} را به شما پرداخت کند"
     else:
         total = - + total
+        block_customer_command[customer_bot_id] = [total , customer_id]
+        status = "0"
         admin_text = f"کاربر مورد نظر باید مبلغ {total} را برای شما واریز کنه"
         customer_text = f"ادمین در حال بستن اکانت {customer_name} است و شما باید مبلغ {total} را پرداخت کنید و برای این کار در قسمت پرداخت قسط این مبلغ را پرداخت کنید"
    
-    return [customer_bot_id , admin_text , customer_text]
+    return [customer_bot_id , admin_text , customer_text , status]
+
+
+def block_acount_done_ser(customer_id):
+    change_customer_status(customer_id)
+    loan_id = change_loan_status(customer_id)
+    change_all_installment_status(loan_id)
+    customer_data = get_customer_data_by_id(customer_id)
+    customer_name = customer_data["FULL_NAME"]
+    family_id = customer_data["FAMILY_ID"]
+    head_id = get_family_data_by_id(family_id)["HEAD_ID"]
+    customer_bot_id = get_customer_bot_id(head_id)
+    return [customer_name , customer_bot_id]

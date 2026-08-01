@@ -1,7 +1,7 @@
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
 from database import get_customer_data_by_id,get_all_family_data_by_id,get_all_customer,get_admin_id_b_access,get_all_family_data,get_family_data_by_head_id,get_id_b_admin_bot_id
 import time
-from handler.command import customer_permissions,see_data_step
+from handler.command import customer_permissions,see_data_step,block_customer_command
 
 def go_ba_ne(bot , data , call , text , page_number=1 , call_id=None):
     markup = InlineKeyboardMarkup()
@@ -200,5 +200,17 @@ def get_customer_data_back(chat_id , customer_id):
 def turn_off_acount_makup(customer_id):
     markup = InlineKeyboardMarkup()
     markup.add(InlineKeyboardButton("تایید" , callback_data=f"block-acount_true_{customer_id}") ,
+               InlineKeyboardButton("لغو" , callback_data=f"block-acount_false_{customer_id}"))
+    return markup
+
+def block_acount_markup(customer_id):
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("تایید" , callback_data=f"block-acount_done_{customer_id}"))
+    return markup
+
+def pay_debt_A_markup(chat_id):
+    _ , customer_id= block_customer_command[chat_id]
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("تایید" , callback_data=f"block-acount_done_{customer_id}") ,
                InlineKeyboardButton("لغو" , callback_data=f"block-acount_false_{customer_id}"))
     return markup

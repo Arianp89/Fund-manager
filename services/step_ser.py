@@ -1,6 +1,5 @@
 from database import add_family_data,add_customer,add_family,get_id_b_admin_bot_id,get_all_family_data,get_customer_bot_id,get_admin_id_b_access,get_customer_data_by_id
-from handler.command import pay_installment_data
-from handler.command import add_new_customer_data
+from handler.command import add_new_customer_data,pay_installment_data,block_customer_command
 import random
 import string
 
@@ -57,3 +56,17 @@ def add_new_customer_step_B_ser(chat_id):
         print(e)
         return False
     return link_id
+
+
+def pay_debt_A_text(customer_bot_id):
+    _ , customer_id = block_customer_command[customer_bot_id]
+    customer_data = get_customer_data_by_id(customer_id)
+    admin_id = get_admin_id_b_access(2)
+    admin_bot_id = get_customer_bot_id(admin_id)
+    total_amount , customer_id = block_customer_command[customer_bot_id]
+    customer_name = customer_data["FULL_NAME"]
+    text = f"""کابر {customer_name} 
+باید مبلغ {total_amount} را واریز میکرد.
+"""
+    return [text , admin_bot_id]
+    

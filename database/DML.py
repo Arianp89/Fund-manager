@@ -142,3 +142,33 @@ def add_pay(loan_id ,head_id ,amount_paid):
     conn.close()
     return  cur.lastrowid 
 
+def change_customer_status(customer_id , status = "false"):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "UPDATE CUSTOMER SET IS_ACTIVE=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (status , customer_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid   
+
+
+def change_loan_status(customer_id , status="true"):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "UPDATE LOAN SET STATUS=%s WHERE CUSTOMER_ID=%s;"
+    cur.execute(SQL_Query, (status , customer_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid
+
+def change_all_installment_status(loan_id , status="true"):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "UPDATE INSTALLMENT SET STATUS=%s WHERE LOAN_ID=%s;"
+    cur.execute(SQL_Query, (status , loan_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid   

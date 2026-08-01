@@ -1,5 +1,5 @@
 from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,add_new_customer_step,admin_step,customer_button,customer_step
-from handler.command import customer_step_send_message,pay_installment_step
+from handler.command import customer_step_send_message,pay_installment_step,pay_debt_step
 from config import API_TOKEN
 from handler.threads import get_ziro
 import telebot
@@ -118,6 +118,14 @@ def pay_installment_handler(message):
 @bot.message_handler(func=lambda message: pay_installment_step.get(message.chat.id) == "A" , content_types=["photo"])
 def pay_installment_step_A_handler(message):
     customers_step.pay_installment_A(message)
+
+@bot.message_handler(func=lambda message:message.text == "پرداخت بدهی")
+def pay_debt_handler(message):
+    customer_buttons.pay_debt(message)
+
+@bot.message_handler(func=lambda message: pay_debt_step.get(message.chat.id) == "A" , content_types=["photo"])
+def pay_debt_step_A_handler(message):
+    customers_step.pay_debt_A(message)
 
 @bot.message_handler(func=lambda message: message.text == "مشاهده لیست اقساط")
 def see_loan_list_handler(message):
