@@ -21,12 +21,10 @@ def pay_installment_ser(chat_id):
     head_id = get_id_b_admin_bot_id(chat_id)
     pay_data = get_payment_data_by_customer_id(head_id)
     if not pay_data:
-        print('ok1')
         family_id = get_family_data_by_head_id(head_id)["ID"]
         for all_customer in get_all_customer():
             if all_customer["FAMILY_ID"] == family_id:
                 customer_id = all_customer["ID"]
-                print(customer_id)
                 loan_id = get_loan_data_by_customer_id(customer_id)
                 if not loan_id:
                     pass
@@ -39,7 +37,6 @@ def pay_installment_ser(chat_id):
                     for installment_data in installment_data:
                         loan_data.append(installment_data)
 
-        print(loan_data)
         pay_installment_step[chat_id] = "A"
         pay_installment_data[chat_id] = loan_data
         for loan_data in loan_data:
@@ -53,18 +50,14 @@ def pay_installment_ser(chat_id):
         return [True , text]
         
     elif pay_data["PAYMENT_DATE"].strftime("%Y/%m") == datetime.datetime.now().strftime("%Y/%m"):
-        print('ok2')
         text = f"""شما این ماه را پرداخت کردی"""
         return [False , text]
 
     else:
-        print('ok3'  , datetime.datetime.now().strftime("%Y/%m"))
-        print('ok3' , pay_data["PAYMENT_DATE"].strftime("%Y/%m"))
         family_id = get_family_data_by_head_id(head_id)["ID"]
         for all_customer in get_all_customer():
             if all_customer["FAMILY_ID"] == family_id:
                 customer_id = all_customer["ID"]
-                print(customer_id)
                 loan_id = get_loan_data_by_customer_id(customer_id)
                 if not loan_id:
                     pass
@@ -77,7 +70,6 @@ def pay_installment_ser(chat_id):
                     for installment_data in installment_data:
                         loan_data.append(installment_data)
 
-        print(loan_data)
         pay_installment_step[chat_id] = "A"
         pay_installment_data[chat_id] = loan_data
         for loan_data in loan_data:

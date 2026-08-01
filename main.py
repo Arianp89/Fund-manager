@@ -238,6 +238,12 @@ def all_callback_query_handler(call):
     elif data == "see-customer-list":
         call_handler.see_customer_list()
 
+    elif data.startswith("turn-off-acount"):
+        call_handler.turn_off_acount(data)
+
+    elif data.startswith("block-acount"):
+        call_handler.block_acount(data)
+
     elif data.startswith("go"):
         call_handler.go(data)
 

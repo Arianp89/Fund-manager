@@ -1,6 +1,6 @@
-from services.call_back_ser import get_customer_bot_id_and_message,family_link_msg_true_ser,pay_installment_true_ser,get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
+from services.call_back_ser import block_acount_true_ser,get_customer_bot_id_and_message,family_link_msg_true_ser,pay_installment_true_ser,get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
 from keyboard.keyboard import admin_markup
-from keyboard.call_back_markup import get_customer_data_back,back_markup,see_customer_list_markup_go,see_customer_list_markup,get_family_markup,get_family_list_markup_go,see_family_data_markup_go,see_family_markup,chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
+from keyboard.call_back_markup import turn_off_acount_makup,get_customer_data_back,back_markup,see_customer_list_markup_go,see_customer_list_markup,get_family_markup,get_family_list_markup_go,see_family_data_markup_go,see_family_markup,chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
 from .command import see_data_step,send_message_one_data,admin_step_send_messsage,customer_step_send_message,customer_data_send_message
 
 class call_back:
@@ -158,7 +158,7 @@ class call_back:
     def get_customer_data(self , data):
         _ , customer_id = data.split("_")
         text = get_see_data_text(customer_id)
-        markup = get_customer_data_back(self.cid)
+        markup = get_customer_data_back(self.cid , customer_id)
         self.bot.edit_message_text(text , self.cid , self.mid , reply_markup = markup)
 
     def get_family_member(self , data):
@@ -203,8 +203,6 @@ class call_back:
 
     def pay_installment(self , data):
         _ , status , customer_bot_id = data.split("_")
-        print(customer_bot_id)
-        print(status)
         if status == 'true':
             try:
                 self.bot.delete_message(self.cid , self.mid)
@@ -261,6 +259,23 @@ class call_back:
             return 
         self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
         
+
+    def turn_off_acount(self , data):
+        _ , customer_id = data.split("_")
+        text = "آیا مطمعن  هستید از این کار"
+        markup = turn_off_acount_makup(customer_id)
+        self.bot.edit_message_text(text = text , chat_id = self.cid , message_id = self.mid , reply_markup = markup)
+
+
+    def block_acount(self , data):
+        _ , status , customer_id = data.split("_")
+        if status == 'true':
+            _data = block_acount_true_ser(customer_id)
+            customer_bot_id = _data[0]
+            admin_text = _data[1]
+            customer_text = _data[2]
+            self.bot.edit_message_text(admin_text , self.cid , self.mid)
+            self.bot.send_message(customer_bot_id , customer_text)
 
     def go(self , data):
         _,_,_,call_name =data.split("_")

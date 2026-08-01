@@ -20,7 +20,6 @@ def add_admin_access2_call(family_id ):
 
 def change_admin_access2_ser(family_id):
     new_admin_id = get_family_data_by_id(family_id)["HEAD_ID"]
-    print(new_admin_id)
     customer_id = get_admin_id_b_access(2)
     setting_data = get_setting_data(customer_id)
     admin_id =  get_admin_id(customer_id)
@@ -41,7 +40,6 @@ def send_message_one_ser(family_id):
     return customer_bot_id
 
 def get_see_data_text(customer_id):
-    print(get_loan_data_by_customer_id(customer_id))
     customer_data = get_customer_data_by_id(customer_id)
     loan_data = get_loan_data_by_customer_id(customer_id)
 
@@ -82,7 +80,6 @@ def see_family_data_admin_text(family_id):
 def pay_installment_true_ser(chat_id):
     chat_id = int(chat_id)
     head_id = get_id_b_admin_bot_id(chat_id)
-    print(pay_installment_data)
     loans_data = pay_installment_data[chat_id]
     for loan_data in loans_data:
         loan_id = loan_data["LOAN_ID"]
@@ -108,14 +105,40 @@ def get_customer_bot_id_and_message():
                 customer_bot_id = get_customer_bot_id(head_id)
                 if customer_bot_id is None:
                     customer_bot_id = loan_data["CUSTOMER_ID"]
-                    print(3)
-                print(customer_bot_id,"customer_bot_id")
                 if str(customer_bot_id)  in data:
-                    print(1)
                     data[str(customer_bot_id)] += loan_data["INSTALLMENT_AMOUNT"]
                 else:
                     data[str(customer_bot_id)] = loan_data["INSTALLMENT_AMOUNT"]
-                    print(2)
-                print(data)
-    print(data)
     return data
+
+
+def block_acount_true_ser(customer_id):
+    loan_data = get_loan_data_by_customer_id(customer_id)
+    customer_data = get_customer_data_by_id(customer_id)
+    head_id = get_family_data_by_id(customer_data["FAMILY_ID"])["HEAD_ID"]
+    customer_bot_id = get_customer_bot_id(head_id)
+    customer_name = customer_data["FULL_NAME"]
+    if not loan_data:
+        total = customer_data["TOTAL_CAPITAL"]
+        
+    else:
+        loan_amount = loan_data["LOAN_AMOUNT"]
+        print(loan_amount)
+        pay_amount = loan_data["AMOUNT_PAID"]
+        print(pay_amount)
+        noy_pay = loan_amount - pay_amount
+        print(noy_pay)
+        total_capital = customer_data["TOTAL_CAPITAL"]
+        print(total_capital)
+        total = total_capital - noy_pay
+        print(total)
+
+    if total > 0:
+        admin_text = f"شما باید مبلغ {total} را پرداخت کنید به کاربر مورد نظر پرداخت کنید"
+        customer_text = f"ادمین درحال بستن اکانت {customer_name} است و باید مبلغ {total} را به شما پرداخت کند"
+    else:
+        total = - + total
+        admin_text = f"کاربر مورد نظر باید مبلغ {total} را برای شما واریز کنه"
+        customer_text = f"ادمین در حال بستن اکانت {customer_name} است و شما باید مبلغ {total} را پرداخت کنید و برای این کار در قسمت پرداخت قسط این مبلغ را پرداخت کنید"
+   
+    return [customer_bot_id , admin_text , customer_text]

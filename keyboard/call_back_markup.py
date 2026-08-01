@@ -1,11 +1,12 @@
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
-from database import get_all_family_data_by_id,get_all_customer,get_admin_id_b_access,get_all_family_data,get_family_data_by_head_id,get_id_b_admin_bot_id
+from database import get_customer_data_by_id,get_all_family_data_by_id,get_all_customer,get_admin_id_b_access,get_all_family_data,get_family_data_by_head_id,get_id_b_admin_bot_id
 import time
 from handler.command import customer_permissions,see_data_step
+
 def go_ba_ne(bot , data , call , text , page_number=1 , call_id=None):
     markup = InlineKeyboardMarkup()
     data_number = len(data)
-    if data_number == 5:
+    if data_number <= 5:
         for da in data:
             markup.add(InlineKeyboardButton(da[text] ,
                                             callback_data=f'{call}_{da["ID"]}'))
@@ -99,7 +100,6 @@ def profile_markup(chat_id):
 
     else:
         markup.add(InlineKeyboardButton("مشاهده لیست خانواده" , callback_data=f'see-family-data_{family_id}'))
-        print("انجام شود")
     # check_time = time.time()-customer_permissions[chat_id]["time"] > 3600*24
     # if customer_permissions[chat_id]["change_bot_id"] == "true" and check_time <= 3600*24:
     #     markup.add(InlineKeyboardButton("تغییر ادرس ربات" , callback_data=f'change-bot-id_{family_id}'))
@@ -178,14 +178,27 @@ def back_markup(mark , markup=None):
     return markup
     
 
-def get_customer_data_back(chat_id):
+def get_customer_data_back(chat_id , customer_id):
     try:
         data = see_data_step[chat_id]
+        markup = InlineKeyboardMarkup()
         if data == "see-customer-list":
-            markup = back_markup("see-customer-list")
+            customer_data = get_customer_data_by_id(customer_id)
+            if customer_data["IS_ACTIVE"] == "true":
+                markup.add(InlineKeyboardButton("غیر فعال کردن اکانت" , callback_data= f'turn-off-acount_{customer_id}') ,
+                            InlineKeyboardButton('جا به جا کردن اکانت' , callback_data= f"access-change-bot_{customer_id}"))
+            markup = back_markup("see-customer-list" , markup)
             return markup
         elif data.startswith("see-family-data"):
-            markup = back_markup(data)
+            markup = back_markup(data , markup)
             return markup
     except:
         return None
+    
+
+
+def turn_off_acount_makup(customer_id):
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("تایید" , callback_data=f"block-acount_true_{customer_id}") ,
+               InlineKeyboardButton("لغو" , callback_data=f"block-acount_false_{customer_id}"))
+    return markup

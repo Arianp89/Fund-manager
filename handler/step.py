@@ -29,7 +29,6 @@ class admin_step:
         text = "پیام ادمین \n"
         text += message.text
         for customer_bot_id in get_all_family_bot_id():
-            print(customer_bot_id)
             try:
                 self.bot.send_message(customer_bot_id , text)
             except:

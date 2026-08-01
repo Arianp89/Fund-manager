@@ -63,7 +63,6 @@ class customer_button:
             return
         
         text = pay_installment_ser(cid)
-        print(text)
         if not text[0]:
             self.bot.send_message(cid , text[1])
             return

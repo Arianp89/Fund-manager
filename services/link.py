@@ -9,7 +9,6 @@ class link:
             
     def get_family_link_ser(self , link_id , chat_id):
         family_data = get_family_data(link_id)
-        print(family_data)
         if family_data is None:
             return False
         if not get_family_link_status(family_data["ID"]):
@@ -37,7 +36,6 @@ class link:
 
     def message_link_family_ser(self , link_id):
         family_data = get_family_data(link_id)
-        print("family_data",family_data)
         if not family_data:
             return False
         elif family_data["USE_LINK"] == "true":
@@ -48,11 +46,8 @@ class link:
 
     def message_link_family(self , message , link_id):
         cid = message.chat.id
-        print(link_id)
         status = self.message_link_family_ser(link_id)
-        print("status" , status)
         if not status:
-            print("1")
             return
         else:
              admin_id = get_admin_id_b_access(2)

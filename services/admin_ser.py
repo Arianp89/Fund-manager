@@ -27,7 +27,6 @@ def admin_see_customer_text():
     customer_data = get_all_customer()
     family_number =len( get_all_family_data())
     for data in customer_data:
-        print(data)
         status = data['IS_ACTIVE']
         if status == "true":
             number_customer_active += 1 
@@ -53,7 +52,6 @@ def see_loan_list_text():
             now = datetime.datetime.now().strftime("%Y/%m")
             for installment_data in get_all_installment_data_by_id(loan_id):
                 if installment_data["REGISTER_DATE"].strftime("%Y/%m") == now:
-                    print(installment_data["STATUS"])
                     if installment_data["STATUS"] == 'true':
                         total_installment_pay += 1
                     else:
