@@ -252,6 +252,9 @@ def all_callback_query_handler(call):
     elif data.startswith("block-acount"):
         call_handler.block_acount(data)
 
+    elif data.startswith("change-bot-id"):
+        call_handler.change_bot_id(data)
+
     elif data.startswith("go"):
         call_handler.go(data)
 

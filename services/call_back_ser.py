@@ -1,5 +1,6 @@
 from database import *
 from handler.command import pay_installment_data,block_customer_command
+import config
 
 def access_1_ser(family_id , chat_id):
     customer_id = get_family_data_by_id(family_id)["HEAD_ID"]
@@ -157,3 +158,16 @@ def block_acount_done_ser(customer_id):
     head_id = get_family_data_by_id(family_id)["HEAD_ID"]
     customer_bot_id = get_customer_bot_id(head_id)
     return [customer_name , customer_bot_id]
+
+
+def change_bot_id_ser(customer_id):
+    family_id = get_customer_data_by_id(customer_id)["FAMILY_ID"]
+    family_data = get_family_data_by_id(family_id)
+    head_id = family_data["HEAD_ID"]
+    link_id = family_data["LINK_ID"]
+    customer_bot_id = get_customer_bot_id(head_id)
+    change_status_use_link_family(link_id , "false")
+    delete_customer_bot_id(head_id)
+    text = " کلیک کنید ."+ f" [لینک](https://web.bale.ai/chat?uid={config.bot_id}&start=family_{link_id}) " + "لطفا روی "
+
+    return [customer_bot_id , text]

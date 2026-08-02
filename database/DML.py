@@ -172,3 +172,14 @@ def change_all_installment_status(loan_id , status="true"):
     cur.close()
     conn.close()
     return  cur.lastrowid   
+
+
+def delete_customer_bot_id(head_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "UPDATE CUSTOMER SET BOT_ID=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (None , head_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid  
