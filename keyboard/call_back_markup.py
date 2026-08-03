@@ -1,5 +1,5 @@
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
-from database import get_customer_data_by_id,get_all_family_data_by_id,get_all_customer,get_admin_id_b_access,get_all_family_data,get_family_data_by_head_id,get_id_b_admin_bot_id
+from database import get_customer_bot_id,get_family_data_by_id,get_customer_data_by_id,get_all_family_data_by_id,get_all_customer,get_admin_id_b_access,get_all_family_data,get_family_data_by_head_id,get_id_b_admin_bot_id
 import time
 from handler.command import customer_permissions,see_data_step,block_customer_command
 
@@ -156,6 +156,9 @@ def message_link_family_markup(customer_id , link_id):
 
 def see_loan_list_markup():
     markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("مشاهده افراد پرداخت نکرده" , callback_data="see-customer-nt-pay") ,
+              InlineKeyboardButton("مشاهده افراد پرداخت کرده" , callback_data="see-customer-pay")
+              )
     markup.add(InlineKeyboardButton("ارسال پیام برای پرداخت" , callback_data='send-message-to-pay'))
     return markup
 
@@ -185,8 +188,11 @@ def get_customer_data_back(chat_id , customer_id):
         if data == "see-customer-list":
             customer_data = get_customer_data_by_id(customer_id)
             if customer_data["IS_ACTIVE"] == "true":
-                markup.add(InlineKeyboardButton("غیر فعال کردن اکانت" , callback_data= f'turn-off-acount_{customer_id}') ,
-                            InlineKeyboardButton('جا به جا کردن اکانت' , callback_data= f"change-bot-id_{customer_id}"))
+                if  not get_customer_bot_id(get_family_data_by_id(customer_data["FAMILY_ID"])["HEAD_ID"]):
+                    markup.add(InlineKeyboardButton('جا به جا کردن اکانت' , callback_data= f"change-bot-id_{customer_id}"))
+                else:
+                    markup.add(InlineKeyboardButton("غیر فعال کردن اکانت" , callback_data= f'turn-off-acount_{customer_id}') ,
+                                InlineKeyboardButton('جا به جا کردن اکانت' , callback_data= f"change-bot-id_{customer_id}"))
             markup = back_markup("see-customer-list" , markup)
             return markup
         elif data.startswith("see-family-data"):

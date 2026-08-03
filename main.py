@@ -255,6 +255,12 @@ def all_callback_query_handler(call):
     elif data.startswith("change-bot-id"):
         call_handler.change_bot_id(data)
 
+    elif data == "see-customer-nt-pay":
+        call_handler.see_customer_nt_pay()
+
+    elif data == "see-customer-pay":
+        call_handler.see_customer_pay()
+
     elif data.startswith("go"):
         call_handler.go(data)
 

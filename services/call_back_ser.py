@@ -1,6 +1,7 @@
 from database import *
 from handler.command import pay_installment_data,block_customer_command
 import config
+import datetime
 
 def access_1_ser(family_id , chat_id):
     customer_id = get_family_data_by_id(family_id)["HEAD_ID"]
@@ -30,7 +31,6 @@ def change_admin_access2_ser(family_id):
         delete_setting(admin_id)
     delete_admin(admin_id)
     add_admin(new_admin_id , 2)
-    return True
 
 def send_message_one_ser(family_id):
     family_data = get_family_data_by_id(family_id)
@@ -171,3 +171,34 @@ def change_bot_id_ser(customer_id):
     text = " کلیک کنید ."+ f" [لینک](https://web.bale.ai/chat?uid={config.bot_id}&start=family_{link_id}) " + "لطفا روی "
 
     return [customer_bot_id , text]
+
+
+def see_customer_nt_pay_text():
+    text = ""
+    for family_data in get_all_family_data():
+        head_id = family_data["HEAD_ID"]
+        pay_data = get_payment_data_by_customer_id(head_id) 
+        if not pay_data:
+            text += f"کد خانواده:{family_data["ID"]}      نام خانواده:{family_data["FAMILY_NAME"]} \n"
+        else:
+            now = datetime.datetime.now().strftime("%Y/%m")
+            if pay_data["PAYMENT_DATE"].strftime("%Y/%m") == now:
+                pass
+            else:
+                text += f"کد خانواده:{family_data["ID"]}      نام خانواده:{family_data["FAMILY_NAME"]} \n"
+    return text
+
+def see_customer_pay_text():
+    text = ""
+    for family_data in get_all_family_data():
+        head_id = family_data["HEAD_ID"]
+        pay_data = get_payment_data_by_customer_id(head_id) 
+        if not pay_data:
+            pass
+        else:
+            now = datetime.datetime.now().strftime("%Y/%m")
+            if pay_data["PAYMENT_DATE"].strftime("%Y/%m") == now:
+                text += f"کد خانواده:{family_data["ID"]}      نام خانواده:{family_data["FAMILY_NAME"]} \n"
+            else:
+                pass
+    return text
