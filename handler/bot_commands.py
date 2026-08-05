@@ -26,9 +26,9 @@ class bot_commands:
         if status is None:
             return
         elif status:
-            self.bot.send_message(cid , 'سلام ادمین' , reply_markup=admin_markup(cid))
+            self.bot.send_message(cid , "سلام به ربات ما خوش آمدید" , reply_markup=admin_markup(cid))
         elif not status:
-            self.bot.send_message(cid , 'سلام کاربر' , reply_markup=customer_markup(cid))
+            self.bot.send_message(cid , "سلام به ربات ما خوش آمدید" , reply_markup=customer_markup(cid))
 
     def help(self , message):
         cid = message.chat.id

@@ -5,3 +5,5 @@ database_data/
 excel.csv
 backup.zip
 test.py
+*.log
+*.zip

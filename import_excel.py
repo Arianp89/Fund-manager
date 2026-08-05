@@ -134,7 +134,7 @@ class Import_excel:
 
 def main():
     num = 0
-    line_number = input('enter line_number:')
+    line_number = 11
     im = Import_excel(int(line_number))
     file_data = im.open_file()
     for file_data in file_data:

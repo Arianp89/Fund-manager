@@ -31,7 +31,7 @@ class link:
             self.bot.send_message(cid , 'لینک خراب است')
             return
         elif status:
-            self.bot.send_message(cid , 'سلام' , customer_markup(cid))
+            self.bot.send_message(cid , "سلام به ربات ما خوش آمدید" , customer_markup(cid))
     
 
     def message_link_family_ser(self , link_id):

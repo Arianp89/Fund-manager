@@ -12,8 +12,8 @@ def add_family_link_text():
         family_data = get_family_data_by_id(id)
         link_id = family_data['LINK_ID']
         family_name = family_data['FAMILY_NAME']
-        text = f'کاربر {family_name} \n'
-        text += " کلیک کنید ."+ f" [لینک](https://web.bale.ai/chat?uid={bot_id}&start=family_{link_id}) " + "لطفا روی "
+        text = f"""خانواده:{family_name}
+لطفا برای وارد شدن به اکانت خود روی [لینک](https://web.bale.ai/chat?uid={bot_id}&start=family_{link_id}) کلیک کنید"""
         text_list.append(text)
 
     return text_list

@@ -1,31 +1,10 @@
-from handler import bot_commands,admin_button,call_back,admin_step_send_messsage,add_new_customer_step,admin_step,customer_button,customer_step
-from handler.command import customer_step_send_message,pay_installment_step,pay_debt_step
-from config import API_TOKEN
+from handler.command import customer_step_send_message,pay_installment_step,pay_debt_step,admin_step_send_messsage,add_new_customer_step
+from handler import bot_commands,admin_button,call_back,admin_step,customer_button,customer_step
 from handler.threads import get_ziro
-import telebot
-import logging
+from config import API_TOKEN
 import threading
-
-import functools
 import logging
-
-
-def debug_info(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        # قبل از اجرا: لاگ کردن ورودی‌ها
-        logging.info(f"Calling: {func.__name__} | Args: {args} | Kwargs: {kwargs}")
-        try:
-            result = func(*args, **kwargs)
-            # بعد از اجرا: لاگ کردن خروجی
-            logging.info(f"{func.__name__} returned: {result}")
-            return result
-        except Exception as e:
-            # در صورت بروز خطا: لاگ کردن خطا
-            logging.error(f"Exception in {func.__name__}: {str(e)}")
-            print(e)
-            raise e # خطا را مجدداً بالا می‌برد تا برنامه متوقف نشود یا توسط سایر خطاگیرها دیده شود
-    return wrapper
+import telebot
 
 
 telebot.apihelper.API_URL = 'http://tapi.bale.ai/bot{0}/{1}'
@@ -41,7 +20,7 @@ customers_step =customer_step(bot)
 
 #____________________________________LOGG_______________________________________
 
-# logging.basicConfig("level=logging.INFO, filename='project.log', format='%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, filename='project.log', format='%(asctime)s - %(levelname)s - %(message)s' )
 
 #____________________________________LISENER_____________________________________
 

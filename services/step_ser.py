@@ -35,7 +35,7 @@ def pay_installment_A_text_and_admin_id(chat_id):
     customer_id = get_id_b_admin_bot_id(chat_id)
     customer_data = get_customer_data_by_id(customer_id)
     customer_name = customer_data["FULL_NAME"]
-    total_pay_number = pay_installment_data[chat_id]
+    total_pay_number = pay_installment_data[chat_id][1]
     text = f"""کاربر:{customer_name}
 باید مبلغ:{total_pay_number} را واریز میکرد
 """

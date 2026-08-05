@@ -59,7 +59,8 @@ class admin_button:
         
         now = datetime.datetime.today()
         with open(os.path.join("Data", "backup.zip"), "rb") as f:
-            text = f"فایل [backup](github.com/arianp89/database-data-mover) {now}"
+            text = f"""فایل [backup](github.com/arianp89/database-data-mover) 
+تاریخ:{now}"""
             self.bot.send_document(cid, f, caption=text, parse_mode="Markdown")
 
         

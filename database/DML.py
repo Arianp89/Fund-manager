@@ -132,11 +132,11 @@ def change_loan_number(loan_id , new_number = -1):
     return  cur.lastrowid  
 
 
-def add_pay(loan_id ,head_id ,amount_paid):
+def add_pay(loan_id ,head_id ,amount_paid,capital_increase):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "INSERT INTO PAYMENT (LOAN_ID  , CUSTOMER_ID , AMOUNT_PAID) VALUES (%s,%s,%s);"
-    cur.execute(SQL_Query , (loan_id  , head_id , amount_paid))
+    SQL_Query = "INSERT INTO PAYMENT (LOAN_ID  , CUSTOMER_ID , AMOUNT_PAID , CAPITAL_INCREASE) VALUES (%s,%s,%s);"
+    cur.execute(SQL_Query , (loan_id  , head_id , amount_paid , capital_increase))
     conn.commit()
     cur.close()
     conn.close()
