@@ -20,13 +20,13 @@ customers_step =customer_step(bot)
 
 #____________________________________LOGG_______________________________________
 
-logging.basicConfig(level=logging.INFO, filename='project.log', format='%(asctime)s - %(levelname)s - %(message)s' )
+logging.basicConfig(level=logging.INFO, filename='project.log',encoding="utf-8" , format="%(asctime)s - %(levelname)s - %(message)s")
 
 #____________________________________LISENER_____________________________________
 
 
 def listener(messages):
-    for m in messages:
+    for m in messages:    
         # print(m)
         if m.content_type == "text":
             print(f"{m.chat.first_name} [{str(m.chat.id)}]: {m.text}")

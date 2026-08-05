@@ -113,16 +113,21 @@ def get_customer_bot_id_and_message():
     for loan_data in get_all_loan_data():
         loan_id = loan_data["ID"]
         for installment in get_all_installment_data_by_id(loan_id):
+            print(1)
             if installment["STATUS"] == 'false':
                 family_id = get_customer_data_by_id(loan_data["CUSTOMER_ID"])["FAMILY_ID"]
+                print(family_id)
                 head_id = get_family_data_by_id(family_id)["HEAD_ID"]
+                print(head_id)
                 customer_bot_id = get_customer_bot_id(head_id)
+                print(customer_bot_id)
                 if customer_bot_id is None:
                     customer_bot_id = loan_data["CUSTOMER_ID"]
                 if str(customer_bot_id)  in data:
                     data[str(customer_bot_id)] += loan_data["INSTALLMENT_AMOUNT"]
                 else:
                     data[str(customer_bot_id)] = loan_data["INSTALLMENT_AMOUNT"]
+    print(data)
     return data
 
 
@@ -187,6 +192,8 @@ def change_bot_id_ser(customer_id):
 
 
 
+import datetime
+
 def see_customer_nt_pay_text():
     all_data = {}
     text = ""
@@ -202,22 +209,28 @@ def see_customer_nt_pay_text():
             if customer_data["FAMILY_ID"] != family_id:
                 continue
 
-            if customer_data["IS_ACTIVE"] != "true":
+            if str(customer_data["IS_ACTIVE"]).lower() != "true":
                 continue
 
             loan_data = get_loan_data_by_customer_id(customer_data["ID"])
             if not loan_data:
                 continue
 
-            pay_data = get_all_installment_data_by_loan_id(loan_data["ID"], "true")
+            pay_data = get_all_installment_data_by_loan_id(loan_data["ID"], "false")
+            print("pay_data",pay_data)
 
             add_customer = False
 
-            if not pay_data:
-                add_customer = True
+            if not pay_data or pay_data == []:
+                add_customer = False
             else:
-                # اگر pay_data یک دیکشنری باشد
-                if change_time(pay_data["PAYMENT_DATE"]).strftime("%Y/%m") != now:
+                try:
+                    for pay_data in pay_data:
+                        reg_date_str = pay_data["REGISTER_DATE"]
+                        if change_time(reg_date_str).strftime("%Y/%m") == now:
+                            add_customer = True
+                except Exception as e:
+                    print(f"Error processing date for customer {customer_data['ID']}: {e}")
                     add_customer = True
 
             if add_customer:
@@ -232,29 +245,79 @@ def see_customer_nt_pay_text():
                     "name": customer_data["FULL_NAME"]
                 })
 
+    if not all_data:
+        return "همه پرداخت‌ها طبق برنامه انجام شده است. ✅"
+
+
     for family_id, data in all_data.items():
         text += f"کد خانواده: {family_id} | نام خانواده: {data['family_name']}\n"
         for customer in data["customer_data"]:
             text += f"  - کد: {customer['id']} | نام: {customer['name']}\n"
-        text += "\n\n"
+        text += "\n"
 
     return text
 
 
 
 def see_customer_pay_text():
+    all_data = {}
     text = ""
-    for family_data in get_all_family_data():
-        head_id = family_data["HEAD_ID"]
-        pay_data = get_payment_data_by_customer_id(head_id) 
-        if not pay_data:
-            pass
-        else:
-            now = datetime.datetime.now().strftime("%Y/%m")
-            if pay_data["PAYMENT_DATE"].strftime("%Y/%m") == now:
-                text += f"کد خانواده:{family_data["ID"]}      نام خانواده:{family_data["FAMILY_NAME"]} \n"
+
+    families = get_all_family_data()
+    customers = get_all_customer()
+    now = change_time(datetime.datetime.now()).strftime("%Y/%m")
+
+    for family_data in families:
+        family_id = family_data["ID"]
+
+        for customer_data in customers:
+            if customer_data["FAMILY_ID"] != family_id:
+                continue
+
+            if str(customer_data["IS_ACTIVE"]).lower() != "true":
+                continue
+
+            loan_data = get_loan_data_by_customer_id(customer_data["ID"])
+            if not loan_data:
+                continue
+
+            pay_data = get_all_installment_data_by_loan_id(loan_data["ID"], "true")
+            print("pay_data",pay_data)
+
+            add_customer = False
+
+            if not pay_data or pay_data == []:
+                add_customer = False
             else:
-                pass
-    if text == "":
-        text = "کسی تا به الان پرداخت نکرده"
+                try:
+                    for pay_data in pay_data:
+                        reg_date_str = pay_data["REGISTER_DATE"]
+                        if change_time(reg_date_str).strftime("%Y/%m") == now:
+                            add_customer = True
+                except Exception as e:
+                    print(f"Error processing date for customer {customer_data['ID']}: {e}")
+                    add_customer = True
+
+            if add_customer:
+                if family_id not in all_data:
+                    all_data[family_id] = {
+                        "family_name": family_data["FAMILY_NAME"],
+                        "customer_data": []
+                    }
+
+                all_data[family_id]["customer_data"].append({
+                    "id": customer_data["ID"],
+                    "name": customer_data["FULL_NAME"]
+                })
+
+    if not all_data:
+        return "همه پرداخت‌ها طبق برنامه انجام نشده است. ✅"
+
+
+    for family_id, data in all_data.items():
+        text += f"کد خانواده: {family_id} | نام خانواده: {data['family_name']}\n"
+        for customer in data["customer_data"]:
+            text += f"  - کد: {customer['id']} | نام: {customer['name']}\n"
+        text += "\n"
+
     return text

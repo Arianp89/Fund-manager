@@ -236,6 +236,7 @@ class call_back:
             family_link_msg_true_ser(link_id , customer_bot_id)
 
     def send_message_to_pay(self):
+        print(get_customer_bot_id_and_message())
         for customer_bot_id , text in get_customer_bot_id_and_message().items():
             text = f"شمل باید مبلغ {text} را واریز کنید لطفا انجام دهید"
             try:
