@@ -1,8 +1,8 @@
-from services.call_back_ser import see_customer_pay_text,see_customer_nt_pay_text,change_bot_id_ser,block_acount_done_ser,block_acount_true_ser,get_customer_bot_id_and_message,family_link_msg_true_ser,pay_installment_true_ser,get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
+from services.call_back_ser import block_acount_false_ser,see_customer_pay_text,see_customer_nt_pay_text,change_bot_id_ser,block_acount_done_ser,block_acount_true_ser,get_customer_bot_id_and_message,family_link_msg_true_ser,pay_installment_true_ser,get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
 from keyboard.keyboard import customer_markup,admin_markup
 from keyboard.call_back_markup import block_acount_markup,turn_off_acount_makup,get_customer_data_back,back_markup,see_customer_list_markup_go,see_customer_list_markup,get_family_markup,get_family_list_markup_go,see_family_data_markup_go,see_family_markup,chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
 from .command import pay_installment_step,pay_installment_data,see_data_step,send_message_one_data,admin_step_send_messsage,customer_step_send_message,customer_data_send_message
-
+from .admin_button import admin_button
 class call_back:
     def __init__(self , bot , call):
         self.bot = bot
@@ -103,13 +103,14 @@ class call_back:
             return
         admin_step_send_messsage[self.cid] = "A"
         send_message_one_data[self.cid] = customer_bot_id
-        self.bot.edit_message_text("پیام خود را وارد کنید" , self.cid , self.mid )
+        text = "پیام خود را وارد کنید \n برای خروج روی /cancel رو بزنید"
+        self.bot.edit_message_text(text , self.cid , self.mid)
 
 
 
     def send_massage_customer_one(self):
         markup = chose_customer_to_send_message_markup(self.bot)
-        self.bot.edit_message_text(chat_id = self.cid , text = "انتخاب کنید" , message_id = self.mid , reply_markup = markup)
+        self.bot.edit_message_text(chat_id = self.cid , text = "خانواده مورد نظر خود را انتخاب کنید" , message_id = self.mid , reply_markup = markup)
 
 
     def chose_customer_to_send_message_go(self , data):
@@ -122,12 +123,13 @@ class call_back:
         markup = chose_customer_to_send_message_markup_go(self.bot , page_number , self.call_id)
         if not markup:
             return 
-        self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
+        self.bot.edit_message_text("خانواده مورد نظر خود را انتخاب کنید" , self.cid , self.mid , reply_markup=markup)
 
 
     def send_message_all_customer(self):
         admin_step_send_messsage[self.cid] = "B"
-        self.bot.edit_message_text("پیام خود را وارد کنید" , self.cid , self.mid)
+        text = "پیام خود را وارد کنید \n برای خروج روی /cancel رو بزنید"
+        self.bot.edit_message_text(text , self.cid , self.mid)
 
 
     def see_message(self , data):
@@ -213,7 +215,7 @@ class call_back:
                 self.bot.send_message(customer_bot_id , "تایید شد")
             except Exception as e:
                 print(e)
-                self.bot.answer_callback_query(self.call_id , "تایید شد")
+                self.bot.answer_callback_query(self.call_id , "تایید نشد")
                 self.bot.edit_message_reply_markup(self.cid , self.mid)
 
         else:
@@ -250,7 +252,7 @@ class call_back:
 
     def see_customer_list(self):
         see_data_step[self.cid] = "see-customer-list"
-        text = "لیست کابران"
+        text = "لیست همه کاربران"
         markup = see_customer_list_markup(self.bot)
         self.bot.edit_message_text(chat_id = self.cid , message_id = self.mid , text = text , reply_markup = markup)
 
@@ -265,7 +267,7 @@ class call_back:
         markup = see_customer_list_markup_go(self.bot , page_number , self.call_id)
         if not markup:
             return 
-        self.bot.edit_message_text('انتخاب کنید' , self.cid , self.mid , reply_markup=markup)
+        self.bot.edit_message_text("لیست همه کاربران" , self.cid , self.mid , reply_markup=markup)
         
 
     def turn_off_acount(self , data):
@@ -288,7 +290,7 @@ class call_back:
             else:
                 markup = None
             self.bot.edit_message_text(admin_text , self.cid , self.mid , reply_markup = markup)
-            self.bot.send_message(customer_bot_id , customer_text)
+            self.bot.send_message(customer_bot_id , customer_text , reply_markup = customer_markup(customer_bot_id))
 
         elif status == "false":
             try:
@@ -296,6 +298,9 @@ class call_back:
             except Exception as e:
                 self.bot.edit_message_reply_markup(self.cid , self.mid)
             self.bot.answer_callback_query(self.call_id , "لغو شد")
+            customer_bot_id = block_acount_false_ser(customer_id)
+            self.bot.send_message(customer_bot_id , "عکس شما لغو شد")
+            
 
 
         elif status == "done":
@@ -323,12 +328,14 @@ class call_back:
     
     def see_customer_nt_pay(self):
         text = see_customer_nt_pay_text()
-        self.bot.edit_message_text(text , self.cid , self.mid)
+        markup = back_markup("see-installment-data")
+        self.bot.edit_message_text(text , self.cid , self.mid , reply_markup = markup)
 
     
     def see_customer_pay(self):
         text = see_customer_pay_text()
-        self.bot.edit_message_text(text , self.cid , self.mid)
+        markup = back_markup("see-installment-data")
+        self.bot.edit_message_text(text , self.cid , self.mid , reply_markup = markup)
         
 
     def go(self , data):
@@ -363,3 +370,11 @@ class call_back:
 
         elif to.startswith("see-family-data"):
             self.get_family_member(to)
+        
+        elif to.startswith("see-installment-data"):
+            try:
+                self.bot.delete_message(self.cid , self.mid)
+                admin_button(self.bot).see_loan_list(self.message)
+            except Exception as e:
+                print(e)
+                self.bot.edit_message_reply_markup(self.cid , self.mid)

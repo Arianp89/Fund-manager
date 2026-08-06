@@ -86,9 +86,15 @@ def see_family_data_admin_text(family_id):
 
 def pay_installment_true_ser(chat_id):
     try:
+        _list = list()
         chat_id = int(chat_id)
+        print("ok",pay_installment_data[chat_id])
         head_id = get_id_b_admin_bot_id(chat_id)
         loans_data = pay_installment_data[chat_id][0]
+        total_amount = pay_installment_data[chat_id][1]
+        customer_id = get_admin_id_b_access(2)
+        setting_data = get_setting_data(customer_id)
+        capital_amount = 50
         print(loans_data)
         for loan_data in loans_data:
             print("loan_data",loan_data)
@@ -96,9 +102,13 @@ def pay_installment_true_ser(chat_id):
             loan_id - int(loan_id)
             change_loan_number(loan_id)
             change_all_installment_status(loan_id , "true")
-            add_pay(loan_id , int(head_id) , 1 , 1)
+            customer_id = get_loan_data_by_id(loan_id)["CUSTOMER_ID"]
+            if customer_id not in _list:
+                _list.append(customer_id)
+            add_pay(head_id , total_amount , capital_amount , loan_id)
     except Exception as e:
         print(e)
+    pay_installment_data.pop(chat_id)
 
 
 def family_link_msg_true_ser(link_id , customer_bot_id):
@@ -158,23 +168,32 @@ def block_acount_true_ser(customer_id):
         customer_text = f"ادمین درحال بستن اکانت {customer_name} است و باید مبلغ {total} را به شما پرداخت کند"
     else:
         total = - + total
-        block_customer_command[customer_bot_id] = [total , customer_id]
         status = "0"
         admin_text = f"کاربر مورد نظر باید مبلغ {total} را برای شما واریز کنه"
-        customer_text = f"ادمین در حال بستن اکانت {customer_name} است و شما باید مبلغ {total} را پرداخت کنید و برای این کار در قسمت پرداخت قسط این مبلغ را پرداخت کنید"
+        customer_text = f"ادمین در حال بستن اکانت {customer_name} است و شما برای پرداخت بدهی خود روی دکمه پرداخت بدهی کلیک کنید"
    
+    block_customer_command[customer_bot_id] = [total , customer_id]
     return [customer_bot_id , admin_text , customer_text , status]
 
 
 def block_acount_done_ser(customer_id):
-    change_customer_status(customer_id)
-    loan_id = change_loan_status(customer_id)
-    change_all_installment_status(loan_id)
     customer_data = get_customer_data_by_id(customer_id)
     customer_name = customer_data["FULL_NAME"]
     family_id = customer_data["FAMILY_ID"]
     head_id = get_family_data_by_id(family_id)["HEAD_ID"]
     customer_bot_id = get_customer_bot_id(head_id)
+    change_customer_status(customer_id )
+    loan_id = get_loan_data_by_customer_id(customer_id)
+    total_amount , _ = block_customer_command[customer_bot_id]
+    if not loan_id:
+        add_pay(customer_id , total_amount , 0)
+    else:
+        loan_id = loan_id["ID"]
+        loan_id = int(loan_id)
+        change_loan_status(customer_id)
+        change_all_installment_status(loan_id)
+        add_pay(customer_id , total_amount , 0 ,loan_id)
+    block_customer_command.pop(customer_bot_id)
     return [customer_name , customer_bot_id]
 
 
@@ -183,10 +202,12 @@ def change_bot_id_ser(customer_id):
     family_data = get_family_data_by_id(family_id)
     head_id = family_data["HEAD_ID"]
     link_id = family_data["LINK_ID"]
+    family_name = family_data["FAMILY_NAME"]
     customer_bot_id = get_customer_bot_id(head_id)
     change_status_use_link_family(link_id , "false")
     delete_customer_bot_id(head_id)
-    text = " کلیک کنید ."+ f" [لینک](https://web.bale.ai/chat?uid={config.bot_id}&start=family_{link_id}) " + "لطفا روی "
+    text = f"""خانواده:{family_name}
+لطفا برای وارد شدن به اکانت خود روی [لینک](https://web.bale.ai/chat?uid={config.bot_id}&start=family_{link_id}) کلیک کنید"""
 
     return [customer_bot_id , text]
 
@@ -321,3 +342,10 @@ def see_customer_pay_text():
         text += "\n"
 
     return text
+
+
+def block_acount_false_ser(customer_id):
+    family_id = get_customer_data_by_id(customer_id)["FAMILY_ID"]
+    head_id = get_family_data_by_id(family_id)["HEAD_ID"]
+    customer_bot_id = get_customer_bot_id(head_id)
+    return customer_bot_id

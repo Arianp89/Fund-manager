@@ -132,32 +132,38 @@ def change_loan_number(loan_id , new_number = -1):
     return  cur.lastrowid  
 
 
-def add_pay(loan_id ,head_id ,amount_paid,capital_increase):
+def add_pay(head_id , amount_paid , capital_increase , loan_id=None):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "INSERT INTO PAYMENT (LOAN_ID  , CUSTOMER_ID , AMOUNT_PAID , CAPITAL_INCREASE) VALUES (%s,%s,%s);"
-    cur.execute(SQL_Query , (loan_id  , head_id , amount_paid , capital_increase))
+    SQL_Query = "INSERT INTO PAYMENT ( CUSTOMER_ID , AMOUNT_PAID , CAPITAL_INCREASE , LOAN_ID ) VALUES (%s,%s,%s,%s);"
+    cur.execute(SQL_Query , (head_id , amount_paid , capital_increase , loan_id))
     conn.commit()
     cur.close()
     conn.close()
     return  cur.lastrowid 
 
-def change_customer_status(customer_id , status = "false"):
+def change_customer_status(customer_id , total_capital = None , status = "false"):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "UPDATE CUSTOMER SET IS_ACTIVE=%s WHERE ID=%s;"
-    cur.execute(SQL_Query, (status , customer_id))
+    SQL_Query = "UPDATE CUSTOMER SET IS_ACTIVE=%s , TOTAL_CAPITAL=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (status , total_capital , customer_id))
     conn.commit()
     cur.close()
     conn.close()
     return  cur.lastrowid   
 
 
-def change_loan_status(customer_id , status="true"):
+def change_loan_status(customer_id , number = 0 , status="true"):
     conn = mysql.connector.connect(**db_config, database=database_name)
-    cur = conn.cursor()
-    SQL_Query = "UPDATE LOAN SET STATUS=%s WHERE CUSTOMER_ID=%s;"
-    cur.execute(SQL_Query, (status , customer_id))
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT LOAN_AMOUNT FROM LOAN WHERE CUSTOMER_ID=%s;"
+    cur.execute(SQL_Query , (customer_id ,))
+    amount_paid = cur.fetchone()   
+    if amount_paid is None:
+        return False
+    amount_paid = amount_paid["LOAN_AMOUNT"]
+    SQL_Query = "UPDATE LOAN SET STATUS=%s,NUMBER_REMAINING_INSTALLMENTS=%s,AMOUNT_PAID=%s WHERE CUSTOMER_ID=%s;"
+    cur.execute(SQL_Query, (status , number , amount_paid , customer_id))
     conn.commit()
     cur.close()
     conn.close()

@@ -137,7 +137,7 @@ def admin_see_family_list():
 
 def pay_installment_markup(head_id):
     markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton("افزایش سرمایه" , callback_data=f"amount_{head_id}"))
+    markup.add(InlineKeyboardButton("افزایش سرمایه" , callback_data=f"capital-amount_{head_id}"))
     return markup
 
 
@@ -189,7 +189,7 @@ def get_customer_data_back(chat_id , customer_id):
             customer_data = get_customer_data_by_id(customer_id)
             if customer_data["IS_ACTIVE"] == "true":
                 if  not get_customer_bot_id(get_family_data_by_id(customer_data["FAMILY_ID"])["HEAD_ID"]):
-                    markup.add(InlineKeyboardButton("غیر فعال کردن اکانت" , callback_data= f'turn-off-acount_{customer_id}'))
+                    pass
                 else:
                     markup.add(InlineKeyboardButton("غیر فعال کردن اکانت" , callback_data= f'turn-off-acount_{customer_id}') ,
                                 InlineKeyboardButton('جا به جا کردن اکانت' , callback_data= f"change-bot-id_{customer_id}"))

@@ -1,6 +1,6 @@
 from backup import DatabaseManager
 from config import db_config,database_name
-from keyboard.keyboard import customer_markup,admin_markup
+from keyboard.keyboard import customer_markup,admin_markup,back_home_markup
 from keyboard.call_back_markup import see_loan_list_markup,admin_see_family_list,add_admin_access2_markup,change_admin_access2_markup,send_message_to_customer_markup,get_family_markup
 import shutil
 from .command import add_new_customer_data,add_new_customer_step
@@ -124,5 +124,6 @@ class admin_button:
     def add_new_customer(self , message):
         cid = message.chat.id
         text = "لطفا نام و نام خانوادگی فرد را وارد کنید:"
+        markup = back_home_markup()
         add_new_customer_step[cid] = "A"
-        self.bot.send_message(cid , text)
+        self.bot.send_message(cid , text , reply_markup = markup)

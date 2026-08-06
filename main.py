@@ -66,6 +66,12 @@ def cancel_handler(message):
 
 #____________________________________BUTTON______________________________________
 
+
+@bot.message_handler(func=lambda message: message.text.startswith("بازگشت"))
+def back_handler(message):
+    bot_command.cancel(message)
+
+
 #____________________________________ADMIN-ACCESS1________________________________
 
 @bot.message_handler(func=lambda message: message.text == "گرفتن بکآپ")

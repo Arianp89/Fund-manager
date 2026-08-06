@@ -33,3 +33,7 @@ def admin_markup(chat_id):
     markup.add("وارد شدن به پنل کاربر")
     return markup
 
+def back_home_markup(text ="بازگشت"):
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add(text)
+    return markup

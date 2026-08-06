@@ -40,9 +40,11 @@ def have_loan(head_id):
 
 def pay_installment_ser(chat_id):
     data = list()
+    customer_number = 0
     total = 0
     head_id = get_id_b_admin_bot_id(chat_id)
     pay_data = get_payment_data_by_customer_id(head_id)
+    
 
     if not have_loan(head_id):
         text = "وامی به خانواده تعلق نگرفته"
@@ -54,15 +56,13 @@ def pay_installment_ser(chat_id):
         for all_customer in get_all_customer():
             if all_customer["FAMILY_ID"] == family_id:
                 customer_id = all_customer["ID"]
+                customer_number += 1
                 loan_id = get_loan_data_by_customer_id(customer_id)
                 if not loan_id:
                     pass
                 else:
-                     loan_id = loan_id["ID"]
-                installment_data = get_all_installment_data_by_loan_id(loan_id , "false")
-                if not installment_data:
-                    pass
-                else:
+                    loan_id = loan_id["ID"]
+                    installment_data = get_all_installment_data_by_loan_id(loan_id , "false")
                     for installment_data in installment_data:
                         data.append(installment_data)
 
@@ -71,11 +71,16 @@ def pay_installment_ser(chat_id):
             loan_id = loan_data["LOAN_ID"]
             installment_amount = get_loan_data_by_id(loan_id)["INSTALLMENT_AMOUNT"]
             total += installment_amount
+        
+        capital_amount = 50
+        total += customer_number*capital_amount
         pay_installment_data[chat_id] = [data, total]
         cart_number = 0
         name_cart = "ali"
         text = f"""شما باید مبلغ:{total} 
-        را به شماره {cart_number}            {name_cart}"""
+        را به شماره {cart_number}            {name_cart}
+پرداخت کنید و عکس فیش پرداختی را ارسال کنید
+اگر افزایش سرمایه دارید روی دکمه پایین کلیک کنید"""
         return [True , text]
         
     elif change_time(pay_data["PAYMENT_DATE"]).strftime("%Y/%m") == change_time(datetime.datetime.now()).strftime("%Y/%m"):
@@ -93,11 +98,8 @@ def pay_installment_ser(chat_id):
                 if not loan_id:
                     pass
                 else:
-                     loan_id = loan_id["ID"]
-                installment_data = get_all_installment_data_by_loan_id(loan_id , "false")
-                if not installment_data:
-                    pass
-                else:
+                    loan_id = loan_id["ID"]
+                    installment_data = get_all_installment_data_by_loan_id(loan_id , "false")
                     for installment_data in installment_data:
                         data.append(installment_data)
 
@@ -106,9 +108,12 @@ def pay_installment_ser(chat_id):
             loan_id = loan_data["LOAN_ID"]
             installment_amount = get_loan_data_by_id(loan_id)["INSTALLMENT_AMOUNT"]
             total += installment_amount
-            cart_number = 0
-            name_cart = "ali"
+        capital_amount = 50
+        total += customer_number*capital_amount
+        cart_number = 0
+        name_cart = "ali"
         pay_installment_data[chat_id] = [data, total]
         text = f"""شما باید مبلغ:{total} 
-        را به شماره {cart_number}            {name_cart}"""
+        را به شماره {cart_number}            {name_cart}
+پرداخت کنید و عکس فیش پرداختی را ارسال کنید"""
         return [True , text]

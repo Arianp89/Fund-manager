@@ -164,7 +164,7 @@ class make_database:
         cur=conn.cursor()
         SQL_Query="""CREATE TABLE PAYMENT (
         `ID`                      BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        `LOAN_ID`                 BIGINT UNSIGNED NOT NULL,              -- اتصال به وام
+        `LOAN_ID`                 BIGINT UNSIGNED,              -- اتصال به وام
         `INSTALLMENT_ID`          BIGINT UNSIGNED NULL,           -- اتصال به قسط (اختیاری، اگر پرداخت مستقیماً برای یک قسط باشد)
         `CUSTOMER_ID`             BIGINT UNSIGNED NOT NULL,         -- اتصال به مشتری (برای کوئری‌های سریع‌تر)
         `CAPITAL_INCREASE`      BIGINT UNSIGNED NOT NULL ,        -- مبلغ افزایش سرمایه

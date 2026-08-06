@@ -57,6 +57,15 @@ class bot_commands:
         if cid in customer_step_send_message:
             customer_step_send_message.pop(cid)
 
+        elif cid in admin_step_send_messsage:
+            admin_step_send_messsage.pop(cid)
+        
+        elif cid in add_new_customer_step:
+            add_new_customer_step.pop(cid)
+
+        elif cid in pay_debt_step:
+            pay_debt_step.pop(cid)
+
         if check_admin(cid) == 'admin':
             markup = admin_markup(cid)
         else:
