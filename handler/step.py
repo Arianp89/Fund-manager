@@ -1,5 +1,5 @@
-from .command import pay_installment_step,pay_debt_step,add_new_customer_step,add_new_customer_data,send_message_one_data , admin_step_send_messsage,customer_step_send_message,customer_data_send_message
-from services.step_ser import pay_debt_A_text,add_new_customer_step_B_ser,pay_installment_A_text_and_admin_id,get_all_family_bot_id,send_message_admin_ser
+from .command import setting_step,setting_data,pay_installment_step,pay_debt_step,add_new_customer_step,add_new_customer_data,send_message_one_data , admin_step_send_messsage,customer_step_send_message,customer_data_send_message
+from services.step_ser import setting_step_ser,pay_debt_A_text,add_new_customer_step_B_ser,pay_installment_A_text_and_admin_id,get_all_family_bot_id,send_message_admin_ser
 from keyboard.call_back_markup import send_message_admin_markup,check_pay_admin_markup,pay_debt_A_markup
 from config import bot_id
 from keyboard.keyboard import customer_markup
@@ -62,6 +62,64 @@ class admin_step:
         self.bot.send_message(cid , "لطفا لینک بالا را برای کاربر ارسال کنید")
         add_new_customer_data.pop(cid) 
         add_new_customer_step.pop(cid)
+
+
+    def setting_step_A(self , message):
+        cid = message.chat.id
+        cart_number = message.text
+        len_cart_number = len(cart_number)
+        try:
+            cart_number = int(cart_number)
+        except Exception as e:
+            print(e)
+            self.bot.send_message(cid , "به عدد وارد کنید")
+            return
+
+        if len_cart_number != 16:
+            self.bot.send_message(cid , "شماره کارت خود را درست وارد کنید")
+            return
+        
+        self.bot.send_message(cid , "نام دارنده کارت را وارد کنید")
+        setting_data[cid] = {"cart_number":cart_number , "cart_name":None ,
+                             "installment_number":None , "capital_amount":None}
+        setting_step[cid] = "B"
+
+
+    def setting_step_B(self , message):
+        cid = message.chat.id
+        cart_name = message.text
+        setting_data[cid]["cart_name"] = cart_name
+        self.bot.send_message(cid , "تعداد اقساط را وارد کنید")
+        setting_step[cid] = "C"
+    
+
+    def setting_step_C(self , message):
+        cid = message.chat.id
+        installment_number = message.text
+        try:
+            installment_number = int(installment_number)
+        except Exception as e:
+            print(e)
+            self.bot.send_message(cid , "به عدد وارد کنید")
+            return
+        setting_data[cid]["installment_number"] = installment_number
+        self.bot.send_message(cid , "مبلغ افزایش سرمایه را به ریال وارد کنید")
+        setting_step[cid] = "D"
+
+        
+
+    def setting_step_D(self , message):
+        cid = message.chat.id
+        capital_amount = message.text
+        setting_data[cid]["capital_amount"] = capital_amount
+        data = setting_data[cid]
+        setting_step_ser(cid , data)
+        self.bot.send_message(cid , "تمام شد")
+        setting_step.pop(cid)
+
+
+        
+
 
 
 

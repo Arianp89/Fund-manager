@@ -7,7 +7,7 @@ from services.link import link
 
 
 
-class bot_commands:
+class Bot_Commands:
 
     def __init__(self , bot):
         self.bot = bot
@@ -94,3 +94,8 @@ class bot_commands:
         else:
             markup = customer_markup(cid)
         self.bot.send_message(cid , 'دستور یافت نشد' , reply_markup = markup)
+
+    def setting(self , message):
+        cid = message.chat.id
+        setting_step[cid] = "A"
+        self.bot.send_message(cid , "لطفا شماره کارت خود را وارد کنید")

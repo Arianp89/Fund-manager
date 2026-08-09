@@ -210,9 +210,9 @@ class call_back:
         if status == 'true':
             try:
                 self.bot.delete_message(self.cid , self.mid)
-                self.bot.answer_callback_query(self.call_id ,  "تایید شد")
                 pay_installment_true_ser(customer_bot_id)
-                self.bot.send_message(customer_bot_id , "تایید شد")
+                self.bot.send_message(customer_bot_id , "قسط پرداخت شد")
+                self.bot.answer_callback_query(self.call_id ,  "تایید شد")
             except Exception as e:
                 print(e)
                 self.bot.answer_callback_query(self.call_id , "تایید نشد")

@@ -335,3 +335,16 @@ def get_all_installment_data_by_id(loan_id):
     cur.close()
     conn.close()
     return data
+
+
+def get_admin_id_by_customer_id(customer_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT ID FROM ADMIN WHERE CUSTOMER_ID =%s;"
+    cur.execute(SQL_Query , (customer_id, ))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data["ID"]

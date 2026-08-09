@@ -70,6 +70,7 @@ def pay_installment_ser(chat_id):
         for loan_data in data:
             loan_id = loan_data["LOAN_ID"]
             installment_amount = get_loan_data_by_id(loan_id)["INSTALLMENT_AMOUNT"]
+            print("installment_amount",installment_amount)
             total += installment_amount
         
         capital_amount = 50

@@ -1,5 +1,5 @@
-from handler.command import customer_step_send_message,pay_installment_step,pay_debt_step,admin_step_send_messsage,add_new_customer_step
-from handler import bot_commands,admin_button,call_back,admin_step,customer_button,customer_step
+from handler.command import setting_step,customer_step_send_message,pay_installment_step,pay_debt_step,admin_step_send_messsage,add_new_customer_step
+from handler import Bot_Commands,admin_button,call_back,admin_step,customer_button,customer_step
 from handler.threads import get_ziro
 from config import API_TOKEN
 import threading
@@ -12,7 +12,7 @@ bot=telebot.TeleBot(API_TOKEN)
 
 
 password_get_access1 = "Ad1fWQ89Gg"
-bot_command = bot_commands(bot)
+bot_command = Bot_Commands(bot)
 admin_buttons = admin_button(bot)
 customer_buttons = customer_button(bot)
 admins_step = admin_step(bot)
@@ -63,7 +63,25 @@ def add_admin_handler(message):
 def cancel_handler(message):
     bot_command.cancel(message)
 
+@bot.message_handler(commands=["setting"])
+def setting_handler(message):
+    bot_command.setting(message)
 
+@bot.message_handler(func=lambda message: setting_step.get(message.chat.id) == "A")
+def setting_step_A_handler(message):
+    admins_step.setting_step_A(message)
+
+@bot.message_handler(func=lambda message: setting_step.get(message.chat.id) == "B")
+def setting_step_B_handler(message):
+    admins_step.setting_step_B(message)
+
+@bot.message_handler(func=lambda message: setting_step.get(message.chat.id) == "C")
+def setting_step_C_handler(message):
+    admins_step.setting_step_C(message)
+
+@bot.message_handler(func=lambda message: setting_step.get(message.chat.id) == "D")
+def setting_step_D_handler(message):
+    admins_step.setting_step_D(message)
 #____________________________________BUTTON______________________________________
 
 

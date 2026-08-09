@@ -90,22 +90,24 @@ def pay_installment_true_ser(chat_id):
         chat_id = int(chat_id)
         print("ok",pay_installment_data[chat_id])
         head_id = get_id_b_admin_bot_id(chat_id)
+        print(head_id)
+        if not head_id:
+            return False
         loans_data = pay_installment_data[chat_id][0]
         total_amount = pay_installment_data[chat_id][1]
         customer_id = get_admin_id_b_access(2)
-        setting_data = get_setting_data(customer_id)
         capital_amount = 50
         print(loans_data)
         for loan_data in loans_data:
             print("loan_data",loan_data)
             loan_id = loan_data["LOAN_ID"]
             loan_id - int(loan_id)
-            change_loan_number(loan_id)
+            plus_amount_paid(loan_id)
             change_all_installment_status(loan_id , "true")
             customer_id = get_loan_data_by_id(loan_id)["CUSTOMER_ID"]
             if customer_id not in _list:
                 _list.append(customer_id)
-            add_pay(head_id , total_amount , capital_amount , loan_id)
+            add_pay(head_id , total_amount , capital_amount , loan_id  , loan_data["ID"])
     except Exception as e:
         print(e)
     pay_installment_data.pop(chat_id)

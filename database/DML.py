@@ -132,11 +132,11 @@ def change_loan_number(loan_id , new_number = -1):
     return  cur.lastrowid  
 
 
-def add_pay(head_id , amount_paid , capital_increase , loan_id=None):
+def add_pay(head_id , amount_paid , capital_increase , loan_id=None , installment_id = None):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor()
-    SQL_Query = "INSERT INTO PAYMENT ( CUSTOMER_ID , AMOUNT_PAID , CAPITAL_INCREASE , LOAN_ID ) VALUES (%s,%s,%s,%s);"
-    cur.execute(SQL_Query , (head_id , amount_paid , capital_increase , loan_id))
+    SQL_Query = "INSERT INTO PAYMENT ( CUSTOMER_ID , AMOUNT_PAID , CAPITAL_INCREASE , LOAN_ID ,INSTALLMENT_ID ) VALUES (%s,%s,%s,%s,%s);"
+    cur.execute(SQL_Query , (head_id , amount_paid , capital_increase , loan_id , installment_id))
     conn.commit()
     cur.close()
     conn.close()
@@ -189,3 +189,31 @@ def delete_customer_bot_id(head_id):
     cur.close()
     conn.close()
     return  cur.lastrowid  
+
+
+def plus_amount_paid(loan_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT INSTALLMENT_AMOUNT,AMOUNT_PAID FROM LOAN WHERE ID=%s;"
+    cur.execute(SQL_Query , (loan_id, ))
+    install_amount = cur.fetchone()   
+    if install_amount is None:
+        return False
+    amount_paid = install_amount["INSTALLMENT_AMOUNT"]+install_amount["AMOUNT_PAID"]
+    SQL_Query = "UPDATE LOAN SET AMOUNT_PAID=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (amount_paid , loan_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid
+
+
+def add_setting_data(admin_id , cart_number , cart_name , installment_number , capital_amount):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "INSERT INTO SETTING ( ADMIN_ID , CART_NUMBER , CART_NAME , INSTALLMENT_NUMBER , CAPITAL_AMOUNT ) VALUES (%s,%s,%s,%s,%s);"
+    cur.execute(SQL_Query , (admin_id , cart_number , cart_name , installment_number , capital_amount))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid 

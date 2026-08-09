@@ -1,4 +1,4 @@
-from database import add_family_data,add_customer,add_family,get_id_b_admin_bot_id,get_all_family_data,get_customer_bot_id,get_admin_id_b_access,get_customer_data_by_id
+from database import add_setting_data,delete_setting,get_setting_data,get_admin_id_by_customer_id,add_family_data,add_customer,add_family,get_id_b_admin_bot_id,get_all_family_data,get_customer_bot_id,get_admin_id_b_access,get_customer_data_by_id
 from handler.command import add_new_customer_data,pay_installment_data,block_customer_command
 import random
 import string
@@ -69,4 +69,19 @@ def pay_debt_A_text(customer_bot_id):
 باید مبلغ {total_amount} را واریز میکرد.
 """
     return [text , admin_bot_id]
+
+
+def setting_step_ser(chat_id , data):
+    customer_id = get_id_b_admin_bot_id(chat_id)
+    setting_data = get_setting_data(customer_id)
+    admin_id = get_admin_id_by_customer_id(customer_id)
+    if not setting_data:
+        pass
+    else:
+        delete_setting(admin_id)
+    cart_number = data["cart_number"] 
+    cart_name = data["cart_name"] 
+    installment_number = data["installment_number"] 
+    capital_amount = data["capital_amount"] 
+    add_setting_data(admin_id , cart_number , cart_name , installment_number , capital_amount) 
     
