@@ -1,5 +1,5 @@
 from database import add_setting_data,delete_setting,get_setting_data,get_admin_id_by_customer_id,add_family_data,add_customer,add_family,get_id_b_admin_bot_id,get_all_family_data,get_customer_bot_id,get_admin_id_b_access,get_customer_data_by_id
-from handler.command import add_new_customer_data,pay_installment_data,block_customer_command
+from handler.command import add_new_customer_data,pay_installment_data,block_customer_command,capital_amount_data
 import random
 import string
 
@@ -35,7 +35,9 @@ def pay_installment_A_text_and_admin_id(chat_id):
     customer_id = get_id_b_admin_bot_id(chat_id)
     customer_data = get_customer_data_by_id(customer_id)
     customer_name = customer_data["FULL_NAME"]
-    total_pay_number = pay_installment_data[chat_id][1]
+    _ , total_pay_number , customer_number , _ = pay_installment_data[chat_id]
+    capital_amount = capital_amount_data[chat_id]
+    total_pay_number += capital_amount*customer_number
     text = f"""کاربر:{customer_name}
 باید مبلغ:{total_pay_number} را واریز میکرد
 """

@@ -220,3 +220,11 @@ def pay_debt_A_markup(chat_id):
     markup.add(InlineKeyboardButton("تایید" , callback_data=f"block-acount_done_{customer_id}") ,
                InlineKeyboardButton("لغو" , callback_data=f"block-acount_false_{customer_id}"))
     return markup
+
+def capital_amoount_step_A_markup(cid , us = None):
+    markup = InlineKeyboardMarkup()
+
+    if us is not None:
+        markup.add(InlineKeyboardButton("همه اعضا" , callback_data="capital_all"))
+
+    return markup

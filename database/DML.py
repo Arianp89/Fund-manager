@@ -217,3 +217,20 @@ def add_setting_data(admin_id , cart_number , cart_name , installment_number , c
     cur.close()
     conn.close()
     return  cur.lastrowid 
+
+
+def plus_customer_capital(customer_id , capital_amount):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query = "SELECT TOTAL_CAPITAL FROM CUSTOMER WHERE ID=%s;"
+    cur.execute(SQL_Query , (customer_id, ))
+    total_capital = cur.fetchone()   
+    if total_capital is None:
+        return False
+    amount_paid = total_capital["TOTAL_CAPITAL"] + capital_amount
+    SQL_Query = "UPDATE CUSTOMER SET TOTAL_CAPITAL=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (amount_paid , customer_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid

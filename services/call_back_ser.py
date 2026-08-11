@@ -1,5 +1,5 @@
 from database import *
-from handler.command import pay_installment_data,block_customer_command
+from handler.command import pay_installment_data,block_customer_command,capital_amount_data
 import config
 import datetime
 import jdatetime
@@ -49,6 +49,7 @@ def send_message_one_ser(family_id):
 def get_see_data_text(customer_id):
     customer_data = get_customer_data_by_id(customer_id)
     loan_data = get_loan_data_by_customer_id(customer_id)
+    len_installment = len(get_all_installment_data_by_loan_id(loan_data["ID"] , "false"))
 
 
     if customer_data["IS_ACTIVE"] == "false":
@@ -63,7 +64,7 @@ def get_see_data_text(customer_id):
 
         else:
             loan_number = loan_data["LOAN_AMOUNT"]
-            number_installmet_pay = loan_data["NUMBER_REMAINING_INSTALLMENTS"]
+            number_installmet_pay = loan_data["NUMBER_REMAINING_INSTALLMENTS"]+len_installment
             installment_number = loan_data["INSTALLMENT_AMOUNT"]
 
         is_active = "فعال"
@@ -84,34 +85,40 @@ def see_family_data_admin_text(family_id):
     pay_time = get_payment_data_by_customer_id(head_id)
 
 
+def plus_capital_customer(head_id , capital_amount = None , customer_bot_id = None):
+    if capital_amount is not None:
+        family_id = get_family_data_by_head_id(head_id)["ID"]
+        for customer_data in get_all_customer():
+            if customer_data["FAMILY_ID"] == family_id:
+                customer_id = customer_data["ID"]
+                plus_customer_capital(customer_id  , capital_amount)
+    else:
+        setting_data = get_setting_data(get_admin_id_b_access(2))
+        for customer_id in pay_installment_data[customer_bot_id][-1]:
+            plus_customer_capital(customer_id , setting_data["CAPITAL_AMOUNT"])
+
+
 def pay_installment_true_ser(chat_id):
     try:
-        _list = list()
         chat_id = int(chat_id)
-        print("ok",pay_installment_data[chat_id])
         head_id = get_id_b_admin_bot_id(chat_id)
-        print(head_id)
-        if not head_id:
-            return False
         loans_data = pay_installment_data[chat_id][0]
         total_amount = pay_installment_data[chat_id][1]
-        customer_id = get_admin_id_b_access(2)
-        capital_amount = 50
-        print(loans_data)
+        capital_amount = get_setting_data(get_admin_id_b_access(2))["CAPITAL_AMOUNT"]
         for loan_data in loans_data:
-            print("loan_data",loan_data)
             loan_id = loan_data["LOAN_ID"]
-            loan_id - int(loan_id)
             plus_amount_paid(loan_id)
             change_all_installment_status(loan_id , "true")
-            customer_id = get_loan_data_by_id(loan_id)["CUSTOMER_ID"]
-            if customer_id not in _list:
-                _list.append(customer_id)
+            if chat_id in capital_amount_data:
+                capital_amount = capital_amount_data[chat_id]
             add_pay(head_id , total_amount , capital_amount , loan_id  , loan_data["ID"])
+        if chat_id in capital_amount_data:
+            plus_capital_customer(head_id ,capital_amount)
+        plus_capital_customer(head_id , customer_bot_id=chat_id)
     except Exception as e:
         print(e)
     pay_installment_data.pop(chat_id)
-
+    capital_amount_data.pop(chat_id)
 
 def family_link_msg_true_ser(link_id , customer_bot_id):
     for family_data in get_all_family_data():
@@ -351,3 +358,22 @@ def block_acount_false_ser(customer_id):
     head_id = get_family_data_by_id(family_id)["HEAD_ID"]
     customer_bot_id = get_customer_bot_id(head_id)
     return customer_bot_id
+
+def capital_text(chat_id):
+    _ , total_amount  , customer_number , _= pay_installment_data[chat_id]
+    print(total_amount)
+    capital_number = capital_amount_data[chat_id]
+    print(capital_number)
+    setting_data = get_setting_data(get_admin_id_b_access(2))
+    cart_number = setting_data["CART_NUMBER"]
+    name_cart = setting_data["CART_NAME"]
+    total_amount += capital_number
+    print(total_amount)
+    text = f"""شما باید مبلغ:{total_amount} 
+را به شماره {cart_number}   {name_cart}
+پرداخت کنید و عکس فیش پرداختی را ارسال کنید
+اگر افزایش سرمایه دارید روی دکمه پایین کلیک کنید"""
+    capital_number = int(capital_number / customer_number)
+    print(capital_number)
+    capital_amount_data[chat_id] = capital_number
+    return text

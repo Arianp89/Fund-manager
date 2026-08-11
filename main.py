@@ -18,7 +18,7 @@ customer_buttons = customer_button(bot)
 admins_step = admin_step(bot)
 customers_step =customer_step(bot)
 
-#____________________________________LOGG_______________________________________
+#____________________________________LOG_______________________________________
 
 logging.basicConfig(level=logging.INFO, filename='project.log',encoding="utf-8" , format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -82,6 +82,8 @@ def setting_step_C_handler(message):
 @bot.message_handler(func=lambda message: setting_step.get(message.chat.id) == "D")
 def setting_step_D_handler(message):
     admins_step.setting_step_D(message)
+
+
 #____________________________________BUTTON______________________________________
 
 
@@ -121,6 +123,10 @@ def pay_installment_handler(message):
 @bot.message_handler(func=lambda message: pay_installment_step.get(message.chat.id) == "A" , content_types=["photo"])
 def pay_installment_step_A_handler(message):
     customers_step.pay_installment_A(message)
+
+@bot.message_handler(func=lambda message: pay_installment_step.get(message.chat.id) == "B")
+def capital_amoount_step_A_handler(message):
+    customers_step.pay_installment_step_B(message)
 
 @bot.message_handler(func=lambda message:message.text == "پرداخت بدهی")
 def pay_debt_handler(message):
@@ -263,6 +269,13 @@ def all_callback_query_handler(call):
 
     elif data == "see-customer-pay":
         call_handler.see_customer_pay()
+
+    elif data.startswith("capital-amount"):
+        call_handler.capital_amount()
+
+    elif data.startswith("capital"):
+        call_handler.capital(data)
+
 
     elif data.startswith("go"):
         call_handler.go(data)

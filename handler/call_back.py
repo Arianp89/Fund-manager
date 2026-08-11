@@ -1,4 +1,4 @@
-from services.call_back_ser import block_acount_false_ser,see_customer_pay_text,see_customer_nt_pay_text,change_bot_id_ser,block_acount_done_ser,block_acount_true_ser,get_customer_bot_id_and_message,family_link_msg_true_ser,pay_installment_true_ser,get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
+from services.call_back_ser import capital_text,block_acount_false_ser,see_customer_pay_text,see_customer_nt_pay_text,change_bot_id_ser,block_acount_done_ser,block_acount_true_ser,get_customer_bot_id_and_message,family_link_msg_true_ser,pay_installment_true_ser,get_see_data_text,access_1_ser,add_admin_access2_call,change_admin_access2_ser,send_message_one_ser
 from keyboard.keyboard import customer_markup,admin_markup
 from keyboard.call_back_markup import block_acount_markup,turn_off_acount_makup,get_customer_data_back,back_markup,see_customer_list_markup_go,see_customer_list_markup,get_family_markup,get_family_list_markup_go,see_family_data_markup_go,see_family_markup,chose_customer_to_send_message_markup_go,add_admin_access1_markup,add_admin_access2_markup,change_admin_access2_markup_go,chose_customer_to_send_message_markup
 from .command import pay_installment_step,pay_installment_data,see_data_step,send_message_one_data,admin_step_send_messsage,customer_step_send_message,customer_data_send_message
@@ -336,7 +336,18 @@ class call_back:
         text = see_customer_pay_text()
         markup = back_markup("see-installment-data")
         self.bot.edit_message_text(text , self.cid , self.mid , reply_markup = markup)
+
+    def capital_amount(self):
+        self.bot.edit_message_text("مبلغ افزایش سرمایه را وارد کنید" , self.cid , self.mid)
+        pay_installment_step[self.cid] = "B"
         
+    def capital(self , data):
+        _ , customer_id = data.split("_")
+        if customer_id == "all":
+            text = capital_text(self.cid)
+            self.bot.edit_message_text(text , self.cid , self.mid)
+            pay_installment_step[self.cid] = "A"
+
 
     def go(self , data):
         _,_,_,call_name =data.split("_")

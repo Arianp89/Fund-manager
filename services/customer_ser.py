@@ -1,6 +1,6 @@
 from database import *
 import datetime
-from handler.command import pay_installment_step , pay_installment_data 
+from handler.command import pay_installment_step , pay_installment_data ,capital_amount_data
 import jdatetime
 
 
@@ -40,6 +40,7 @@ def have_loan(head_id):
 
 def pay_installment_ser(chat_id):
     data = list()
+    customer_list = list()
     customer_number = 0
     total = 0
     head_id = get_id_b_admin_bot_id(chat_id)
@@ -58,13 +59,14 @@ def pay_installment_ser(chat_id):
                 customer_id = all_customer["ID"]
                 customer_number += 1
                 loan_id = get_loan_data_by_customer_id(customer_id)
-                if not loan_id:
-                    pass
+                if not loan_id or loan_id["STATUS"] == "true":
+                    continue
                 else:
                     loan_id = loan_id["ID"]
                     installment_data = get_all_installment_data_by_loan_id(loan_id , "false")
                     for installment_data in installment_data:
                         data.append(installment_data)
+                        customer_list.append(get_loan_data_by_id(installment_data["LOAN_ID"])["CUSTOMER_ID"])
 
         pay_installment_step[chat_id] = "A"
         for loan_data in data:
@@ -72,14 +74,22 @@ def pay_installment_ser(chat_id):
             installment_amount = get_loan_data_by_id(loan_id)["INSTALLMENT_AMOUNT"]
             print("installment_amount",installment_amount)
             total += installment_amount
+
+        for customer_data in get_all_customer():
+            if customer_data["FAMILY_ID"] == family_id:
+                if customer_data["ID"] not in customer_list:
+                    customer_list.append(customer_data["ID"])
         
-        capital_amount = 50
-        total += customer_number*capital_amount
-        pay_installment_data[chat_id] = [data, total]
-        cart_number = 0
-        name_cart = "ali"
+        print(data)
+        setting_data = get_setting_data(get_admin_id_b_access(2))
+        cart_number = setting_data["CART_NUMBER"]
+        name_cart = setting_data["CART_NAME"]
+        capital_amount = setting_data["CAPITAL_AMOUNT"]
+        capital_amount_data[chat_id] = capital_amount
+        total += len(customer_list)*capital_amount
+        pay_installment_data[chat_id] = [data, total , customer_number , customer_list]
         text = f"""شما باید مبلغ:{total} 
-        را به شماره {cart_number}            {name_cart}
+را به شماره {cart_number}   {name_cart}
 پرداخت کنید و عکس فیش پرداختی را ارسال کنید
 اگر افزایش سرمایه دارید روی دکمه پایین کلیک کنید"""
         return [True , text]
@@ -95,26 +105,39 @@ def pay_installment_ser(chat_id):
         for all_customer in get_all_customer():
             if all_customer["FAMILY_ID"] == family_id:
                 customer_id = all_customer["ID"]
+                customer_number += 1
                 loan_id = get_loan_data_by_customer_id(customer_id)
-                if not loan_id:
-                    pass
+                if not loan_id or loan_id["STATUS"] == "true":
+                    continue
                 else:
                     loan_id = loan_id["ID"]
                     installment_data = get_all_installment_data_by_loan_id(loan_id , "false")
                     for installment_data in installment_data:
                         data.append(installment_data)
+                        customer_list.append(get_loan_data_by_id(installment_data["LOAN_ID"])["CUSTOMER_ID"])
 
         pay_installment_step[chat_id] = "A"
         for loan_data in data:
             loan_id = loan_data["LOAN_ID"]
             installment_amount = get_loan_data_by_id(loan_id)["INSTALLMENT_AMOUNT"]
+            print("installment_amount",installment_amount)
             total += installment_amount
-        capital_amount = 50
-        total += customer_number*capital_amount
-        cart_number = 0
-        name_cart = "ali"
-        pay_installment_data[chat_id] = [data, total]
+
+        for customer_data in get_all_customer():
+            if customer_data["FAMILY_ID"] == family_id:
+                if customer_data["ID"] not in customer_list:
+                    customer_list.append(customer_data["ID"])
+        
+        print(data)
+        setting_data = get_setting_data(get_admin_id_b_access(2))
+        cart_number = setting_data["CART_NUMBER"]
+        name_cart = setting_data["CART_NAME"]
+        capital_amount = setting_data["CAPITAL_AMOUNT"]
+        capital_amount_data[chat_id] = capital_amount
+        total += len(customer_list)*capital_amount
+        pay_installment_data[chat_id] = [data, total , customer_number , customer_list]
         text = f"""شما باید مبلغ:{total} 
-        را به شماره {cart_number}            {name_cart}
-پرداخت کنید و عکس فیش پرداختی را ارسال کنید"""
+را به شماره {cart_number}   {name_cart}
+پرداخت کنید و عکس فیش پرداختی را ارسال کنید
+اگر افزایش سرمایه دارید روی دکمه پایین کلیک کنید"""
         return [True , text]

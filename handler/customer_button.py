@@ -2,7 +2,7 @@ from backup.information_database_improved import DatabaseManager
 from keyboard.keyboard import customer_markup,back_home_markup
 from keyboard.call_back_markup import profile_markup,pay_installment_markup
 from services.admin_ser import check_admin,get_admin_access_by_chat_id,get_admin_access,check_is_in_db
-from .command import customer_step_send_message,block_customer_command,pay_debt_step
+from .command import customer_step_send_message,block_customer_command,pay_debt_step,capital_amount_data
 from services.admin_ser import *
 from services.customer_ser import *
 
@@ -77,11 +77,12 @@ class customer_button:
         if cid in block_customer_command:
             print(block_customer_command[cid])
             total_amount , _ = block_customer_command[cid]
-            cart_number = 0
-            cart_name = "alskjkhjghfg"
+            setting_data = get_setting_data(get_admin_id_b_access(2))
+            cart_number = setting_data["CART_NUMBER"]
+            cart_name = setting_data["CART_NAME"]
             markup = back_home_markup()
             text = f"""مبلغ {total_amount} را به شماره کارت
-{cart_number}          {cart_name}
+{cart_number}   {cart_name}
 واریز کنید و عکس فیش را ارسال کنید
 """
             self.bot.send_message(cid , text , reply_markup = markup) 
