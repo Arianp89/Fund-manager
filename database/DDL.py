@@ -184,8 +184,24 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table customer created payment')
+        print(f'table payment created successfully')
 
+
+    def create_table_time(self):
+        conn=mysql.connector.connection.MySQLConnection(**self.db_config, database=self.db_name)
+        cur=conn.cursor()
+        SQL_Query="""CREATE TABLE PAYMENT (
+        `ID`                      BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        `YOUS_TIME`               VARCHAR(5),
+        `TIME`                    DATETIME DEFAULT CURRENT_TIMESTAMP,
+        `LAST_UPDATE`             DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+"""
+        cur.execute(SQL_Query)
+        conn.commit()
+        cur.close()
+        conn.close()
+        print(f'table time created successfully')
 
 
 if __name__ == '__main__':
@@ -198,4 +214,5 @@ if __name__ == '__main__':
     db.create_table_loan()
     db.create_table_installment()
     db.create_table_payment()
+    db.create_table_time()
     print('end creat database')
