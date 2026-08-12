@@ -49,7 +49,7 @@ def send_message_one_ser(family_id):
 def get_see_data_text(customer_id):
     customer_data = get_customer_data_by_id(customer_id)
     loan_data = get_loan_data_by_customer_id(customer_id)
-    len_installment = len(get_all_installment_data_by_loan_id(loan_data["ID"] , "false"))
+
 
 
     if customer_data["IS_ACTIVE"] == "false":
@@ -63,6 +63,7 @@ def get_see_data_text(customer_id):
             installment_number = "تعلق نگرفته"
 
         else:
+            len_installment = len(get_all_installment_data_by_loan_id(loan_data["ID"] , "false"))
             loan_number = loan_data["LOAN_AMOUNT"]
             number_installmet_pay = loan_data["NUMBER_REMAINING_INSTALLMENTS"]+len_installment
             installment_number = loan_data["INSTALLMENT_AMOUNT"]

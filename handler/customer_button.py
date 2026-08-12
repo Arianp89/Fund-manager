@@ -2,7 +2,7 @@ from backup.information_database_improved import DatabaseManager
 from keyboard.keyboard import customer_markup,back_home_markup
 from keyboard.call_back_markup import profile_markup,pay_installment_markup
 from services.admin_ser import check_admin,get_admin_access_by_chat_id,get_admin_access,check_is_in_db
-from .command import customer_step_send_message,block_customer_command,pay_debt_step,capital_amount_data
+from .command import customer_step_send_message,block_customer_command,pay_debt_step
 from services.admin_ser import *
 from services.customer_ser import *
 
@@ -58,6 +58,8 @@ class customer_button:
         self.bot.send_message(cid , text , reply_markup = markup)
 
     def pay_installment(self , message):
+        import time
+        _time = time.time()
         cid = message.chat.id
         if not self.answer_customer(cid):
             return
@@ -68,6 +70,7 @@ class customer_button:
             return
         markup = pay_installment_markup(cid)
         self.bot.send_message(cid , text[1] , reply_markup = markup)
+        print(time.time()-_time)
 
     def pay_debt(self , message):
         cid = message.chat.id

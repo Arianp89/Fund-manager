@@ -193,17 +193,4 @@ class customer_step:
         capital_amount_data[cid] = capital_amount
         markup = capital_amoount_step_A_markup(cid , "us")
         self.bot.send_message(cid , "برای چه کسی افزایش داده اید" , reply_markup = markup)
-
-    def pay_installment_step_C(self , message):
-        cid = message.chat.id
-        amount = message.text
-        try:
-            amount = int(amount)
-        except Exception as e:
-            print(e)
-            self.bot.send_message(cid , "به عدد وارد کنید")
-            return
-
-        capital_amount_data[cid] = amount
-        markup = capital_amoount_step_A_markup(cid , "us")
-        self.bot.send_message(cid , "برای چه کسی افزایش داده اید" , reply_markup = markup)        
+              

@@ -17,7 +17,7 @@ def add_loan_and_installment(bot):
         total_pay = 0
         time_data = get_time()
         now = jdatetime.datetime.now()
-        if time_data is None or now.day == 21 and now.day != change_time(time_data["TIME"]).day:
+        if time_data is None or now.day == 1 and now.day != change_time(time_data["TIME"]).day:
             add_time()
             time_data = get_time()
 

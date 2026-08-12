@@ -1,6 +1,6 @@
 from database import *
 import datetime
-from handler.command import pay_installment_step , pay_installment_data ,capital_amount_data
+from handler.command import pay_installment_step , pay_installment_data 
 import jdatetime
 
 
@@ -85,7 +85,6 @@ def pay_installment_ser(chat_id):
         cart_number = setting_data["CART_NUMBER"]
         name_cart = setting_data["CART_NAME"]
         capital_amount = setting_data["CAPITAL_AMOUNT"]
-        capital_amount_data[chat_id] = capital_amount
         total += len(customer_list)*capital_amount
         pay_installment_data[chat_id] = [data, total , customer_number , customer_list]
         text = f"""شما باید مبلغ:{total} 
@@ -133,7 +132,6 @@ def pay_installment_ser(chat_id):
         cart_number = setting_data["CART_NUMBER"]
         name_cart = setting_data["CART_NAME"]
         capital_amount = setting_data["CAPITAL_AMOUNT"]
-        capital_amount_data[chat_id] = capital_amount
         total += len(customer_list)*capital_amount
         pay_installment_data[chat_id] = [data, total , customer_number , customer_list]
         text = f"""شما باید مبلغ:{total} 
