@@ -235,6 +235,12 @@ class call_back:
     def family_link_msg(self , data):
         _ , status , link_id , customer_bot_id = data.split("_")
         if status == "true":
+            try:
+                self.bot.delete_message(self.cid , self.mid)
+            except Exception as e:
+                print(e)
+                self.bot.edit_message_text("انجام شد" , self.cid , self.mid)
+
             family_link_msg_true_ser(link_id , customer_bot_id)
 
     def send_message_to_pay(self):

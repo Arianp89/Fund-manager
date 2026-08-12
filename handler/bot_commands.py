@@ -54,6 +54,8 @@ class Bot_Commands:
 
     def cancel(self , message):
         cid = message.chat.id
+        if not check_is_in_db(cid):
+            return
         if cid in customer_step_send_message:
             customer_step_send_message.pop(cid)
 
@@ -97,5 +99,10 @@ class Bot_Commands:
 
     def setting(self , message):
         cid = message.chat.id
+        if not check_is_in_db(cid):
+            return
+        if check_admin(cid) == "customer":
+            self.bot.send_message(cid , 'دستور یافت نشد' , reply_markup = customer_markup(cid))
+            return
         setting_step[cid] = "A"
         self.bot.send_message(cid , "لطفا شماره کارت خود را وارد کنید")

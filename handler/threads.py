@@ -39,7 +39,7 @@ def add_loan_and_installment(bot):
                         if loan_amount > 300000000:
                             loan_amount = 300000000
                         total_pay += loan_amount
-                        if total_amount < total_pay:
+                        if total_amount < total_pay or not setting_data:
                             break
                         installment_number = setting_data["INSTALLMENT_NUMBER"]
                         loan_id = add_loan_data(customer_id , loan_amount , loan_amount/installment_number , installment_number , 0 , "false")
@@ -48,7 +48,7 @@ def add_loan_and_installment(bot):
 
 
                 for customer_data in get_all_customer():
-                    if customer_data["IS_ACTIVE"] == "false":
+                    if customer_data["IS_ACTIVE"] == "false" or not setting_data:
                         continue
                     customer_id = customer_data["ID"]
                     loan_data = get_loan_data_by_customer_id(customer_id)

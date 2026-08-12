@@ -126,8 +126,15 @@ def family_link_msg_true_ser(link_id , customer_bot_id):
     for family_data in get_all_family_data():
         family_link_id = family_data["LINK_ID"]
         if family_link_id == link_id:
-            add_customer_bot_id(family_data["HEAD_ID"] , customer_bot_id)
-            change_status_use_link_family(link_id)
+            if check_is_in_db(customer_bot_id):
+                new_family_id = get_customer_data_by_id(get_id_b_admin_bot_id(customer_bot_id))["FAMILY_ID"]
+                old_family_id = family_data["ID"]
+                change_family_id(old_family_id , new_family_id)
+                delete_family(old_family_id)
+            else:
+                head_id = family_data['HEAD_ID']
+                add_customer_bot_id(head_id , customer_bot_id)
+                change_status_use_link_family(link_id)
             
 def get_customer_bot_id_and_message():
     data = dict()

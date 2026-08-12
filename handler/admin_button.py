@@ -123,6 +123,8 @@ class admin_button:
 
     def add_new_customer(self , message):
         cid = message.chat.id
+        if not self.answer_customer:
+            return
         text = "لطفا نام و نام خانوادگی فرد را وارد کنید:"
         markup = back_home_markup()
         add_new_customer_step[cid] = "A"

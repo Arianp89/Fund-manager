@@ -1,6 +1,6 @@
 from  keyboard.keyboard import customer_markup
 from keyboard.call_back_markup import message_link_family_markup
-from database import get_customer_bot_id,get_admin_id_b_access,get_family_data,get_family_link_status,add_customer_bot_id,change_status_use_link_family
+from database import delete_family,change_family_id,get_customer_data_by_id,get_id_b_admin_bot_id,check_is_in_db,get_customer_bot_id,get_admin_id_b_access,get_family_data,get_family_link_status,add_customer_bot_id,change_status_use_link_family
 
 class link:
 
@@ -13,9 +13,15 @@ class link:
             return False
         if not get_family_link_status(family_data["ID"]):
             return False
-        head_id = family_data['HEAD_ID']
-        add_customer_bot_id(head_id , chat_id)
-        change_status_use_link_family(link_id)
+        if check_is_in_db(chat_id):
+            new_family_id = get_customer_data_by_id(get_id_b_admin_bot_id(chat_id))["FAMILY_ID"]
+            old_family_id = family_data["ID"]
+            change_family_id(old_family_id , new_family_id)
+            delete_family(old_family_id)
+        else:
+            head_id = family_data['HEAD_ID']
+            add_customer_bot_id(head_id , chat_id)
+            change_status_use_link_family(link_id)
         return True
     
 
@@ -52,6 +58,6 @@ class link:
         else:
              admin_id = get_admin_id_b_access(2)
              admin_bot_id = get_customer_bot_id(admin_id)
-             text = "ok"
+             text = f"از لینک خانواده :{get_family_data(link_id)["FAMILY_NAME"]} استفاده شده است آیا درست است"
              markup = message_link_family_markup(cid , link_id)
              self.bot.send_message(admin_bot_id , text , reply_markup = markup)

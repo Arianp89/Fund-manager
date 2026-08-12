@@ -265,3 +265,23 @@ def change_loan_status(loan_id , status="true"):
     cur.close()
     conn.close()
     return  cur.lastrowid  
+
+def change_family_id(old_family_id , new_family_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "UPDATE CUSTOMER SET FAMILY_ID=%s WHERE FAMILY_ID=%s;"
+    cur.execute(SQL_Query, (new_family_id , old_family_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid  
+
+def delete_family(family_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "DELETE FROM FAMILY WHERE ID=%s;"
+    cur.execute(SQL_Query, (family_id ,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid  

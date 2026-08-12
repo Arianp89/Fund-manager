@@ -294,7 +294,7 @@ def all_message_handler(message):
 t1 = threading.Thread(target=get_ziro, args=())
 t1.start()
 
-t2 = threading.Thread(target=add_loan_and_installment, args=(bot))
+t2 = threading.Thread(target=add_loan_and_installment, args=(bot,))
 t2.start()
 
 print('code running...')
