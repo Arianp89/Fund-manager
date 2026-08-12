@@ -348,3 +348,14 @@ def get_admin_id_by_customer_id(customer_id):
     if data is None:
         return False
     return data["ID"]
+
+
+def get_time():
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT * FROM TIME  ORDER BY id DESC LIMIT 1"
+    cur.execute(SQL_Query)
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    return data

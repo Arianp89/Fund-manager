@@ -109,6 +109,8 @@ def pay_installment_true_ser(chat_id):
             loan_id = loan_data["LOAN_ID"]
             plus_amount_paid(loan_id)
             change_all_installment_status(loan_id , "true")
+            if get_loan_data_by_id(loan_id)["NUMBER_REMAINING_INSTALLMENTS"] == 0:
+                change_loan_status(loan_id)
             if chat_id in capital_amount_data:
                 capital_amount = capital_amount_data[chat_id]
             add_pay(head_id , total_amount , capital_amount , loan_id  , loan_data["ID"])
@@ -199,7 +201,7 @@ def block_acount_done_ser(customer_id):
     else:
         loan_id = loan_id["ID"]
         loan_id = int(loan_id)
-        change_loan_status(customer_id)
+        change_loan_status_and_number(customer_id)
         change_all_installment_status(loan_id)
         add_pay(customer_id , total_amount , 0 ,loan_id)
     block_customer_command.pop(customer_bot_id)

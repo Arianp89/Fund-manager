@@ -153,7 +153,7 @@ def change_customer_status(customer_id , total_capital = None , status = "false"
     return  cur.lastrowid   
 
 
-def change_loan_status(customer_id , number = 0 , status="true"):
+def change_loan_status_and_number(customer_id , number = 0 , status="true"):
     conn = mysql.connector.connect(**db_config, database=database_name)
     cur = conn.cursor(dictionary=True)
     SQL_Query = "SELECT LOAN_AMOUNT FROM LOAN WHERE CUSTOMER_ID=%s;"
@@ -234,3 +234,34 @@ def plus_customer_capital(customer_id , capital_amount):
     cur.close()
     conn.close()
     return  cur.lastrowid
+
+
+def add_time(STATUS = "false"):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "INSERT INTO TIME (USE_TIME) VALUES (%s);"
+    cur.execute(SQL_Query , (STATUS, ))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid 
+
+def change_time_status(time_id , status="true"):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "UPDATE TIME SET USE_TIME=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (status , time_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid  
+
+def change_loan_status(loan_id , status="true"):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor()
+    SQL_Query = "UPDATE LOAN SET STATUS=%s WHERE ID=%s;"
+    cur.execute(SQL_Query, (status , loan_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return  cur.lastrowid  

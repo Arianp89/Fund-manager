@@ -190,11 +190,11 @@ class make_database:
     def create_table_time(self):
         conn=mysql.connector.connection.MySQLConnection(**self.db_config, database=self.db_name)
         cur=conn.cursor()
-        SQL_Query="""CREATE TABLE PAYMENT (
+        SQL_Query="""CREATE TABLE TIME (
         `ID`                      BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        `YOUS_TIME`               VARCHAR(5),
+        `USE_TIME`                VARCHAR(5),
         `TIME`                    DATETIME DEFAULT CURRENT_TIMESTAMP,
-        `LAST_UPDATE`             DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+        `LAST_UPDATE`             DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);
 
 """
         cur.execute(SQL_Query)

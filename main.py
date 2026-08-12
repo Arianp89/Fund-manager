@@ -1,6 +1,6 @@
 from handler.command import setting_step,customer_step_send_message,pay_installment_step,pay_debt_step,admin_step_send_messsage,add_new_customer_step
 from handler import Bot_Commands,admin_button,call_back,admin_step,customer_button,customer_step
-from handler.threads import get_ziro
+from handler.threads import get_ziro,add_loan_and_installment
 from config import API_TOKEN
 import threading
 import logging
@@ -294,6 +294,8 @@ def all_message_handler(message):
 t1 = threading.Thread(target=get_ziro, args=())
 t1.start()
 
+t2 = threading.Thread(target=add_loan_and_installment, args=(bot))
+t2.start()
 
 print('code running...')
 logging.info('code running...')
