@@ -93,6 +93,7 @@ class Import_excel:
                     status = "true"
                 loan_id = add_loan_data(customer_id  , loan_amount , installment_amount , number_paid_installment , amount_paid , status)
                 add_installment(loan_id , number_paid_installment )
+                change_loan_number(loan_id)
                 
             
             self.number = 0
