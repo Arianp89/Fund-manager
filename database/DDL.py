@@ -1,12 +1,8 @@
-import logging
 import mysql.connector
+import logging
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
-
-from config import db_config,database_name
 
 
 
@@ -20,13 +16,12 @@ class make_database:
     def create_database(self):
         conn=mysql.connector.connect(**self.db_config)
         cur=conn.cursor()
-        # noinspection SqlResolve
         cur.execute(f"DROP DATABASE IF EXISTS {database_name};")
         cur.execute(f"CREATE database {database_name} ;")
         conn.commit()
         cur.close()
         conn.close()
-        print(f'database {database_name} created successfully')
+        logging.warning(f'database {database_name} created successfully')
 
 
 
@@ -48,7 +43,7 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table FAMILY created successfully')
+        logging.warning(f'table FAMILY created successfully')
 
 
     def create_table_customer(self):
@@ -71,7 +66,7 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table customer created successfully')
+        logging.warning(f'table customer created successfully')
 
 
 
@@ -91,7 +86,7 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print('table admin created successfully')
+        logging.warning('table admin created successfully')
 
 
     def create_table_setting(self):
@@ -113,7 +108,7 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table setting created successfully')
+        logging.warning(f'table setting created successfully')
 
     def create_table_loan(self):
         conn=mysql.connector.connection.MySQLConnection(**self.db_config, database=self.db_name)
@@ -136,7 +131,7 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table loan created successfully')
+        logging.warning(f'table loan created successfully')
 
 
 
@@ -158,7 +153,7 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table INSTALLMENT created successfully')
+        logging.warning(f'table INSTALLMENT created successfully')
 
 
 
@@ -184,7 +179,7 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table payment created successfully')
+        logging.warning(f'table payment created successfully')
 
 
     def create_table_time(self):
@@ -201,10 +196,12 @@ class make_database:
         conn.commit()
         cur.close()
         conn.close()
-        print(f'table time created successfully')
+        logging.warning(f'table time created successfully')
 
 
 if __name__ == '__main__':
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+    from config import db_config,database_name
     db = make_database(db_config , database_name)
     db.create_database()
     db.create_table_family()
@@ -215,4 +212,5 @@ if __name__ == '__main__':
     db.create_table_installment()
     db.create_table_payment()
     db.create_table_time()
-    print('end creat database')
+    print("end")
+    logging.warning('end creat database')

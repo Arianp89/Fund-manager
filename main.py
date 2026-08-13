@@ -203,6 +203,7 @@ def all_callback_query_handler(call):
     call_handler = call_back(bot , call)
     data = call.data
     print(f'call={call.message.from_user.first_name} [{call.message.chat.id}]:{data}')
+    logging.info(f'call = {call.message.from_user.first_name} [{call.message.chat.id}]:{data}')
 
     if data.startswith("add-access1"):
         call_handler.add_admin_access1(data)
@@ -299,7 +300,10 @@ t2.start()
 
 print('code running...')
 logging.info('code running...')
-bot.infinity_polling()
+try:
+    bot.infinity_polling()
+except:
+    logging.warning("stop bot")
             
 'code write it by:'
 'arian panahi  github adrress : https://github.com/arianp89'

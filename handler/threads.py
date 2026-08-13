@@ -1,9 +1,10 @@
 from .command import see_data_step
-import time
-import datetime
 from .command import *
 from database import *
 import jdatetime
+import logging
+import time
+
 def get_ziro():
     while True:
         customer_step_send_message.clear()
@@ -21,6 +22,7 @@ def get_ziro():
         pay_debt_step.clear()
         setting_step.clear()
         setting_data.clear()
+        logging.info("run get_ziro")
         time.sleep(3600*24)
 
 def change_time(dt):
@@ -76,7 +78,7 @@ def add_loan_and_installment(bot):
                         add_installment(loan_data["ID"] , loan_data["NUMBER_REMAINING_INSTALLMENTS"])
                         change_loan_number(loan_data["ID"])
 
-                print(1)
+                logging.info("add loan and installment is runnig")
                 change_time_status(time_data["ID"])
         time.sleep(3600)
 

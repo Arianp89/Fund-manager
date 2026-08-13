@@ -1,10 +1,12 @@
 from .command import capital_amount_data,setting_step,setting_data,pay_installment_step,pay_debt_step,add_new_customer_step,add_new_customer_data,send_message_one_data , admin_step_send_messsage,customer_step_send_message,customer_data_send_message
 from services.step_ser import setting_step_ser,pay_debt_A_text,add_new_customer_step_B_ser,pay_installment_A_text_and_admin_id,get_all_family_bot_id,send_message_admin_ser
 from keyboard.call_back_markup import capital_amoount_step_A_markup,send_message_admin_markup,check_pay_admin_markup,pay_debt_A_markup
-from config import bot_id
 from keyboard.keyboard import customer_markup
-class admin_step:
+from config import bot_id
 
+
+
+class admin_step:
     def __init__(self , bot):
         self.bot = bot
 

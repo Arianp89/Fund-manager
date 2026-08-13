@@ -1,10 +1,9 @@
-from backup.information_database_improved import DatabaseManager
-from keyboard.keyboard import customer_markup,back_home_markup
-from keyboard.call_back_markup import profile_markup,pay_installment_markup
 from services.admin_ser import check_admin,get_admin_access_by_chat_id,get_admin_access,check_is_in_db
 from .command import customer_step_send_message,block_customer_command,pay_debt_step
+from keyboard.call_back_markup import profile_markup,pay_installment_markup
+from services.customer_ser import get_profile_text,pay_installment_ser
+from keyboard.keyboard import customer_markup,back_home_markup
 from services.admin_ser import *
-from services.customer_ser import *
 
 
 
