@@ -359,3 +359,39 @@ def get_time():
     cur.close()
     conn.close()
     return data
+
+def get_family_id_by_head_id(head_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT ID FROM FAMILY WHERE HEAD_ID = %s"
+    cur.execute(SQL_Query , (head_id, ))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return data["ID"]
+
+def get_all_customer_id_where_family_id(family_id , status="true"):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT ID FROM CUSTOMER WHERE FAMILY_ID=%s and IS_ACTIVE=%s"
+    cur.execute(SQL_Query , (family_id , status))
+    data = cur.fetchall()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return [row['ID'] for row in data]
+
+def get_loan_id_and_status_by_customer_id(customer_id):
+    conn = mysql.connector.connect(**db_config, database=database_name)
+    cur = conn.cursor(dictionary=True)
+    SQL_Query =  "SELECT ID,STATUS,INSTALLMENT_AMOUNT FROM LOAN WHERE CUSTOMER_ID=%s  ORDER BY id DESC LIMIT 1"
+    cur.execute(SQL_Query , (customer_id, ))
+    data = cur.fetchone()    
+    cur.close()
+    conn.close()
+    if data is None:
+        return False
+    return [data["ID"],data["STATUS"],data["INSTALLMENT_AMOUNT"]]
