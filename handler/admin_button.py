@@ -19,13 +19,9 @@ class admin_button:
         if not check_is_in_db(chat_id):
             return False
 
-        if check_admin(chat_id) == 'customer':
-            self.bot.send_message(chat_id , 'دستور وارد شده اشتباه است' , reply_markup = customer_markup(chat_id))
-            return False
-        
-        admin_access = get_admin_access_by_chat_id(chat_id)
-        if admin_access == access_level:
+        elif get_admin_access_by_chat_id(chat_id) == access_level:
             return True
+        
         self.bot.send_message(chat_id , 'دستور وارد شده اشتباه است' , reply_markup = customer_markup(chat_id))
         return False
     

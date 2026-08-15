@@ -127,12 +127,10 @@ def get_all_family_id():
 
 
 
-def check_admin(admin_id):
-    bot_id_list = list()
-    for customer_id in get_admin_list():
-        bot_id = get_customer_bot_id(customer_id)
-        bot_id_list.append(bot_id)
-    if admin_id not in bot_id_list:
+def check_admin(chat_id):
+    customer_id = get_id_b_admin_bot_id(chat_id)
+    admin_id = get_admin_id_by_customer_id(customer_id)
+    if not admin_id:
         return "customer"
     return "admin"
 

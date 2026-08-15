@@ -62,6 +62,7 @@ def add_loan_and_installment(bot):
                         if total_amount < total_pay or not setting_data:
                             break
                         installment_number = setting_data["INSTALLMENT_NUMBER"]
+                        loan_amount = int(loan_amount)
                         add_loan_data(customer_id , loan_amount , loan_amount/installment_number , installment_number , 0 , "false")
                         family_name = get_family_data_by_id(customer_data["FAMILY_ID"])["FAMILY_NAME"]
                         bot.send_message(get_customer_bot_id(get_admin_id_b_access(2)) , f"شما باید مبلغ {loan_amount} را به خانواده {family_name} پرداخت کنید")

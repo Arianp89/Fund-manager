@@ -1,5 +1,5 @@
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,InlineKeyboardMarkup, InlineKeyboardButton,KeyboardButton 
-from database import get_customer_bot_id,get_family_data_by_id,get_customer_data_by_id,get_all_family_data_by_id,get_all_customer,get_admin_id_b_access,get_all_family_data,get_family_data_by_head_id,get_id_b_admin_bot_id
+from database import get_family_id_by_head_id,get_customer_bot_id,get_family_data_by_id,get_customer_data_by_id,get_all_family_data_by_id,get_all_customer,get_admin_id_b_access,get_all_family_data,get_family_data_by_head_id,get_id_b_admin_bot_id
 import time
 from handler.command import customer_permissions,see_data_step,block_customer_command
 
@@ -94,15 +94,12 @@ def send_message_admin_markup(customer_id):
 def profile_markup(chat_id):
     markup = InlineKeyboardMarkup()
     head_id = get_id_b_admin_bot_id(chat_id)
-    family_id = get_family_data_by_head_id(head_id)["ID"]
+    family_id = get_family_id_by_head_id(head_id)
     if len(get_all_family_data_by_id(family_id)) == 1:
         markup.add(InlineKeyboardButton("مشاهده اطلاعات" , callback_data=f'see-data_{head_id}'))
 
     else:
         markup.add(InlineKeyboardButton("مشاهده لیست خانواده" , callback_data=f'see-family-data_{family_id}'))
-    # check_time = time.time()-customer_permissions[chat_id]["time"] > 3600*24
-    # if customer_permissions[chat_id]["change_bot_id"] == "true" and check_time <= 3600*24:
-    #     markup.add(InlineKeyboardButton("تغییر ادرس ربات" , callback_data=f'change-bot-id_{family_id}'))
     return markup
 
 def see_family_markup(bot , family_id):

@@ -21,18 +21,15 @@ def get_profile_text(chat_id):
 
 def have_loan(head_id):
     number = 0
-    family_id = get_family_data_by_head_id(head_id)["ID"]
-    for customer_data in get_all_customer():
-        if customer_data["FAMILY_ID"] == family_id:
-            customer_id = customer_data["ID"]
-            loan_data = get_loan_data_by_customer_id(customer_id)
-            if not loan_data:
-                pass
-            elif loan_data["STATUS"] == "true":
-                pass
-            else:
-                number += 1
-    print(number)
+    family_id = get_family_id_by_head_id(head_id)
+    for customer_id in get_all_customer_id_where_family_id(family_id):
+        loan_data = get_loan_data_by_customer_id(customer_id)
+        if not loan_data:
+            pass
+        elif loan_data["STATUS"] == "true":
+            pass
+        else:
+            number += 1
     if number == 0:
         return False
     return True
@@ -56,21 +53,18 @@ def pay_installment_ser(chat_id):
             customer_number += 1
             loan_id , loan_status , installment_amount= get_loan_id_and_status_by_customer_id(customer_id)
             if not loan_id or loan_status == "true":
-                continue
+                pass
             else:
                 installment_data = get_all_installment_data_by_loan_id(loan_id , "false")
-                number_capital_customer = len(installment_data) * [customer_id]
+                customer_list += len(installment_data) * [customer_id]
                 for installment_data in installment_data:
                     data.append(installment_data)
                     total += installment_amount
-                    customer_list = customer_list + number_capital_customer
 
 
-        print(customer_list)
         for customer_id in get_all_customer_id_where_family_id(family_id):
             if customer_id not in customer_list:
                 customer_list.append(customer_id)
-        print(customer_list)
         
         pay_installment_step[chat_id] = "A"
         setting_data = get_setting_data(get_admin_id_b_access(2))
@@ -99,29 +93,28 @@ def pay_installment_ser(chat_id):
             customer_number += 1
             loan_id , loan_status , installment_amount= get_loan_id_and_status_by_customer_id(customer_id)
             if not loan_id or loan_status == "true":
-                continue
+                pass
             else:
                 installment_data = get_all_installment_data_by_loan_id(loan_id , "false")
-                number_capital_customer = len(installment_data) * [customer_id]
+                customer_list += len(installment_data) * [customer_id]
                 for installment_data in installment_data:
                     data.append(installment_data)
                     total += installment_amount
-                    customer_list.append(number_capital_customer)
 
 
         for customer_id in get_all_customer_id_where_family_id(family_id):
             if customer_id not in customer_list:
                 customer_list.append(customer_id)
         
-        pay_installment_step[chat_id] = "A"
         setting_data = get_setting_data(get_admin_id_b_access(2))
         cart_number = setting_data["CART_NUMBER"]
         name_cart = setting_data["CART_NAME"]
         capital_amount = setting_data["CAPITAL_AMOUNT"]
         total += len(customer_list)*capital_amount
-        pay_installment_data[chat_id] = [data, total , customer_number , customer_list]
         text = f"""شما باید مبلغ:{total} 
 را به شماره {cart_number}   {name_cart}
 پرداخت کنید و عکس فیش پرداختی را ارسال کنید
 اگر افزایش سرمایه دارید روی دکمه پایین کلیک کنید"""
+        pay_installment_step[chat_id] = "A"
+        pay_installment_data[chat_id] = [data, total , customer_number , customer_list]
         return [True , text]

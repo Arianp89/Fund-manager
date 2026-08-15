@@ -2,7 +2,7 @@ from database import add_setting_data,delete_setting,get_setting_data,get_admin_
 from handler.command import add_new_customer_data,pay_installment_data,block_customer_command
 import random
 import string
-
+import config
 
 
 def get_all_family_bot_id():
@@ -84,4 +84,8 @@ def setting_step_ser(chat_id , data):
     installment_number = data["installment_number"] 
     capital_amount = data["capital_amount"] 
     add_setting_data(admin_id , cart_number , cart_name , installment_number , capital_amount) 
+    config.cart_number = 0
+    config.cart_name = ""
+    config.installment_number = 0
+    config.capital_amount = 0
     
